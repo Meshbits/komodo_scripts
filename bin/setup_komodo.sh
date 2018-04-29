@@ -86,7 +86,7 @@ if [[ ${VAR_BLOCKCHAIN_DOWNLOAD} ]]; then
   fi
 fi &
 
-if [[ ! ${DONT_BUILD} ]]; then
+if ! ${DONT_BUILD}; then
 
   #### Install nanomsg
   sudo chown `whoami`. /usr/local/src
