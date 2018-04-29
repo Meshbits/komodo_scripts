@@ -32,7 +32,7 @@ SCRIPTPATH=$(dirname $SCRIPTNAME)
 [[ -z ${VAR_SRC_DIR+x} ]] && VAR_SRC_DIR="${HOME}/bitcoin"
 [[ -z ${VAR_CONF_DIR+x} ]] && VAR_CONF_DIR="${HOME}/.bitcoin"
 [[ -z ${VAR_CONF_FILE+x} ]] && VAR_CONF_FILE="${VAR_CONF_DIR}/conf/bitcoin.conf"
-[[ -z ${VAR_RPCPORT+x} ]] && VAR_RPCPORT=""
+[[ -z ${VAR_RPCPORT+x} ]] && VAR_RPCPORT="8332"
 [[ -z ${VAR_BLOCKCHAIN_ARCHIVE+x} ]] && VAR_BLOCKCHAIN_ARCHIVE="bitcoin_blockchain_backup.tar.gz"
 
 # Create random password for conf if needed
