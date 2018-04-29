@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-if ! $( lsof -Pi :<VAR_RPCPORT> -sTCP:LISTEN -t > /dev/null); then
+if ! $( lsof -Pi :<VAR_RPCPORT> -sTCP:LISTEN -t >& /dev/null); then
   while [[ $# -gt 0 ]]; do
     key="$1"
     case $key in
