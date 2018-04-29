@@ -92,7 +92,7 @@ if [[ ${DONT_BUILD} != true ]]; then
   cd /usr/local/src
   wget -c 'http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz'
   echo '12edc0df75bf9abd7f82f821795bcee50f42cb2e5f76a6a281b85732798364ef db-4.8.30.NC.tar.gz' | sha256sum -c
-  tar -xzvf 'db-4.8.30.NC.tar.gz'
+  tar -xzf 'db-4.8.30.NC.tar.gz'
   cd "db-4.8.30.NC/build_unix"
   time_taken ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=${BDB_PREFIX}
   time_taken make -j${VAR_NPROC}
