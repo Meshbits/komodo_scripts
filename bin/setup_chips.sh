@@ -27,7 +27,7 @@ SCRIPTPATH=$(dirname $SCRIPTNAME)
 [[ -z ${VAR_SRC_DIR+x} ]] && VAR_SRC_DIR="${HOME}/chips3"
 [[ -z ${VAR_CONF_DIR+x} ]] && VAR_CONF_DIR="${HOME}/.chips"
 [[ -z ${VAR_CONF_FILE+x} ]] && VAR_CONF_FILE="${VAR_CONF_DIR}/conf/chips.conf"
-#[[ -z ${VAR_RPCPORT+x} ]] && VAR_RPCPORT=""
+[[ -z ${VAR_RPCPORT+x} ]] && VAR_RPCPORT="57776"
 
 # Create random password for conf if needed
 if [[ ! -f ${VAR_CONF_FILE} ]]; then
@@ -59,6 +59,7 @@ EOF
   cat > "${VAR_CONF_FILE}" << EOF
 rpcuser=${RPCUSER}
 rpcpassword=${RPCPASSWORD}
+rpcport=${VAR_RPCPORT}
 txindex=1
 bind=127.0.0.1
 rpcbind=127.0.0.1
