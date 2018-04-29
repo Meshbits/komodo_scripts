@@ -78,7 +78,7 @@ echo -e "Created configuration file\n"
 [[ -f ${VAR_CONF_DIR}/komodo.conf ]] || ln ${VAR_CONF_FILE} ${VAR_CONF_DIR}/
 
 #### Use blockchain backup from somewhere
-if [[ ${VAR_BLOCKCHAIN_DOWNLOAD} ]]; then
+if [[ ! -n ${VAR_BLOCKCHAIN_DOWNLOAD} ]]; then
   echo -e "## Downloading ${VAR_BLOCKCHAIN_ARCHIVE} in the background ##\n"
   cd ${VAR_CONF_DIR}
   wget -c ${VAR_BLOCKCHAIN_DOWNLOAD} \
@@ -157,7 +157,7 @@ chmod 660 ${VAR_CONF_DIR}/conf/*.conf
 echo -e "## Komodod Daemon has been configured ##\n"
 
 # Let komodo blockchain sync in the background only if blockchain was downloaded
-if [[ ! "${VAR_BLOCKCHAIN_DOWNLOAD}" ]]; then
+if [[ ! -n "${VAR_BLOCKCHAIN_DOWNLOAD}" ]]; then
   if [[ -d "${VAR_CONF_DIR}/blocks" && -d "${VAR_CONF_DIR}/chainstate" ]] \
     && ! $(ps aux | grep "${VAR_BLOCKCHAIN_ARCHIVE}") &> /dev/null; then
       bash ${VAR_CONF_DIR}/bin/start.sh &
