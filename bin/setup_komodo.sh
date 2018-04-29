@@ -14,7 +14,7 @@ source /etc/profile
 # Function
 # Capture real time taken
 function time_taken() {
-	/usr/bin/time -f "## Time taken=%e\n" "$1"
+	/usr/bin/time -f "## Time taken=%e\n" "$@"
 }
 
 # Variables
