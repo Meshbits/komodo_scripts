@@ -68,7 +68,7 @@ echo -e "Created Chips configuration file\n"
 # Create a hard-link for conf file for backward compatibility
 [[ -f "${VAR_CONF_FILE}" ]] || ln "${VAR_CONF_FILE}" ${VAR_CONF_DIR}/
 
-if [[ ! ${DONT_BUILD} ]]; then
+if ! ${DONT_BUILD}; then
 
   ### Checkout the sourcecode
   if [[ -d ${VAR_SRC_DIR} ]]; then
