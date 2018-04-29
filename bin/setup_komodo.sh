@@ -114,13 +114,6 @@ if [[ ! ${DONT_BUILD} ]]; then
   fi
 
   echo -e "===> Build Komodo Daemon"
-  [[ -d "${HOME}/.zcash-params" ]] || mkdir "${HOME}/.zcash-params"
-  time_taken wget -c https://gitlab.com/zcashcommunity/params/raw/master/sprout-proving.key \
-    -O ${HOME}/.zcash-params/sprout-proving.key
-
-  # to-do: Validate the checksum here or stop
-	# 8bc20a7f013b2b58970cddd2e7ea028975c88ae7ceb9259a5344a16bc2c0eef7
-
   time_taken ./zcutil/fetch-params.sh
   time_taken ./zcutil/build.sh -j${VAR_NPROC}
   echo -e "===> Finished building Komodo Daemon"
