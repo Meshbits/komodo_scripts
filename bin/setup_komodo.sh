@@ -33,9 +33,8 @@ if [[ ! -f "${VAR_CONF_FILE}" ]]; then
   RPCUSER="$(date +%s | sha256sum | base64 | head -c 32 ; echo)"
   RPCPASSWORD="$(date +%s | sha256sum | base64 | head -c 32 ; echo)"
 else
-  DAEMONCONF="${VAR_CONF_FILE}"
-  RPCUSER=$(grep 'rpcuser' $DAEMONCONF | cut -d'=' -f2)
-  RPCPASSWORD=$(grep 'rpcpassword' $DAEMONCONF | cut -d'=' -f2)
+  RPCUSER=$(grep 'rpcuser' ${VAR_CONF_FILE} | cut -d'=' -f2)
+  RPCPASSWORD=$(grep 'rpcpassword' ${VAR_CONF_FILE} | cut -d'=' -f2)
 fi
 
 echo -e "## Komodod Daemon setup starting ##\n"
