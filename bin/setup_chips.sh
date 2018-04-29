@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Installing Komodo on Ubuntu 16.04 LTS
+# Installing Chips on Ubuntu 16.04 LTS
 set -e
 
 if [[ $EUID -eq 0 ]]; then
@@ -100,7 +100,8 @@ if [[ ${DONT_BUILD} != true ]]; then
   echo -e "===> Build Chips Daemon"
   cd ${VAR_SRC_DIR}
   time ./autogen.sh
-  time ./configure LDFLAGS="-L${BDB_PREFIX}/lib/" CPPFLAGS="-I${BDB_PREFIX}/include/" --without-gui --without-miniupnpc
+  time ./configure LDFLAGS="-L${BDB_PREFIX}/lib/" CPPFLAGS="-I${BDB_PREFIX}/include/" \
+    --without-gui --without-miniupnpc --disable-tests --disable-bench --with-gui=no
   time make -j${VAR_NPROC}
   echo -e "===> Finished building Chips Daemon"
 
