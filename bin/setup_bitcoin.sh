@@ -150,7 +150,7 @@ sed -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
 sed -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
   "${SCRIPTPATH}/.bitcoin/bin/healthcheck.sh" > "${VAR_CONF_DIR}/bin/healthcheck.sh"
 
-sed -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
+sed -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
   "${SCRIPTPATH}/.bitcoin/bin/status.sh" > "${VAR_CONF_DIR}/bin/status.sh"
 
 # Symlink binaries

@@ -3,9 +3,9 @@ set -e
 
 count=0
 while [[ count -lt 300 ]]; do
-  if "<VAR_SRC_DIR>/src/chips-cli" getinfo >& /dev/null; then
-    getinfo="$(<VAR_SRC_DIR>/src/chips-cli getinfo)"
-    if [[ $(echo ${getinfo} | jq -r .longestchain) -eq $(echo ${getinfo} | jq -r .blocks) ]]; then
+  if "<VAR_SRC_DIR>/src/chips-cli" getblockchaininfo >& /dev/null; then
+    getblockchaininfo="$(<VAR_SRC_DIR>/src/chips-cli getinfo)"
+    if [[ $(echo $getblockchaininfo | jq -r .blocks) -eq $(echo $getblockchaininfo | jq -r .headers) ]]; then
       echo -e '## Chips blockchain in sync with the network ##'
       break
     fi
