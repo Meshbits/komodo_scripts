@@ -2,7 +2,6 @@
 # Installing Komodo on Ubuntu 16.04 LTS
 set -e
 
-
 if [[ $EUID -eq 0 ]]; then
    echo -e "This script needs to run as a non-root user with sudo privileges\n"
    exit 1
@@ -12,13 +11,15 @@ fi
 source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
 
-# Function
+# Functions
 # Capture real time taken
 function time_taken() {
   /usr/bin/time -f "## Time taken=%e\n" "$@"
 }
 
 # Variables
+SCRIPTNAME=$(realpath $0)
+SCRIPTPATH=$(dirname $SCRIPTNAME)
 [[ -z ${VAR_NPROC+x} ]] && VAR_NPROC="$(cat /proc/cpuinfo | grep processor | wc -l)"
 [[ -z ${VAR_USERNAME+x} ]] && VAR_USERNAME="${USER}"
 [[ -z ${VAR_BRANCH+x} ]] && VAR_BRANCH='master'
@@ -29,7 +30,7 @@ function time_taken() {
 #[[ -z ${VAR_RPCPORT+x} ]] && VAR_RPCPORT=""
 
 # Create random password for conf if needed
-if [[ ! -f "${VAR_CONF_FILE}" ]]; then
+if [[ ! -f ${VAR_CONF_FILE} ]]; then
   RPCUSER=$(date +%s | sha256sum | base64 | head -c 32 ; echo)
   RPCPASSWORD=$(date +%s | sha256sum | base64 | head -c 32 ; echo)
 else
@@ -39,7 +40,7 @@ fi
 
 echo -e "## Chips Daemon setup starting ##\n"
 
-# Requisites for chip
+# Install requisites:
 sudo -s bash <<EOF
 export DEBIAN_FRONTEND=noninteractive;
 apt-get -y -qq update
@@ -63,12 +64,12 @@ bind=127.0.0.1
 rpcbind=127.0.0.1
 rpcallowip=127.0.0.1
 EOF
-echo -e "Created Chips configuration file\n"
+echo -e "Created configuration file\n"
 
 # Create a hard-link for conf file for backward compatibility
-[[ -f "${VAR_CONF_FILE}" ]] || ln "${VAR_CONF_FILE}" ${VAR_CONF_DIR}/
+[[ -f ${VAR_CONF_DIR}/chips.conf ]] || ln ${VAR_CONF_FILE} ${VAR_CONF_DIR}/
 
-if ! ${DONT_BUILD}; then
+if [[ ${DONT_BUILD} != true ]]; then
 
   ### Checkout the sourcecode
   if [[ -d ${VAR_SRC_DIR} ]]; then
