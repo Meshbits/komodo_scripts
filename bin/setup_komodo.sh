@@ -101,7 +101,7 @@ if [[ ${DONT_BUILD} != true ]]; then
     git clone https://github.com/nanomsg/nanomsg
     cd nanomsg
   fi
-  time_taken cmake .
+  time_taken cmake . -DNN_TESTS=OFF -DNN_ENABLE_DOC=OFF
   time_taken make
   time_taken sudo make install
   time_taken sudo ldconfig
