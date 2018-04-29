@@ -88,10 +88,10 @@ if [[ ${VAR_BLOCKCHAIN_DOWNLOAD} ]]; then
   fi
 fi &
 
-if ! ${DONT_BUILD}; then
+if [[ ${DONT_BUILD} != true ]]; then
 
   #### Install nanomsg
-  sudo chown `whoami`. /usr/local/src
+  sudo chown $(whoami). /usr/local/src
   cd /usr/local/src
   if [[ -d nanomsg ]]; then
     cd nanomsg
