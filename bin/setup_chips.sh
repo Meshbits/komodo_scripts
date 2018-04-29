@@ -134,4 +134,8 @@ sudo ln -sf ${VAR_SRC_DIR}/src/chipsd /usr/local/bin/
 sudo chmod +x /usr/local/bin/chips-cli
 sudo chmod +x /usr/local/bin/chipsd
 
+# Permissions and ownership
+chmod +x ${VAR_CONF_DIR}/bin/*
+chmod 660 ${VAR_CONF_DIR}/conf/*.conf
+
 echo -e "## Chips Daemon has been configured ##\n"
