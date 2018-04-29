@@ -8,7 +8,7 @@
 ~/.chips/bin/status.sh
 ~/.komodo/bin/status.sh
 
-cd komodo/src
+cd ~/komodo/src
 ./assetchains &
 sleep 5m
 cd ~/SuperNET/iguana
