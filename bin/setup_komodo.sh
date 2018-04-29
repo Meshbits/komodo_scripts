@@ -14,7 +14,7 @@ source /etc/profile
 # Function
 # Capture real time taken
 function time_taken() {
-	/usr/bin/time -f "## Time taken=%e\n" "$@"
+  /usr/bin/time -f "## Time taken=%e\n" "$@"
 }
 
 # Variables
@@ -43,6 +43,7 @@ echo -e "## Komodod Daemon setup starting ##\n"
 #### Install pre-requisites:
 sudo -s bash <<EOF
 export DEBIAN_FRONTEND=noninteractive;
+apt-get -y -qq update
 apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -qq \
   install build-essential pkg-config libc6-dev m4 g++-multilib autoconf libtool \
   ncurses-dev zlib1g-dev bsdmainutils automake libboost-all-dev libssl-dev \
@@ -59,7 +60,7 @@ EOF
 
 #### Create komodo.conf if it doesn't exist
 [[ -f "${VAR_CONF_FILE}" ]] || \
-	cat > "${VAR_CONF_FILE}" << EOF
+  cat > "${VAR_CONF_FILE}" << EOF
 rpcuser=${RPCUSER}
 rpcpassword=${RPCPASSWORD}
 rpcport=${VAR_RPCPORT}
@@ -92,12 +93,12 @@ if [[ ! ${DONT_BUILD} ]]; then
   sudo chown `whoami`. /usr/local/src
   cd /usr/local/src
   if [[ -d nanomsg ]]; then
-  	cd nanomsg
-  	git reset --hard; git pull --rebase
-	else
-		git clone https://github.com/nanomsg/nanomsg
-  	cd nanomsg
-	fi
+    cd nanomsg
+    git reset --hard; git pull --rebase
+  else
+    git clone https://github.com/nanomsg/nanomsg
+    cd nanomsg
+  fi
   time_taken cmake .
   time_taken make
   time_taken sudo make install
@@ -108,8 +109,8 @@ if [[ ! ${DONT_BUILD} ]]; then
     cd ${VAR_SRC_DIR}
     git checkout ${VAR_BRANCH}; git reset --hard; git pull --rebase
   else
-  	cd ${HOME}
-		git clone ${VAR_REPO} -b ${VAR_BRANCH}
+    cd ${HOME}
+    git clone ${VAR_REPO} -b ${VAR_BRANCH}
     cd ${VAR_SRC_DIR}
   fi
 
