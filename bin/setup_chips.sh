@@ -107,6 +107,27 @@ if [[ ${DONT_BUILD} != true ]]; then
 
 fi
 
+# Setup control scripts
+sed -e "s|<VAR_RPCPORT>|${VAR_RPCPORT}|g" \
+  -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
+  -e "s|<VAR_CONF_DIR>|${VAR_CONF_DIR}|g" \
+  -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
+  -e "s|<VAR_NPROC>|${VAR_NPROC}|g" \
+  -e "s|<VAR_USERNAME>|${VAR_USERNAME}|g" \
+  "${SCRIPTPATH}/.chips/bin/start.sh" > "${VAR_CONF_DIR}/bin/start.sh"
+
+sed -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
+  -e "s|<VAR_CONF_DIR>|${VAR_CONF_DIR}|g" \
+  -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
+  -e "s|<VAR_USERNAME>|${VAR_USERNAME}|g" \
+  "${SCRIPTPATH}/.chips/bin/stop.sh" > "${VAR_CONF_DIR}/bin/stop.sh"
+
+sed -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
+  "${SCRIPTPATH}/.chips/bin/healthcheck.sh" > "${VAR_CONF_DIR}/bin/healthcheck.sh"
+
+sed -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
+  "${SCRIPTPATH}/.chips/bin/status.sh" > "${VAR_CONF_DIR}/bin/status.sh"
+
 # Symlink binaries
 sudo ln -sf ${VAR_SRC_DIR}/src/chips-cli /usr/local/bin/
 sudo ln -sf ${VAR_SRC_DIR}/src/chipsd /usr/local/bin/
