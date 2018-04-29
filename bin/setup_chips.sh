@@ -106,8 +106,8 @@ if ! ${DONT_BUILD}; then
 fi
 
 # Symlink binaries
-sudo ln -sf ${CHIPS_SRC_DIR}/src/chips-cli /usr/local/bin/
-sudo ln -sf ${CHIPS_SRC_DIR}/src/chipsd /usr/local/bin/
+sudo ln -sf ${VAR_SRC_DIR}/src/chips-cli /usr/local/bin/
+sudo ln -sf ${VAR_SRC_DIR}/src/chipsd /usr/local/bin/
 sudo chmod +x /usr/local/bin/chips-cli
 sudo chmod +x /usr/local/bin/chipsd
 
