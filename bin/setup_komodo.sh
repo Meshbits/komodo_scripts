@@ -19,7 +19,7 @@ function time_taken() {
 
 # Variables
 [[ -z ${VAR_NPROC+x} ]] && VAR_NPROC="$(cat /proc/cpuinfo | grep processor | wc -l)"
-[[ -z ${VAR_USERNAME+x} ]] && VAR_USERNAME="${USERNAME}"
+[[ -z ${VAR_USERNAME+x} ]] && VAR_USERNAME="${USER}"
 [[ -z ${VAR_BRANCH+x} ]] && VAR_BRANCH='dev'
 [[ -z ${VAR_REPO+x} ]] && VAR_REPO='https://github.com/jl777/komodo.git'
 [[ -z ${VAR_SRC_DIR+x} ]] && VAR_SRC_DIR="${HOME}/komodo"
