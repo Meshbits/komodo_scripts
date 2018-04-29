@@ -50,7 +50,8 @@ apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold
   ncurses-dev zlib1g-dev bsdmainutils automake libboost-all-dev libssl-dev \
   libprotobuf-dev protobuf-compiler libqt4-dev libqrencode-dev libdb++-dev \
   software-properties-common libcurl4-gnutls-dev cmake clang libgmp3-dev \
-  pigz vim ntp ntpdate curl wget git python unzip
+  pigz vim ntp ntpdate curl wget git python unzip sudo jq dnsutils tree \
+  inotify-tools htop
 EOF
 
 # Create directories
@@ -125,22 +126,22 @@ fi
 # Setup control scripts
 sed -e "s|<VAR_RPCPORT>|${VAR_RPCPORT}|g" \
   -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
-  -e "s|<VAR_CONF_DIR>|${VAR_CONF_DIR}|g" \
-  -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
   -e "s|<VAR_NPROC>|${VAR_NPROC}|g" \
   -e "s|<VAR_USERNAME>|${VAR_USERNAME}|g" \
+  -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
+  -e "s|<VAR_CONF_DIR>|${VAR_CONF_DIR}|g" \
   "${SCRIPTPATH}/.komodo/bin/start.sh" > "${VAR_CONF_DIR}/bin/start.sh"
 
-sed -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
-  -e "s|<VAR_CONF_DIR>|${VAR_CONF_DIR}|g" \
+sed -e "s|<VAR_USERNAME>|${VAR_USERNAME}|g" \
+  -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
   -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
-  -e "s|<VAR_USERNAME>|${VAR_USERNAME}|g" \
+  -e "s|<VAR_CONF_DIR>|${VAR_CONF_DIR}|g" \
   "${SCRIPTPATH}/.komodo/bin/stop.sh" > "${VAR_CONF_DIR}/bin/stop.sh"
 
 sed -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
   "${SCRIPTPATH}/.komodo/bin/healthcheck.sh" > "${VAR_CONF_DIR}/bin/healthcheck.sh"
 
-sed -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
+sed -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
   "${SCRIPTPATH}/.komodo/bin/status.sh" > "${VAR_CONF_DIR}/bin/status.sh"
 
 # Symlink binaries
