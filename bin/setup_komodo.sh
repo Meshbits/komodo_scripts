@@ -57,7 +57,7 @@ EOF
 [[ -d ${VAR_CONF_DIR}/log ]] || mkdir ${VAR_CONF_DIR}/log
 [[ -d ${VAR_CONF_DIR}/bin ]] || mkdir ${VAR_CONF_DIR}/bin
 
-#### Create komodo.conf if it doesn't exist
+#### Create conf only if it doesn't exist before
 [[ -f "${VAR_CONF_FILE}" ]] || \
   cat > "${VAR_CONF_FILE}" << EOF
 rpcuser=${RPCUSER}
@@ -141,18 +141,14 @@ sed -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
   "$(dirname $0)/.komodo/bin/status.sh" > "${VAR_CONF_DIR}/bin/status.sh"
 
 # Symlink binaries
-sudo ln -sf ${HOME}/komodo/src/komodo-cli /usr/local/bin/
-sudo ln -sf ${HOME}/komodo/src/komodod /usr/local/bin/
+sudo ln -sf ${VAR_SRC_DIR}/src/komodo-cli /usr/local/bin/
+sudo ln -sf ${VAR_SRC_DIR}/src/komodod /usr/local/bin/
 sudo chmod +x /usr/local/bin/komodo-cli
 sudo chmod +x /usr/local/bin/komodod
 
-# Create files to stop, start and check status
-
-
 # Permissions and ownership
-chmod +x ${HOME}/.komodo/bin/*
-chmod 660 ${HOME}/.komodo/conf/*.conf
-
+chmod +x ${VAR_CONF_DIR}/bin/*
+chmod 660 ${VAR_CONF_DIR}/conf/*.conf
 
 echo -e "## Komodod Daemon has been configured ##\n"
 
