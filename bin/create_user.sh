@@ -2,7 +2,7 @@
 # Tested on Ubuntu 16.04 LTS
 set -e
 
-if [[ $EUID -eq 0 ]]; then
+if [[ $EUID -ne 0 ]]; then
    echo -e "This script needs to run as a root user\n"
    exit 1
 fi
