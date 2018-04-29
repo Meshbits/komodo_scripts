@@ -11,13 +11,15 @@ fi
 source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
 
-# Function
+# Functions
 # Capture real time taken
 function time_taken() {
   /usr/bin/time -f "## Time taken=%e\n" "$@"
 }
 
 # Variables
+SCRIPTNAME=$(realpath $0)
+SCRIPTPATH=$(dirname $SCRIPTNAME)
 [[ -z ${VAR_NPROC+x} ]] && VAR_NPROC="$(cat /proc/cpuinfo | grep processor | wc -l)"
 [[ -z ${VAR_USERNAME+x} ]] && VAR_USERNAME="${USER}"
 [[ -z ${VAR_BRANCH+x} ]] && VAR_BRANCH='dev'
@@ -127,19 +129,19 @@ sed -e "s|<VAR_RPCPORT>|${VAR_RPCPORT}|g" \
   -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
   -e "s|<VAR_NPROC>|${VAR_NPROC}|g" \
   -e "s|<VAR_USERNAME>|${VAR_USERNAME}|g" \
-  "$(dirname $0)/.komodo/bin/start.sh" > "${VAR_CONF_DIR}/bin/start.sh"
+  "${SCRIPTPATH}/.komodo/bin/start.sh" > "${VAR_CONF_DIR}/bin/start.sh"
 
 sed -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
   -e "s|<VAR_CONF_DIR>|${VAR_CONF_DIR}|g" \
   -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
   -e "s|<VAR_USERNAME>|${VAR_USERNAME}|g" \
-  "$(dirname $0)/.komodo/bin/stop.sh" > "${VAR_CONF_DIR}/bin/stop.sh"
+  "${SCRIPTPATH}/.komodo/bin/stop.sh" > "${VAR_CONF_DIR}/bin/stop.sh"
 
 sed -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
-  "$(dirname $0)/.komodo/bin/healthcheck.sh" > "${VAR_CONF_DIR}/bin/healthcheck.sh"
+  "${SCRIPTPATH}/.komodo/bin/healthcheck.sh" > "${VAR_CONF_DIR}/bin/healthcheck.sh"
 
 sed -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
-  "$(dirname $0)/.komodo/bin/status.sh" > "${VAR_CONF_DIR}/bin/status.sh"
+  "${SCRIPTPATH}/.komodo/bin/status.sh" > "${VAR_CONF_DIR}/bin/status.sh"
 
 # Symlink binaries
 sudo ln -sf ${VAR_SRC_DIR}/src/komodo-cli /usr/local/bin/
