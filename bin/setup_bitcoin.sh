@@ -80,7 +80,7 @@ EOF
 echo -e "Created configuration file\n"
 
 # Create a hard-link for conf file for backward compatibility
-[[ -f ${VAR_CONF_DIR}/bitcoin.conf ]] || ln ${VAR_CONF_FILE} ${VAR_CONF_DIR}/
+[[ -f ${VAR_CONF_DIR}/bitcoin.conf ]] || ln -sf ${VAR_CONF_FILE} ${VAR_CONF_DIR}/
 
 #### Use blockchain backup from somewhere
 if [[ ! -z "${VAR_BLOCKCHAIN_DOWNLOAD+x}" ]]; then
