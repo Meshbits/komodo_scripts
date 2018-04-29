@@ -28,7 +28,7 @@ HELP
     shift
   done
 
-  echo -e "Start komodod\n"
+  echo -e "## Start komodo daemon ##\n"
   sudo -H -u <VAR_USERNAME> /bin/bash -c \
     "<VAR_SRC_DIR>/src/komodod -conf=<VAR_CONF_FILE> \
     ${NOTARY_PARAMS} ${GEN_PARAMS} &>> <VAR_CONF_DIR>/log/komodod.log"
