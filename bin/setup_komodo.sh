@@ -31,9 +31,9 @@ SCRIPTPATH=$(dirname $SCRIPTNAME)
 [[ -z ${VAR_BLOCKCHAIN_ARCHIVE+x} ]] && VAR_BLOCKCHAIN_ARCHIVE="komodo_blockchain_backup.tar.gz"
 
 # Create random password for conf if needed
-if [[ ! -f "${VAR_CONF_FILE}" ]]; then
-  RPCUSER="$(date +%s | sha256sum | base64 | head -c 32 ; echo)"
-  RPCPASSWORD="$(date +%s | sha256sum | base64 | head -c 32 ; echo)"
+if [[ ! -f ${VAR_CONF_FILE} ]]; then
+  RPCUSER=$(date +%s | sha256sum | base64 | head -c 32 ; echo)
+  RPCPASSWORD=$(date +%s | sha256sum | base64 | head -c 32 ; echo)
 else
   RPCUSER=$(grep 'rpcuser' ${VAR_CONF_FILE} | cut -d'=' -f2)
   RPCPASSWORD=$(grep 'rpcpassword' ${VAR_CONF_FILE} | cut -d'=' -f2)
@@ -41,7 +41,7 @@ fi
 
 echo -e "## Komodod Daemon setup starting ##\n"
 
-#### Install pre-requisites:
+# Install requisites:
 sudo -s bash <<EOF
 export DEBIAN_FRONTEND=noninteractive;
 apt-get -y -qq update
@@ -71,7 +71,7 @@ rpcbind=127.0.0.1
 rpcallowip=127.0.0.1
 addnode=78.47.196.146
 EOF
-echo -e "Created Komodo configuration file\n"
+echo -e "Created configuration file\n"
 
 # Create a hard-link for conf file for backward compatibility
 [[ -f ${VAR_CONF_DIR}/komodo.conf ]] || ln ${VAR_CONF_FILE} ${VAR_CONF_DIR}/
