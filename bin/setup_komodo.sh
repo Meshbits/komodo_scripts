@@ -44,12 +44,11 @@ echo -e "## Komodod Daemon setup starting ##\n"
 sudo -s bash <<EOF
 export DEBIAN_FRONTEND=noninteractive;
 apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -qq \
-  install build-essential pkg-config libc6-dev m4 g++-multilib \
-  autoconf libtool ncurses-dev unzip git python zlib1g-dev wget bsdmainutils \
-  automake libboost-all-dev libssl-dev libprotobuf-dev protobuf-compiler \
-  libqt4-dev libqrencode-dev libdb++-dev ntp ntpdate vim \
-  software-properties-common curl libcurl4-gnutls-dev cmake clang \
-  libgmp3-dev
+  install build-essential pkg-config libc6-dev m4 g++-multilib autoconf libtool \
+  ncurses-dev zlib1g-dev bsdmainutils automake libboost-all-dev libssl-dev \
+  libprotobuf-dev protobuf-compiler libqt4-dev libqrencode-dev libdb++-dev \
+  software-properties-common libcurl4-gnutls-dev cmake clang libgmp3-dev \
+  pigz vim ntp ntpdate curl wget git python unzip
 EOF
 
 # Create directories
@@ -74,6 +73,18 @@ echo -e "Created Komodo configuration file\n"
 
 # Create a hard-link for conf file for backward compatibility
 [[ -f ${VAR_CONF_DIR}/komodo.conf ]] || ln ${VAR_CONF_FILE} ${VAR_CONF_DIR}/
+
+#### Use blockchain backup from somewhere
+if [[ ${VAR_BLOCKCHAIN_DOWNLOAD} ]]; then
+  echo -e "## Downloading ${VAR_BLOCKCHAIN_ARCHIVE} in the background ##\n"
+  cd ${VAR_CONF_DIR}
+  wget -c ${VAR_BLOCKCHAIN_DOWNLOAD} \
+    -O ${VAR_BLOCKCHAIN_ARCHIVE}
+
+  if ! [[ -d blocks && -d chainstate ]]; then
+    pigz -dc ${VAR_BLOCKCHAIN_ARCHIVE} | tar xf -
+  fi
+fi &
 
 if [[ ! ${DONT_BUILD} ]]; then
 
