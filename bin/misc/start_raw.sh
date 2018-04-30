@@ -12,4 +12,5 @@ cd ~/komodo/src
 ./assetchains &
 sleep 5m
 cd ~/SuperNET/iguana
-git checkout dev && git pull && ./m_notary && cd ~/komodo/src && ./dpowassets
+git checkout dev && git pull && ./m_notary &>> ~/m_notary.log \
+&& cd ~/komodo/src && ./dpowassets &>> ~/dpowassets.log
