@@ -11,7 +11,7 @@ do
   all=${coinlist[count]}
   name=${all%% *}
   supply=$(expr "$all" : '.* \(.*\)')
-  if [ "$name" != "" ]
+  if [[ "$name" != "" || "$name" != "PIZZA" || "$name" != "BEER" ]]
     then
      gen="-gen -genproclimit=2"
      komodod -pubkey=$pubkey -ac_name=$name -ac_supply=$supply -addnode="$seed_ip" $gen $args &
