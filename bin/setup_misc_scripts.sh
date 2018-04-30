@@ -10,4 +10,4 @@ SCRIPTNAME=$(realpath $0)
 SCRIPTPATH=$(dirname $SCRIPTNAME)
 
 # Sync all the scripts
-rsync -a "${SCRIPTPATH}/misc" "${HOME}/misc_scripts"
+rsync -a "${SCRIPTPATH}/misc/" "${HOME}/misc_scripts/"
