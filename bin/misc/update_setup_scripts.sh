@@ -10,3 +10,7 @@ else
   git clone https://github.com/ns408/komodo_scripts.git
 fi
 EOF
+
+cd /usr/local/src/komodo_scripts
+bash bin/setup_misc_scripts.sh
+cd ~
