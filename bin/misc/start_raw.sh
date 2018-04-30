@@ -8,9 +8,8 @@
 ~/.chips/bin/status.sh
 ~/.komodo/bin/status.sh
 
-cd ~/komodo/src
-./assetchains &
+cd ~/misc_scripts
+./mine_assets &
 sleep 5m
 cd ~/SuperNET/iguana
-git checkout dev && git pull && ./m_notary &>> ~/m_notary.log \
-&& cd ~/komodo/src && ./dpowassets &>> ~/dpowassets.log
+git checkout dev && git pull && ./m_notary && cd ~/komodo/src && ./dpowassets
