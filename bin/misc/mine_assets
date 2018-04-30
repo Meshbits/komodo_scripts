@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-seed_ip=`getent hosts seed.mewhub.com | awk '{ print $1 }'`
+seed_ip=$(getent hosts zero.kolo.supernet.org | awk '{ print $1 }')
 source coinlist
 source ~/komodo/src/pubkey.txt
 args=("$@")
@@ -13,8 +13,8 @@ do
   supply=$(expr "$all" : '.* \(.*\)')
   if [ "$name" != "" ]
     then
-     gen=" -gen -genproclimit=2"
-     komodod -pubkey=$pubkey -ac_name=$name -ac_supply=$supply -addnode=$seed_ip $gen $args &
+     gen="-gen -genproclimit=2"
+     komodod -pubkey=$pubkey -ac_name=$name -ac_supply=$supply -addnode="$seed_ip" $gen $args &
      sleep $delay
     fi
   count=$(( $count +1 ))
