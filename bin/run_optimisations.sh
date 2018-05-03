@@ -1,17 +1,27 @@
 #!/usr/bin/env bash
 
-# environment optimisation
+# Display all limits
 ulimit -a
-ulimit -n # see the number of open files
+
+# Set them up for this session - helpful if you can't reboot the system right away
+
+# open files
 ulimit -n 1000000
+grep '* soft nofile 1000000' /etc/security/limits.conf || \
+  sed -i '$i* soft nofile 1000000\n* hard nofile 1000000' /etc/security/limits.conf
 
-grep 'ulimit -n 1000000' /etc/rc.local || sed -i '$iulimit -n 1000000' /etc/rc.local
+# pending signals
+ulimit -i 1031188
+grep '* soft sigpending 1031181' /etc/security/limits.conf || \
+  sed -i '$i* soft sigpending 1031181' /etc/security/limits.conf
 
-grep '* soft nofile 1000000' /etc/security/limits.conf | \
-sed -i '$i* soft nofile 1000000\n* hard nofile 1000000' /etc/security/limits.conf
+#max user processes
+ulimit -u 5000000
+grep '* - nproc 5000000' /etc/security/limits.conf || \
+  sed -i '$i* - nproc 5000000' /etc/security/limits.conf
 
-grep 'session required pam_limits.so' /etc/pam.d/common-session \
-|| sed -i '$isession required pam_limits.so' /etc/pam.d/common-session
+grep 'session required pam_limits.so' /etc/pam.d/common-session || \
+  sed -i '$isession required pam_limits.so' /etc/pam.d/common-session
 
 apt-get -y -qq install --install-recommends linux-generic-hwe-16.04
 
@@ -21,6 +31,12 @@ if modprobe tcp_bbr 2> /dev/null; then
     echo 'tcp_bbr' | sudo tee --append /etc/modules-load.d/modules.conf
     update-initramfs -u
   fi
+
+  grep 'kernel.pid_max = 4194303' /etc/sysctl.conf || \
+    echo 'kernel.pid_max = 4194303' >> /etc/sysctl.conf
+
+  grep 'kernel.threads-max = 4194303' /etc/sysctl.conf || \
+    echo 'kernel.threads-max = 4194303' >> /etc/sysctl.conf
 
   cat > /etc/sysctl.d/01-notary.conf <<EOF
 net.core.default_qdisc=fq
