@@ -9,8 +9,8 @@ if grep -P '^komodo_asset' ${ASSETCHAINS_FILE} >& /dev/null; then
   do
     conffile=<HOME>/.komodo/${name}/${name}.conf
 
-    if [[ ! -f ${conffile} ]]; then
-      echo -e "## Stop ${name} daemon ##\n"
+    if [[ -f ${conffile} ]]; then
+      echo -e "## Stop daemon: $name ##\n"
       <HOME>/komodo/src/komodo-cli -ac_name=${name} stop &
     fi
   done
