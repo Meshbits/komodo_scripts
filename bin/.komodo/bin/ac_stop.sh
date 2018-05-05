@@ -11,7 +11,7 @@ if grep -P '^komodo_asset' ${ASSETCHAINS_FILE} >& /dev/null; then
 
     if [[ ! -f ${conffile} ]]; then
       echo -e "## Stop ${name} daemon ##\n"
-      sudo -H -u <VAR_USERNAME> /bin/bash -c "<HOME>/komodo/src/komodo-cli -ac_name=${name} stop" &
+      <HOME>/komodo/src/komodo-cli -ac_name=${name} stop &
     fi
   done
 fi

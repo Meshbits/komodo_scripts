@@ -11,8 +11,8 @@ if grep -P '^komodo_asset' ${ASSETCHAINS_FILE} >& /dev/null; then
 
     count=0
     while [[ count -lt 180 ]]; do
-      if sudo -H -u <VAR_USERNAME> /bin/bash -c "<HOME>/komodo/src/komodo-cli -ac_name=${name} getinfo" &> /dev/null; then
-        getinfo=$(sudo -H -u <VAR_USERNAME> /bin/bash -c "<HOME>/komodo/src/komodo-cli -ac_name=${name} getinfo")
+      if <HOME>/komodo/src/komodo-cli -ac_name=${name} getinfo &> /dev/null; then
+        getinfo=$(<HOME>/komodo/src/komodo-cli -ac_name=${name} getinfo)
         if [[ $(echo $getinfo | jq -r .longestchain) -eq $(echo $getinfo | jq -r .blocks) ]]; then
           echo -e "$list assetchain in sync with the network"
           break
