@@ -53,6 +53,7 @@ EOF
 [[ -d ${VAR_CONF_DIR}/conf ]] || mkdir ${VAR_CONF_DIR}/conf
 [[ -d ${VAR_CONF_DIR}/log ]] || mkdir ${VAR_CONF_DIR}/log
 [[ -d ${VAR_CONF_DIR}/bin ]] || mkdir ${VAR_CONF_DIR}/bin
+[[ -d ${HOME}/.build_source ]] || mkdir ${HOME}/.build_source
 
 #### Create conf only if it doesn't exist before
 [[ -f "${VAR_CONF_FILE}" ]] || \
@@ -76,32 +77,38 @@ if [[ ${DONT_BUILD} != true ]]; then
 
   ### Checkout the sourcecode
   if [[ -d ${VAR_SRC_DIR} ]]; then
-    cd ${VAR_SRC_DIR}
-    git checkout ${VAR_BRANCH}; git reset --hard; git pull --rebase
+
+    echo -e "## Chips3 source directory already exists, building in *.build_source/chips3* ##\n"
+    cd ${VAR_SRC_DIR}/.. >& /dev/null
+
+    BDB_PREFIX="${HOME}/.build_source/chips3/db4"
+
+    if [[ -d .build_source/chips3 ]]; then
+      $(dirname $0)/install_berkleydb.sh .build_source/chips3
+      cd .build_source/chips3
+      git checkout ${VAR_BRANCH}
+      git reset --hard
+      git pull --rebase
+    else
+      cd .build_source
+      git clone ${VAR_REPO} -b ${VAR_BRANCH} chips3
+      $(dirname $0)/install_berkleydb.sh chips3
+      cd chips3
+    fi
+
   else
     cd ${HOME}
     git clone ${VAR_REPO} -b ${VAR_BRANCH}
     cd ${VAR_SRC_DIR}
-  fi
 
-  # Download & Install Berkley DB 4.8
-  echo -e "===> Build Berkley DB 4.8"
-  BDB_PREFIX="${VAR_SRC_DIR}/db4"
-  [[ -d "${BDB_PREFIX}" ]] || mkdir -p "${BDB_PREFIX}"
-  sudo chown -R `whoami`. /usr/local/src
-  cd /usr/local/src
-  wget -c 'http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz'
-  echo '12edc0df75bf9abd7f82f821795bcee50f42cb2e5f76a6a281b85732798364ef db-4.8.30.NC.tar.gz' | sha256sum -c
-  tar -xzf 'db-4.8.30.NC.tar.gz'
-  cd "db-4.8.30.NC/build_unix"
-  time_taken ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=${BDB_PREFIX}
-  time_taken make -j${VAR_NPROC}
-  time_taken make install
-  echo -e "===> Finished building and installing Berkley DB 4.8"
+    # Build BerkleyDB
+    $(dirname $0)/install_berkleydb.sh ${VAR_SRC_DIR}
+    cd ${VAR_SRC_DIR}
+    BDB_PREFIX="${VAR_SRC_DIR}/db4"
+  fi
 
   # Build Chips
   echo -e "===> Build Chips Daemon"
-  cd ${VAR_SRC_DIR}
   time ./autogen.sh
   time ./configure LDFLAGS="-L${BDB_PREFIX}/lib/" CPPFLAGS="-I${BDB_PREFIX}/include/" \
     --without-gui --without-miniupnpc --disable-tests --disable-bench --with-gui=no
@@ -142,3 +149,16 @@ chmod +x ${VAR_CONF_DIR}/bin/*
 chmod 660 ${VAR_CONF_DIR}/conf/*.conf
 
 echo -e "## Chips Daemon has been configured ##\n"
+
+# Create monit template
+cat > ${HOME}/.chips/monitd_chips.template <<EOF
+check program chips_healthcheck.sh with path "${HOME}/.chips/bin/healthcheck.sh"
+  as uid ${USER} and gid ${USER}
+  with timeout 60 seconds
+if status != 0 then exec "${HOME}/.chips/bin/start.sh"
+  as uid ${USER} and gid ${USER}
+  repeat every 2 cycles
+EOF
+
+# Copy monit configuration
+sudo mv ${HOME}/.chips/monitd_chips.template /etc/monit/conf.d/monitd_chips

@@ -165,10 +165,16 @@ chmod 660 ${VAR_CONF_DIR}/conf/*.conf
 
 echo -e "## Bitcoin Daemon has been configured ##\n"
 
-# Let blockchain sync in the background only if blockchain was downloaded
-if [[ ! -z "${VAR_BLOCKCHAIN_DOWNLOAD+x}" ]]; then
-  if [[ -d "${VAR_CONF_DIR}/blocks" && -d "${VAR_CONF_DIR}/chainstate" ]] \
-    && ! $(ps aux | grep "${VAR_BLOCKCHAIN_ARCHIVE}") &> /dev/null; then
-      bash ${VAR_CONF_DIR}/bin/start.sh &
-  fi
-fi
+
+# Create monit template
+cat > ${HOME}/.bitcoin/monitd_bitcoin.template <<EOF
+check program bitcoind_healthcheck.sh with path "${HOME}/.bitcoin/bin/healthcheck.sh"
+  as uid ${USER} and gid ${USER}
+  with timeout 60 seconds
+if status != 0 then exec "${HOME}/.bitcoin/bin/start.sh"
+  as uid ${USER} and gid ${USER}
+  repeat every 2 cycles
+EOF
+
+# Copy monit configuration
+sudo mv ${HOME}/.bitcoin/monitd_bitcoin.template /etc/monit/conf.d/monitd_bitcoin

@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
+# source profile and setup variables using "${HOME}/.common/config"
+source /etc/profile
+[[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
+
 echo -e "## Stop komodo daemon ##\n"
 sudo -H -u <VAR_USERNAME> /bin/bash -c \
   "<VAR_SRC_DIR>/src/komodo-cli -conf=<VAR_CONF_FILE> stop"

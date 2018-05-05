@@ -19,5 +19,5 @@ HELP
 
   echo -e "## Start chips daemon ##\n"
   sudo -H -u <VAR_USERNAME> /bin/bash -c \
-    "<VAR_SRC_DIR>/src/chipsd -conf=<VAR_CONF_FILE> &>> <VAR_CONF_DIR>/log/chipsd.log"
+    "<VAR_SRC_DIR>/src/chipsd -conf=<VAR_CONF_FILE> -gen &>> <VAR_CONF_DIR>/log/chipsd.log"
 fi

@@ -59,6 +59,7 @@ EOF
 [[ -d ${VAR_CONF_DIR}/conf ]] || mkdir ${VAR_CONF_DIR}/conf
 [[ -d ${VAR_CONF_DIR}/log ]] || mkdir ${VAR_CONF_DIR}/log
 [[ -d ${VAR_CONF_DIR}/bin ]] || mkdir ${VAR_CONF_DIR}/bin
+[[ -d ${HOME}/.build_source ]] || mkdir ${HOME}/.build_source
 
 #### Create conf only if it doesn't exist before
 [[ -f "${VAR_CONF_FILE}" ]] || \
@@ -108,8 +109,23 @@ if [[ ${DONT_BUILD} != true ]]; then
 
   ### Checkout the sourcecode
   if [[ -d ${VAR_SRC_DIR} ]]; then
-    cd ${VAR_SRC_DIR}
-    git checkout ${VAR_BRANCH}; git reset --hard; git pull --rebase
+
+    echo -e "## Komodo source directory already exists, building in *.build/komodo* ##\n"
+    cd ${VAR_SRC_DIR}/.. >& /dev/null
+
+    if [[ -d .build_source/komodo ]]; then
+      cd .build_source/komodo
+      git checkout ${VAR_BRANCH}
+      git reset --hard
+      git pull --rebase
+    else
+      cd .build_source
+      git clone ${VAR_REPO} -b ${VAR_BRANCH} komodo
+      cd komodo
+    fi
+    # Copy the pubkey from old source
+    cp -vf ${VAR_SRC_DIR}/src/pubkey.txt ${HOME}/.build_source/komodo/src/
+
   else
     cd ${HOME}
     git clone ${VAR_REPO} -b ${VAR_BRANCH}
@@ -156,10 +172,15 @@ chmod 660 ${VAR_CONF_DIR}/conf/*.conf
 
 echo -e "## Komodod Daemon has been configured ##\n"
 
-# Let komodo blockchain sync in the background only if blockchain was downloaded
-if [[ ! -z "${VAR_BLOCKCHAIN_DOWNLOAD+x}" ]]; then
-  if [[ -d "${VAR_CONF_DIR}/blocks" && -d "${VAR_CONF_DIR}/chainstate" ]] \
-    && ! $(ps aux | grep "${VAR_BLOCKCHAIN_ARCHIVE}") &> /dev/null; then
-      bash ${VAR_CONF_DIR}/bin/start.sh &
-  fi
-fi
+# Create monit template
+cat > ${HOME}/.komodo/monitd_komodo.template <<EOF
+check program komodod_healthcheck.sh with path "${HOME}/.komodo/bin/healthcheck.sh"
+  as uid ${USER} and gid ${USER}
+  with timeout 60 seconds
+if status != 0 then exec "${HOME}/.komodo/bin/start.sh"
+  as uid ${USER} and gid ${USER}
+  repeat every 2 cycles
+EOF
+
+# Copy monit configuration
+sudo mv ${HOME}/.komodo/monitd_komodo.template /etc/monit/conf.d/monitd_komodo

@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
+# source profile and setup variables using "${HOME}/.common/config"
+source /etc/profile
+[[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
+
 if ! $( lsof -Pi :<VAR_RPCPORT> -sTCP:LISTEN -t >& /dev/null); then
   while [[ $# -gt 0 ]]; do
     key="$1"
@@ -18,11 +22,11 @@ HELP
       -notary)
         if [[ -f "<VAR_SRC_DIR>/src/pubkey.txt" ]]; then
           btcpubkey=$(cat "<VAR_SRC_DIR>/src/pubkey.txt" | cut -d'=' -f2)
-          NOTARY_PARAMS="-notary -pubkey=${btcpubkey}"
+          KOMODO_NOTARY_PARAMS="-notary -pubkey=${btcpubkey}"
         fi
       ;;
       -gen)
-        GEN_PARAMS="-gen -genproclimit=<VAR_NPROC>"
+        KOMODO_GEN_PARAMS="-gen -genproclimit=<VAR_NPROC>"
       ;;
     esac
     shift
@@ -30,5 +34,5 @@ HELP
 
   echo -e "## Start komodo daemon ##\n"
   sudo -H -u <VAR_USERNAME> /bin/bash -c \
-    "<VAR_SRC_DIR>/src/komodod -conf=<VAR_CONF_FILE> ${NOTARY_PARAMS} ${GEN_PARAMS} &>> <VAR_CONF_DIR>/log/komodod.log"
+    "<VAR_SRC_DIR>/src/komodod -conf=<VAR_CONF_FILE> ${KOMODO_NOTARY_PARAMS} ${KOMODO_GEN_PARAMS} &>> <VAR_CONF_DIR>/log/komodod.log"
 fi

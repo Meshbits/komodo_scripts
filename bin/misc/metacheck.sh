@@ -2,9 +2,7 @@
 
 cd ${HOME}
 echo -n BTC;echo -n -e ' \t' ;echo -n "$(bitcoin-cli listunspent | grep .0001 | wc)"; bitcoin-cli getinfo | grep balance
-cd ~/chips3/src
 echo -n CHIPS;echo -n -e ' \t' ;echo -n "$(chips-cli listunspent | grep .0001 | wc)";chips-cli getinfo | grep balance
-cd ~/komodo/src
 echo -n KMD;echo -n -e ' \t'; echo -n "$(./komodo-cli listunspent | grep .0001 | wc)"; ./komodo-cli getinfo | grep balance
 echo -n REVS;echo -n -e ' \t'; echo -n "$(./komodo-cli -ac_name=REVS listunspent | grep .0001 | wc)"; ./komodo-cli -ac_name=REVS getinfo | grep balance
 echo -n SUPERNET;echo -n; echo -n "$(./komodo-cli -ac_name=SUPERNET listunspent | grep .0001 | wc)";./komodo-cli -ac_name=SUPERNET getinfo | grep balance

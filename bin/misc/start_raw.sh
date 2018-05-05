@@ -1,15 +1,22 @@
 #!/usr/bin/env bash
 
-~/.bitcoin/bin/start.sh &
-~/.chips/bin/start.sh &
-~/.komodo/bin/start.sh -notary -gen &
+if [[ $EUID -eq 0 ]]; then
+   echo -e "This script needs to run as a non-root user\n"
+   exit 1
+fi
 
-~/.bitcoin/bin/status.sh
-~/.chips/bin/status.sh
-~/.komodo/bin/status.sh
+cd ${HOME}/misc_scripts
 
-cd ~/misc_scripts
-./mine_assets &
-sleep 5m
-cd ~/SuperNET/iguana
+${HOME}/.bitcoin/bin/start.sh &
+${HOME}/.chips/bin/start.sh &
+${HOME}/.komodo/bin/start.sh -notary -gen &
+
+${HOME}/.bitcoin/bin/status.sh
+${HOME}/.chips/bin/status.sh
+${HOME}/.komodo/bin/status.sh
+
+${HOME}/.komodo/bin/ac_start.sh &
+${HOME}/.komodo/bin/ac_status.sh
+
+cd ${HOME}/SuperNET/iguana
 git checkout dev && git pull && ./m_notary && cd ~/komodo/src && ./dpowassets

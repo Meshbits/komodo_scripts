@@ -1,0 +1,41 @@
+###############################################################################
+## Monit control file
+###############################################################################
+## Comments begin with a '#' and extend through the end of the line. Keywords
+## are case insensitive. All path's MUST BE FULLY QUALIFIED, starting with '/'.
+###############################################################################
+## Global section
+###############################################################################
+## Start Monit in the background (run as a daemon): #
+  set daemon 60             # check services at 1-minute intervals
+  # with start delay 120    # optional: delay the first check by 2-minutes (by
+  set logfile /var/log/monit.log
+  set pidfile /var/run/monit.pid
+  set idfile /var/lib/monit/id
+  set statefile /var/lib/monit/state
+  set eventqueue
+      basedir /var/lib/monit/events # set the base directory where events will be stored
+      slots 100                     # optionally limit the queue size
+  include /etc/monit/conf.d/*
+  #include /etc/monit/conf-enabled/*
+
+  set httpd port 2812
+    use address 127.0.0.1
+    allow 127.0.0.1
+    allow admin:monit
+
+  check system $HOST
+    if cpu usage > <VAR_NPROC>00% for 5 cycles then alert
+
+  check filesystem rootfs with path /
+    if space usage > 80% then exec "/usr/local/bin/slack_monit.sh" else if succeeded then exec "/usr/local/bin/slack_monit.sh"
+
+## Set limits for various tests. The following example shows the default values:
+##
+# set limits {
+#     programOutput:     512 B,    # check program's output truncate limit
+#     sendExpectBuffer:  256 B,    # limit for send/expect protocol test
+#     fileContentBuffer: 512 B,    # limit for file content test
+#     httpContentBuffer: 1 MB,     # limit for HTTP content test
+#     networkTimeout:    5 seconds # timeout for network I/O
+# }

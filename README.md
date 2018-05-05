@@ -20,22 +20,54 @@ else
 fi
 ```
 
+- `run_optimisations.sh`: system optimisations
+```
+/usr/local/src/komodo_scripts/bin/run_optimisations.sh
+```
+
+- `common_config.sh`: create common configuration
+```
+/usr/local/src/komodo_scripts/bin/common_config.sh
+```
+
 - `create_user.sh`: create meshbits user
 ```
-cd komodo_scripts
-bash bin/create_user.sh meshbits
+/usr/local/src/komodo_scripts/bin/create_user.sh meshbits
+```
+
+- `common_config.sh`: sets up common configuration file
+```
+su - meshbits
+/usr/local/src/komodo_scripts/bin/common_config.sh
+```
+
+- `userdata.sh`: userdata
+```
+/usr/local/src/komodo_scripts/bin/userdata.sh
 ```
 
 - `setup_komodo.sh`: sets up komodo daemon from scratch
 ```
 su - meshbits
-cd /usr/local/src/komodo_scripts
-bash bin/setup_komodo.sh
+/usr/local/src/komodo_scripts/bin/setup_komodo.sh
 ```
 
 - `setup_chips.sh`: sets up chips daemon from scratch
 ```
 su - meshbits
-cd /usr/local/src/komodo_scripts
-bash bin/setup_chips.sh
+/usr/local/src/komodo_scripts/bin/setup_chips.sh
+```
+
+- `setup_assetchains.sh`: sets up chips daemon from scratch
+```
+su - meshbits
+/usr/local/src/komodo_scripts/bin/setup_assetchains.sh
+```
+
+
+### Sync while developing
+
+- `misc/update_setup_scripts.sh`: Loop script
+```
+/usr/local/src/komodo_scripts/bin/misc/update_setup_scripts.sh
 ```

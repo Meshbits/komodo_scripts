@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
+# source profile and setup variables using "${HOME}/.common/config"
+source /etc/profile
+[[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
+
 echo -e "## Komodod Assetchains setup starting ##\n"
 
 # Setup configuration which monit can use

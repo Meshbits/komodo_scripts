@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
+# source profile and setup variables using "${HOME}/.common/config"
+source /etc/profile
+[[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
+
 DAEMONCONF="<VAR_CONF_FILE>"
 RPCUSER=$(grep 'rpcuser' $DAEMONCONF | cut -d'=' -f2)
 RPCPASSWORD=$(grep 'rpcpassword' $DAEMONCONF | cut -d'=' -f2)
