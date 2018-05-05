@@ -20,15 +20,15 @@ if grep -P '^komodo_asset' ${ASSETCHAINS_FILE} >& /dev/null; then
     conffile=<HOME>/.komodo/${name}/${name}.conf
 
     if [[ ! -f ${conffile} ]]; then
-      komodo_asset $list $supply -gen &
+      komodo_asset ${name} ${supply} -gen &
     else
       sed -i 's|rpcworkqueue=64|rpcworkqueue=128|' ${conffile}
       RPCPORT=$(grep 'rpcport=' ${conffile} | cut -d'=' -f2)
       if ! $( lsof -Pi :${RPCPORT} -sTCP:LISTEN -t >& /dev/null); then
-        if [[ "$EXTERNALIP" = "-externalip=<EXTERNALIP>" || "$EXTERNALIP" = "-externalip=" ]]; then
-          komodo_asset $list $supply -gen &
+        if [[ "${EXTERNALIP}" = "-externalip=<EXTERNALIP>" || "${EXTERNALIP}" = "-externalip=" ]]; then
+          komodo_asset ${name} ${supply} -gen &
         else
-          komodo_asset $list $supply "$EXTERNALIP" -gen &
+          komodo_asset ${name} ${supply} "${EXTERNALIP}" -gen &
         fi
       fi
     fi
