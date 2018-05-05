@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
+# Running Komodo assetchains create files which I'd like to keep contained hence cd'ing to komodo
+cd <HOME>/komodo
+
 source <HOME>/komodo/src/pubkey.txt
 args=("$@")
 seed_ip=$(getent hosts zero.kolo.supernet.org | awk '{ print $1 }')
@@ -35,3 +38,6 @@ if grep -P '^komodo_asset' ${ASSETCHAINS_FILE} >& /dev/null; then
     sleep 1
   done
 fi
+
+# Go back to the previous directory
+cd - >& /dev/null
