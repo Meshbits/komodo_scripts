@@ -25,11 +25,6 @@ fi
 /usr/local/src/komodo_scripts/bin/run_optimisations.sh
 ```
 
-- `common_config.sh`: create common configuration
-```
-/usr/local/src/komodo_scripts/bin/common_config.sh
-```
-
 - `create_user.sh`: create meshbits user
 ```
 /usr/local/src/komodo_scripts/bin/create_user.sh meshbits
