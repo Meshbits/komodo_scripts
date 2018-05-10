@@ -8,7 +8,7 @@ if [[ $EUID -eq 0 ]]; then
 fi
 
 currentdir=$(pwd)
-VAR_SRC_DIR="${currentdir}/${1}"
+VAR_SRC_DIR="${1}"
 VAR_NPROC="$(cat /proc/cpuinfo | grep processor | wc -l)"
 
 # Capture real time taken
