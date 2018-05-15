@@ -23,6 +23,7 @@ grep '* - nproc 5000000' /etc/security/limits.conf || \
 grep 'session required pam_limits.so' /etc/pam.d/common-session || \
   sed -i '$isession required pam_limits.so' /etc/pam.d/common-session
 
+apt-get -y -qq update
 apt-get -y -qq install --install-recommends linux-generic-hwe-16.04
 
 # For `net.ipv4.tcp_congestion_control=bbr` you need a kernel > 4.9 and you have to load the kernel module.
