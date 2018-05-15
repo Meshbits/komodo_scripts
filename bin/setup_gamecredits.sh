@@ -78,24 +78,14 @@ if [[ ${DONT_BUILD} != true ]]; then
   ### Checkout the sourcecode
   if [[ -d ${VAR_SRC_DIR} ]]; then
 
-    echo -e "## GameCredits source directory already exists, building in *.build_source/GameCredits* ##\n"
-    cd ${VAR_SRC_DIR}/.. >& /dev/null
+    echo -e "## GameCredits source directory already exists, building in *.build_source/gamecredits* ##\n"
+    cd "${HOME}/.build_source" >& /dev/null
 
+    rm -rf gamecredits
+    git clone ${VAR_REPO} -b ${VAR_BRANCH} gamecredits
+    $(dirname $0)/install_berkleydb.sh "${HOME}/.build_source/gamecredits"
+    cd gamecredits
     BDB_PREFIX="${HOME}/.build_source/gamecredits/db4"
-
-    if [[ -d .build_source/gamecredits ]]; then
-      $(dirname $0)/install_berkleydb.sh "${SCRIPTPATH}/.build_source/gamecredits"
-      cd .build_source/gamecredits
-      git checkout ${VAR_BRANCH}
-      git reset --hard
-      git pull --rebase
-    else
-      cd .build_source
-      git clone ${VAR_REPO} -b ${VAR_BRANCH} gamecredits
-      $(dirname $0)/install_berkleydb.sh "${SCRIPTPATH}/.build_source/gamecredits/db4"
-      cd gamecredits
-    fi
-
   else
     cd ${HOME}
     git clone ${VAR_REPO} -b ${VAR_BRANCH} gamecredits
