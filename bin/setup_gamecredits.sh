@@ -98,7 +98,7 @@ if [[ ${DONT_BUILD} != true ]]; then
 
   else
     cd ${HOME}
-    git clone ${VAR_REPO} -b ${VAR_BRANCH}
+    git clone ${VAR_REPO} -b ${VAR_BRANCH} gamecredits
     cd ${VAR_SRC_DIR}
 
     # Build BerkleyDB
