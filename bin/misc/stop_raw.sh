@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
-~/.bitcoin/bin/stop.sh
+sudo /etc/init.d/monit stop
+#~/.bitcoin/bin/stop.sh
 ~/.chips/bin/stop.sh
+~/.gamecredits/bin/stop.sh
 ~/.komodo/bin/stop.sh
+~/.komodo/bin/ac_stop.sh
 
 pkill -15 iguana

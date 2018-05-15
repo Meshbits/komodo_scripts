@@ -9,10 +9,12 @@ cd ${HOME}/misc_scripts
 
 ${HOME}/.bitcoin/bin/start.sh &
 ${HOME}/.chips/bin/start.sh &
+${HOME}/.gamecredits/bin/start.sh &
 ${HOME}/.komodo/bin/start.sh -notary -gen &
 
 ${HOME}/.bitcoin/bin/status.sh
 ${HOME}/.chips/bin/status.sh
+${HOME}/.gamecredits/bin/status.sh
 ${HOME}/.komodo/bin/status.sh
 
 ${HOME}/.komodo/bin/ac_start.sh &
