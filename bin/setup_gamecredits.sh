@@ -92,7 +92,7 @@ if [[ ${DONT_BUILD} != true ]]; then
     else
       cd .build_source
       git clone ${VAR_REPO} -b ${VAR_BRANCH} gamecredits
-      $(dirname $0)/install_berkleydb.sh "${SCRIPTPATH}/.build_source/gamecredits"
+      $(dirname $0)/install_berkleydb.sh "${SCRIPTPATH}/.build_source/gamecredits/db4"
       cd gamecredits
     fi
 
