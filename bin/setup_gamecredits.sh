@@ -80,7 +80,6 @@ if [[ ${DONT_BUILD} != true ]]; then
 
     echo -e "## GameCredits source directory already exists, building in *.build_source/gamecredits* ##\n"
     cd "${HOME}/.build_source" >& /dev/null
-
     rm -rf gamecredits
     git clone ${VAR_REPO} -b ${VAR_BRANCH} gamecredits
     $(dirname $0)/install_berkleydb.sh "${HOME}/.build_source/gamecredits"

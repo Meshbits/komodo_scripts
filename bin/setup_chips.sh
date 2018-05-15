@@ -79,26 +79,15 @@ if [[ ${DONT_BUILD} != true ]]; then
   if [[ -d ${VAR_SRC_DIR} ]]; then
 
     echo -e "## Chips3 source directory already exists, building in *.build_source/chips3* ##\n"
-    cd ${VAR_SRC_DIR}/.. >& /dev/null
-
+    cd ${HOME}/.build_source >& /dev/null
+    rm -rf chips3
+    git clone ${VAR_REPO} -b ${VAR_BRANCH} chips3
+    $(dirname $0)/install_berkleydb.sh "${HOME}/.build_source/chips3"
+    cd chips3
     BDB_PREFIX="${HOME}/.build_source/chips3/db4"
-
-    if [[ -d .build_source/chips3 ]]; then
-      $(dirname $0)/install_berkleydb.sh "${SCRIPTPATH}/.build_source/chips3"
-      cd .build_source/chips3
-      git checkout ${VAR_BRANCH}
-      git reset --hard
-      git pull --rebase
-    else
-      cd .build_source
-      git clone ${VAR_REPO} -b ${VAR_BRANCH} chips3
-      $(dirname $0)/install_berkleydb.sh "${SCRIPTPATH}/.build_source/chips3"
-      cd chips3
-    fi
-
   else
     cd ${HOME}
-    git clone ${VAR_REPO} -b ${VAR_BRANCH}
+    git clone ${VAR_REPO} -b ${VAR_BRANCH} chips3
     cd ${VAR_SRC_DIR}
 
     # Build BerkleyDB
