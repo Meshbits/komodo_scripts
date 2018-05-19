@@ -14,7 +14,7 @@ if grep -P '^komodo_asset' ${ASSETCHAINS_FILE} >& /dev/null; then
     if [[ ${name} == "BEER" || ${name} == "PIZZA" || ${name} == "VOTE2018" ]]; then continue; fi
     conffile="<HOME>/.komodo/${name}/${name}.conf"
 
-    if [[ ! -f ${conffile} ]]; then
+    if [[ -f ${conffile} ]]; then
       RPCPORT=$(grep 'rpcport=' ${conffile} | cut -d'=' -f2)
       RPCUSER=$(grep 'rpcuser=' ${conffile} | cut -d'=' -f2)
       RPCPASSWORD=$(grep 'rpcpassword=' ${conffile} | cut -d'=' -f2)
