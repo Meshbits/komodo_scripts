@@ -27,7 +27,7 @@ if grep -P '^komodo_asset' ${ASSETCHAINS_FILE} >& /dev/null; then
     supply=$(echo $list | awk -F':' '{ print $2 }')
     conffile=<HOME>/.komodo/${name}/${name}.conf
 
-    if [[ ! -f ${conffile} ]]; then
+    if [[ -f ${conffile} ]]; then
       komodo_asset ${name} ${supply} &
     else
       sed -i 's|rpcworkqueue=64|rpcworkqueue=256|' ${conffile}
