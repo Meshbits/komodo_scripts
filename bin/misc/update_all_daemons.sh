@@ -5,6 +5,9 @@ set -e
 SCRIPTNAME=$(realpath $0)
 SCRIPTPATH=$(dirname $SCRIPTNAME)
 
+# Ensure that everything is running first
+${SCRIPTPATH}/start_raw.sh
+
 # update the daemons
 /usr/local/src/komodo_scripts/bin/setup_komodo.sh
 /usr/local/src/komodo_scripts/bin/setup_chips.sh

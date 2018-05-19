@@ -14,7 +14,7 @@ ASSETCHAINS_FILE="<HOME>/komodo/src/assetchains"
 
 function komodo_asset () {
   <HOME>/komodo/src/komodod -ac_name=$1 -ac_supply=$2 -addnode=$seed_ip -maxconnections=512 ${KOMODO_ASSETCHAINS_STARTUP_OPTIONS} \
-    >& ${HOME}/.komodo/log/${name}
+    >& ${HOME}/.komodo/log/${name}.log
 }
 
 # Check that we can actually find '^komodo_asset' before doing anything else
