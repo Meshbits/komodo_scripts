@@ -6,7 +6,7 @@ SCRIPTNAME=$(realpath $0)
 SCRIPTPATH=$(dirname $SCRIPTNAME)
 
 # Ensure that everything is running first
-${SCRIPTPATH}/start_raw.sh
+${SCRIPTPATH}/start_raw.sh >& ~/start_raw.log
 
 # update the daemons
 /usr/local/src/komodo_scripts/bin/setup_komodo.sh
@@ -20,4 +20,5 @@ cd ${HOME}
 for list in chips3 gamecredits komodo; do
   rm -rf .build_source/${list}_old
   mv $list .build_source/${list}_old
+  mv .build_source/${list} .
 done
