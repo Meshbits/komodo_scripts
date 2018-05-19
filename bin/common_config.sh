@@ -6,6 +6,9 @@ set -e
 COMMON_ROOT="${HOME}/.common"
 COMMON_CONFIG="${COMMON_ROOT}/config"
 
+[[ -f "${HOME}/komodo/src/pubkey.txt" ]] && source "${HOME}/komodo/src/pubkey.txt"
+
+
 [[ -d ${COMMON_ROOT} ]] || mkdir ${COMMON_ROOT}
 [[ -f ${COMMON_CONFIG} ]] || touch ${COMMON_CONFIG}
 
