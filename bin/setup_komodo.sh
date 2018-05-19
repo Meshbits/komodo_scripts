@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Installing Komodo on Ubuntu 16.04 LTS
+# Tested on Ubuntu 16.04 LTS
 set -e
 
 if [[ $EUID -eq 0 ]]; then
@@ -20,13 +20,15 @@ function time_taken() {
 # Variables
 SCRIPTNAME=$(realpath $0)
 SCRIPTPATH=$(dirname $SCRIPTNAME)
+VAR_THING=komodo
+
 [[ -z ${VAR_NPROC+x} ]] && VAR_NPROC="$(cat /proc/cpuinfo | grep processor | wc -l)"
 [[ -z ${VAR_USERNAME+x} ]] && VAR_USERNAME="${USER}"
 [[ -z ${VAR_BRANCH+x} ]] && VAR_BRANCH='dev'
 [[ -z ${VAR_REPO+x} ]] && VAR_REPO='https://github.com/jl777/komodo.git'
-[[ -z ${VAR_SRC_DIR+x} ]] && VAR_SRC_DIR="${HOME}/komodo"
-[[ -z ${VAR_CONF_DIR+x} ]] && VAR_CONF_DIR="${HOME}/.komodo"
-[[ -z ${VAR_CONF_FILE+x} ]] && VAR_CONF_FILE="${VAR_CONF_DIR}/conf/komodo.conf"
+[[ -z ${VAR_SRC_DIR+x} ]] && VAR_SRC_DIR="${HOME}/${VAR_THING}"
+[[ -z ${VAR_CONF_DIR+x} ]] && VAR_CONF_DIR="${HOME}/.${VAR_THING}"
+[[ -z ${VAR_CONF_FILE+x} ]] && VAR_CONF_FILE="${VAR_CONF_DIR}/conf/${VAR_THING}.conf"
 [[ -z ${VAR_RPCPORT+x} ]] && VAR_RPCPORT="7771"
 [[ -z ${VAR_BLOCKCHAIN_ARCHIVE+x} ]] && VAR_BLOCKCHAIN_ARCHIVE="komodo_blockchain_backup.tar.gz"
 
@@ -39,7 +41,7 @@ else
   RPCPASSWORD=$(grep 'rpcpassword' ${VAR_CONF_FILE} | cut -d'=' -f2)
 fi
 
-echo -e "## Komodod Daemon setup starting ##\n"
+echo -e "## ${VAR_THING} setup starting ##\n"
 
 # Install requisites:
 sudo -s bash <<EOF
@@ -76,7 +78,7 @@ EOF
 echo -e "Created configuration file\n"
 
 # Create a hard-link for conf file for backward compatibility
-[[ -f ${VAR_CONF_DIR}/komodo.conf ]] || ln ${VAR_CONF_FILE} ${VAR_CONF_DIR}/
+[[ -f ${VAR_CONF_DIR}/${VAR_THING}.conf ]] || ln ${VAR_CONF_FILE} ${VAR_CONF_DIR}/
 
 #### Use blockchain backup from somewhere
 if [[ ! -z ${VAR_BLOCKCHAIN_DOWNLOAD+x} ]]; then
@@ -110,21 +112,21 @@ if [[ ${DONT_BUILD} != true ]]; then
   ### Checkout the sourcecode
   if [[ -d ${VAR_SRC_DIR} ]]; then
 
-    echo -e "## Komodo source directory already exists, building in *.build/komodo* ##\n"
+    echo -e "## ${VAR_THING} source directory already exists, building in *.build/${VAR_THING}* ##\n"
     cd ${VAR_SRC_DIR}/.. >& /dev/null
 
-    if [[ -d .build_source/komodo ]]; then
-      cd .build_source/komodo
+    if [[ -d .build_source/${VAR_THING} ]]; then
+      cd .build_source/${VAR_THING}
       git checkout ${VAR_BRANCH}
       git reset --hard
       git pull --rebase
     else
       cd .build_source
-      git clone ${VAR_REPO} -b ${VAR_BRANCH} komodo
-      cd komodo
+      git clone ${VAR_REPO} -b ${VAR_BRANCH} ${VAR_THING}
+      cd ${VAR_THING}
     fi
     # Copy the pubkey from old source
-    cp -vf ${VAR_SRC_DIR}/src/pubkey.txt ${HOME}/.build_source/komodo/src/
+    cp -vf ${VAR_SRC_DIR}/src/pubkey.txt ${HOME}/.build_source/${VAR_THING}/src/
 
   else
     cd ${HOME}
@@ -132,10 +134,10 @@ if [[ ${DONT_BUILD} != true ]]; then
     cd ${VAR_SRC_DIR}
   fi
 
-  echo -e "===> Build Komodo Daemon"
+  echo -e "===> Build ${VAR_THING}"
   time_taken ./zcutil/fetch-params.sh
   time_taken ./zcutil/build.sh -j${VAR_NPROC}
-  echo -e "===> Finished building Komodo Daemon"
+  echo -e "===> Finished building ${VAR_THING}"
 
 fi
 
@@ -146,41 +148,41 @@ sed -e "s|<VAR_RPCPORT>|${VAR_RPCPORT}|g" \
   -e "s|<VAR_USERNAME>|${VAR_USERNAME}|g" \
   -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
   -e "s|<VAR_CONF_DIR>|${VAR_CONF_DIR}|g" \
-  "${SCRIPTPATH}/.komodo/bin/start.sh" > "${VAR_CONF_DIR}/bin/start.sh"
+  "${SCRIPTPATH}/.${VAR_THING}/bin/start.sh" > "${VAR_CONF_DIR}/bin/start.sh"
 
 sed -e "s|<VAR_USERNAME>|${VAR_USERNAME}|g" \
   -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
   -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
   -e "s|<VAR_CONF_DIR>|${VAR_CONF_DIR}|g" \
-  "${SCRIPTPATH}/.komodo/bin/stop.sh" > "${VAR_CONF_DIR}/bin/stop.sh"
+  "${SCRIPTPATH}/.${VAR_THING}/bin/stop.sh" > "${VAR_CONF_DIR}/bin/stop.sh"
 
 sed -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
-  "${SCRIPTPATH}/.komodo/bin/healthcheck.sh" > "${VAR_CONF_DIR}/bin/healthcheck.sh"
+  "${SCRIPTPATH}/.${VAR_THING}/bin/healthcheck.sh" > "${VAR_CONF_DIR}/bin/healthcheck.sh"
 
 sed -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
-  "${SCRIPTPATH}/.komodo/bin/status.sh" > "${VAR_CONF_DIR}/bin/status.sh"
+  "${SCRIPTPATH}/.${VAR_THING}/bin/status.sh" > "${VAR_CONF_DIR}/bin/status.sh"
 
 # Symlink binaries
-sudo ln -sf ${VAR_SRC_DIR}/src/komodo-cli /usr/local/bin/
-sudo ln -sf ${VAR_SRC_DIR}/src/komodod /usr/local/bin/
-sudo chmod +x /usr/local/bin/komodo-cli
-sudo chmod +x /usr/local/bin/komodod
+sudo ln -sf ${VAR_SRC_DIR}/src/${VAR_THING}-cli /usr/local/bin/
+sudo ln -sf ${VAR_SRC_DIR}/src/${VAR_THING}d /usr/local/bin/
+sudo chmod +x /usr/local/bin/${VAR_THING}-cli
+sudo chmod +x /usr/local/bin/${VAR_THING}d
 
 # Permissions and ownership
 chmod +x ${VAR_CONF_DIR}/bin/*
 chmod 660 ${VAR_CONF_DIR}/conf/*.conf
 
-echo -e "## Komodod Daemon has been configured ##\n"
+echo -e "## ${VAR_THING} has been configured ##\n"
 
 # Create monit template
-cat > ${HOME}/.komodo/monitd_komodo.template <<EOF
-check program komodod_healthcheck.sh with path "${HOME}/.komodo/bin/healthcheck.sh"
+cat > ${HOME}/.${VAR_THING}/monitd_${VAR_THING}.template <<EOF
+check program ${VAR_THING}d_healthcheck.sh with path "${HOME}/.${VAR_THING}/bin/healthcheck.sh"
   as uid ${USER} and gid ${USER}
   with timeout 60 seconds
-if status != 0 then exec "${HOME}/.komodo/bin/start.sh"
+if status != 0 then exec "${HOME}/.${VAR_THING}/bin/start.sh"
   as uid ${USER} and gid ${USER}
   repeat every 2 cycles
 EOF
 
 # Copy monit configuration
-sudo mv ${HOME}/.komodo/monitd_komodo.template /etc/monit/conf.d/monitd_komodo
+sudo mv ${HOME}/.${VAR_THING}/monitd_${VAR_THING}.template /etc/monit/conf.d/monitd_${VAR_THING}
