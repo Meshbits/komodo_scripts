@@ -4,18 +4,16 @@ set -e
 # source profile and setup variables using "${HOME}/.common/config"
 source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
+[[ -f "${HOME}/komodo/src/pubkey.txt" ]] && source "${HOME}/komodo/src/pubkey.txt"
 
 # Running Komodo assetchains create files which I'd like to keep contained hence cd'ing to komodo
 cd <HOME>/komodo
-
-[[ -f <HOME>/komodo/src/pubkey.txt ]] || source <HOME>/komodo/src/pubkey.txt
-args=("$@")
 seed_ip=$(getent hosts zero.kolo.supernet.org | awk '{ print $1 }')
 EXTERNALIP="-externalip=<EXTERNALIP>"
 ASSETCHAINS_FILE="<HOME>/komodo/src/assetchains"
 
 function komodo_asset () {
-  <HOME>/komodo/src/komodod -pubkey=$pubkey -ac_name=$1 -ac_supply=$2 -addnode=$seed_ip -maxconnections=512 -gen $args \
+  <HOME>/komodo/src/komodod -ac_name=$1 -ac_supply=$2 -addnode=$seed_ip -maxconnections=512 ${KOMODO_ASSETCHAINS_STARTUP_OPTIONS} \
     >& ${HOME}/.komodo/log/${name}
 }
 

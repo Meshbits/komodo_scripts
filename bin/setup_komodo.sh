@@ -154,6 +154,7 @@ sed -e "s|<VAR_USERNAME>|${VAR_USERNAME}|g" \
   -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
   -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
   -e "s|<VAR_CONF_DIR>|${VAR_CONF_DIR}|g" \
+  -e "s|<VAR_THING>|${VAR_THING}|g" \
   "${SCRIPTPATH}/.${VAR_THING}/bin/stop.sh" > "${VAR_CONF_DIR}/bin/stop.sh"
 
 sed -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
