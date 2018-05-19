@@ -10,15 +10,11 @@ COMMON_CONFIG="${COMMON_ROOT}/config"
 [[ -f ${COMMON_CONFIG} ]] || touch ${COMMON_CONFIG}
 
 function verifyvalue() {
-  VARKEY=${1}
-  VARVALUE=${2}
-  if [[ ! -z ${VARVALUE+x} ]]; then
-    if grep -q "${VARVALUE}" ${COMMON_CONFIG}; then
-      if [[ ! -z ${OVERWRITE_COMMON_CONFIG+x} ]]; then
-        sed -i "s|^${VARKEY}=.*$|${VARKEY}=${VARVALUE}|" ${COMMON_CONFIG}
-      fi
-    else
-      echo "${VARKEY}=${VARVALUE}" >> ${COMMON_CONFIG}
+  VARKEY="${1}"
+  VARVALUE="${2}"
+  if [[ ! -z "${VARVALUE+x}" ]]; then
+    if ! grep -q "${VARKEY}" ${COMMON_CONFIG} >& /dev/null; then
+      echo "${VARKEY}=\"${VARVALUE}\"" >> ${COMMON_CONFIG}
     fi
   fi
 }
@@ -37,8 +33,8 @@ verifyvalue KOMODO_BRANCH ${KOMODO_BRANCH}
 verifyvalue KOMODO_REPOSITORY ${KOMODO_REPOSITORY}
 verifyvalue KOMODO_SRC_DIR ${KOMODO_SRC_DIR}
 verifyvalue KOMODO_RPCPORT 7771
-verifyvalue KOMODO_STARTUP_OPTIONS "-notary -pubkey=${pubkey} -gen -genproclimit=-1"
-verifyvalue KOMODO_ASSETCHAINS_STARTUP_OPTIONS "-pubkey=${pubkey} -gen -genproclimit=-1"
+verifyvalue KOMODO_STARTUP_OPTIONS "-notary -pubkey=\${pubkey} -gen -genproclimit=-1"
+verifyvalue KOMODO_ASSETCHAINS_STARTUP_OPTIONS "-pubkey=\${pubkey} -gen -genproclimit=-1"
 
 verifyvalue BITCOIND_BRANCH ${BITCOIND_BRANCH}
 verifyvalue BITCOIND_REPOSITORY ${BITCOIND_REPOSITORY}
@@ -53,9 +49,9 @@ verifyvalue IGUANA_RPCPORT 7778
 verifyvalue CHIPS_BRANCH ${CHIPS_BRANCH}
 verifyvalue CHIPS_REPOSITORY ${CHIPS_REPOSITORY}
 verifyvalue CHIPS_SRC_DIR ${CHIPS_SRC_DIR}
-verifyvalue CHIPS_STARTUP_OPTIONS "-pubkey=${pubkey} -gen -genproclimit=-1"
+verifyvalue CHIPS_STARTUP_OPTIONS "-pubkey=\${pubkey} -gen -genproclimit=-1"
 
 verifyvalue GAMECREDITS_BRANCH ${GAMECREDITS_BRANCH}
 verifyvalue GAMECREDITS_REPOSITORY ${CHIPS_REPOSITORY}
 verifyvalue CHIPS_SRC_DIR ${GAMECREDITS_SRC_DIR}
-verifyvalue GAMECREDITS_STARTUP_OPTIONS "-pubkey=${pubkey} -gen -genproclimit=-1"
+verifyvalue GAMECREDITS_STARTUP_OPTIONS "-pubkey=\${pubkey} -gen -genproclimit=-1"
