@@ -171,7 +171,7 @@ cat > ${HOME}/.bitcoin/monitd_bitcoin.template <<EOF
 check program bitcoind_healthcheck.sh with path "${HOME}/.bitcoin/bin/healthcheck.sh"
   as uid ${USER} and gid ${USER}
   with timeout 60 seconds
-if status != 0 then exec "${HOME}/.bitcoin/bin/start.sh"
+if status != 0 then exec "/usr/local/bin/sudo_wrapper ${HOME}/.bitcoin/bin/start.sh"
   as uid ${USER} and gid ${USER}
   repeat every 2 cycles
 EOF

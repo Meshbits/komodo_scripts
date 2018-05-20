@@ -142,7 +142,7 @@ cat > ${HOME}/.gamecredits/monitd_gamecredits.template <<EOF
 check program gamecredits_healthcheck.sh with path "${HOME}/.gamecredits/bin/healthcheck.sh"
   as uid ${USER} and gid ${USER}
   with timeout 60 seconds
-if status != 0 then exec "${HOME}/.gamecredits/bin/start.sh"
+if status != 0 then exec "/usr/local/bin/sudo_wrapper ${HOME}/.gamecredits/bin/start.sh"
   as uid ${USER} and gid ${USER}
   repeat every 2 cycles
 EOF

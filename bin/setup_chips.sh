@@ -144,7 +144,7 @@ cat > ${HOME}/.chips/monitd_chips.template <<EOF
 check program chips_healthcheck.sh with path "${HOME}/.chips/bin/healthcheck.sh"
   as uid ${USER} and gid ${USER}
   with timeout 60 seconds
-if status != 0 then exec "${HOME}/.chips/bin/start.sh"
+if status != 0 then exec "/usr/local/bin/sudo_wrapper ${HOME}/.chips/bin/start.sh"
   as uid ${USER} and gid ${USER}
   repeat every 2 cycles
 EOF

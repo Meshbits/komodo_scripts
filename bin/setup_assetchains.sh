@@ -27,7 +27,7 @@ cat > ${HOME}/.komodo/monitd_assetchains.template <<EOF
 check program assetchains_healthcheck.sh with path "${HOME}/.komodo/bin/ac_healthcheck.sh"
   as uid ${USER} and gid ${USER}
   with timeout 60 seconds
-if status != 0 then exec "${HOME}/.komodo/bin/ac_start.sh"
+if status != 0 then exec "/usr/local/bin/sudo_wrapper ${HOME}/.komodo/bin/ac_start.sh"
   as uid ${USER} and gid ${USER}
   repeat every 2 cycles
 EOF
