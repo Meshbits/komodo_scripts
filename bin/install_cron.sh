@@ -7,8 +7,8 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 cat > /var/spool/cron/crontabs/meshbits <<\EOF
-*/30 * * * * bash /home/meshbits/misc_scripts/cron_recharge_utxos.sh
-*/30 * * * * bash /usr/local/bin/slack_alert "#nn_reports" "\`\`\`$(echo $(hostname);/home/meshbits/misc_scripts/stats_new | grep -P -- 'KMD |BTC |-ASSET- ')\`\`\`"
+0 * * * * bash /home/meshbits/misc_scripts/cron_recharge_utxos.sh
+0 * * * * bash /usr/local/bin/slack_alert "#nn_reports" "\`\`\`$(echo $(hostname);/home/meshbits/misc_scripts/stats_new | grep -P -- 'KMD |BTC |-ASSET- ')\`\`\`"
 EOF
 
 chown meshbits.crontab /var/spool/cron/crontabs/meshbits
