@@ -13,3 +13,5 @@ EOF
 
 chown meshbits.crontab /var/spool/cron/crontabs/meshbits
 chmod 0600 /var/spool/cron/crontabs/meshbits
+
+/etc/init.d/cron restart

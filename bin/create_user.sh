@@ -20,7 +20,7 @@ echo "${1} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${1}
 chmod 0400 /etc/sudoers.d/${1}
 
 # Create sudo wrapper
-sudo tee /usr/local/bin/sudo_wrapper <<EOF
+cat <<'EOF' | sudo tee /usr/local/bin/sudo_wrapper
 #!/usr/bin/env bash
 set -e
 sudo -H -u ${1} /bin/bash -l -c -- "\$@"
