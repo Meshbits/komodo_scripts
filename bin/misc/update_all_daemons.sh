@@ -22,3 +22,5 @@ for list in chips3 gamecredits komodo; do
   mv $list .build_source/${list}_old
   mv .build_source/${list} .
 done
+
+${SCRIPTPATH}/start_raw.sh >& ~/start_raw.log
