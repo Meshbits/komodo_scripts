@@ -18,3 +18,11 @@ id -u ${1} &>/dev/null || adduser --disabled-password --gecos "" ${1}
 # sudoers entry for the user
 echo "${1} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${1}
 chmod 0400 /etc/sudoers.d/${1}
+
+# Create sudo wrapper
+sudo tee /usr/local/bin/sudo_wrapper <<EOF
+#!/usr/bin/env bash
+set -e
+sudo -H -u ${USER} /bin/bash -l -c -- "\$@"
+EOF
+sudo chmod +x /usr/local/bin/sudo_wrapper

@@ -7,14 +7,6 @@ fi
 
 VAR_NPROC="$(cat /proc/cpuinfo | grep processor | wc -l)"
 
-# Create sudo wrapper
-cat > /usr/local/bin/sudo_wrapper <<\EOF
-#!/usr/bin/env bash
-set -e
-sudo -H -u ${USER} /bin/bash -l -c -- "$@"
-EOF
-chmod +x /usr/local/bin/sudo_wrapper
-
 # Create slack alert wrapper
 cat > /usr/local/bin/slack_alert <<\EOF
 [[ -f "${HOME}/.common/config" ]]; source "${HOME}/.common/config"
