@@ -23,6 +23,6 @@ chmod 0400 /etc/sudoers.d/${1}
 sudo tee /usr/local/bin/sudo_wrapper <<EOF
 #!/usr/bin/env bash
 set -e
-sudo -H -u ${USER} /bin/bash -l -c -- "\$@"
+sudo -H -u ${1} /bin/bash -l -c -- "\$@"
 EOF
 sudo chmod +x /usr/local/bin/sudo_wrapper
