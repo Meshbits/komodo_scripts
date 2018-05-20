@@ -18,6 +18,5 @@ HELP
   done
 
   echo -e "## Start bitcoin daemon ##\n"
-  sudo -H -u <VAR_USERNAME> /bin/bash -c \
-    "<VAR_SRC_DIR>/src/bitcoind -conf=<VAR_CONF_FILE> &>> <VAR_CONF_DIR>/log/bitcoind.log"
+  <VAR_SRC_DIR>/src/bitcoind -conf=<VAR_CONF_FILE> &>> <VAR_CONF_DIR>/log/bitcoind.log
 fi
