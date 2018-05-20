@@ -11,6 +11,10 @@ for items in BTC_NOTARISATION_ADDRESS KMD_NOTARISATION_ADDRESS; do
   fi
 done
 
+# Variables
+SCRIPTNAME=$(realpath $0)
+SCRIPTPATH=$(dirname $SCRIPTNAME)
+
 #Seconds in display loop, change to false if you don't want it to loop
 sleepytime=false
 
@@ -19,7 +23,7 @@ txscanamount=10000
 
 #Don't change below unless you know
 IFS=
-source coinlist
+source ${SCRIPTPATH}/coinlist
 utxoamt=0.00010000
 ntrzdamt=-0.00083600
 btcntrzaddr=$BTC_NOTARISATION_ADDRESS
