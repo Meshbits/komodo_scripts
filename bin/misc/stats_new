@@ -1,17 +1,5 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-# source profile and setup variables using "${HOME}/.common/config"
-source /etc/profile
-[[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
-
-for items in BTC_NOTARISATION_ADDRESS KMD_NOTARISATION_ADDRESS; do
-  if [[ -z ${items+x} ]]; then
-    echo -e "Unset variable: ${item}"
-    exit 1
-  fi
-done
-
-# Variables
 SCRIPTNAME=$(realpath $0)
 SCRIPTPATH=$(dirname $SCRIPTNAME)
 
@@ -26,8 +14,8 @@ IFS=
 source ${SCRIPTPATH}/coinlist
 utxoamt=0.00010000
 ntrzdamt=-0.00083600
-btcntrzaddr=$BTC_NOTARISATION_ADDRESS
-kmdntrzaddr=$KMD_NOTARISATION_ADDRESS
+btcntrzaddr=1P3rU1Nk1pmc2BiWC8dEy9bZa1ZbMp5jfg
+kmdntrzaddr=RXL3YXG2ceaB6C5hfJcN4fvmLH2C34knhA
 
 format="%-8s %7s %6s %7s %12s %8s %7s %7s\n"
 
