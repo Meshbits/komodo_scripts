@@ -5,6 +5,8 @@ if [[ $EUID -eq 0 ]]; then
    exit 1
 fi
 
+echo -e "# Starting all services\n"
+
 cd ${HOME}/misc_scripts
 
 ${HOME}/.bitcoin/bin/start.sh &
