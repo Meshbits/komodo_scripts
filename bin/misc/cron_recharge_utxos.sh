@@ -19,6 +19,12 @@ if [[ $(chips-cli listunspent | grep ${dsatoshis} | wc -l) -lt 20 ]]; then
   /usr/local/bin/slack_alert "$(echo -n -e 'CHIPS utxos after split:\t'; chips-cli listunspent | grep ${dsatoshis} | wc -l)"
 fi
 
+if [[ $(gamecredits-cli listunspent | grep ${dsatoshis} | wc -l) -lt 20 ]]; then
+  /usr/local/bin/slack_alert "$(echo -n -e 'GameCredits utxos before split:\t'; gamecredits-cli listunspent | grep ${dsatoshis} | wc -l)"
+  ${HOME}/misc_scripts/acsplit.sh GAME 5
+  /usr/local/bin/slack_alert "$(echo -n -e 'GameCredits utxos after split:\t'; gamecredits-cli listunspent | grep ${dsatoshis} | wc -l)"
+fi
+
 if [[ $(komodo-cli listunspent | grep ${dsatoshis} | wc -l) -lt 20 ]]; then
   /usr/local/bin/slack_alert "$(echo -n -e 'KMD utxos before split:\t'; komodo-cli listunspent | grep ${dsatoshis} | wc -l)"
   ${HOME}/misc_scripts/acsplit.sh KMD 20
