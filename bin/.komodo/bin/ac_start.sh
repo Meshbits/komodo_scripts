@@ -17,16 +17,14 @@ function komodo_asset () {
     >& ${HOME}/.komodo/log/${name}.log
 }
 
-for ((item=1; item<$(cat ${ASSETCHAINS_FILE} | jq '. | length'); item++)); do
+for ((item=1; item<$(cat ${ASSETCHAINS_FILE} | jq '. | length'); item++));
 do
   name=$(cat ${ASSETCHAINS_FILE} | jq -r ".[${item}] | .ac_name")
-
   if [[ ${name} == "BEER" || ${name} == "PIZZA" || ${name} == "VOTE2018" ]]; then continue; fi
-
   supply=$(cat ${ASSETCHAINS_FILE} | jq -r ".[${item}] | .ac_supply")
   conffile=<HOME>/.komodo/${name}/${name}.conf
 
-  if [[ -f ${conffile} ]]; then
+  if [[ ! -f ${conffile} ]]; then
     komodo_asset ${name} ${supply} &
   else
     sed -i 's|rpcworkqueue=64|rpcworkqueue=256|' ${conffile}
