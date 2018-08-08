@@ -59,6 +59,12 @@ su - meshbits
 /usr/local/src/komodo_scripts/bin/setup_assetchains.sh
 ```
 
+- `setup_misc_scripts.sh`: sets up misc scripts and ensures **all daemon start up using rc.local**
+```
+su - meshbits
+/usr/local/src/komodo_scripts/bin/setup_misc_scripts.sh
+```
+
 
 ### Sync while developing
 

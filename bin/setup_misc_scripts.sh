@@ -11,3 +11,11 @@ SCRIPTPATH=$(dirname $SCRIPTNAME)
 
 # Sync all the scripts
 rsync -a "${SCRIPTPATH}/misc/" "${HOME}/misc_scripts/"
+
+# Start everything after system reboot
+if ! grep 'misc_scripts/start_raw.sh' /etc/rc.local; then
+  sudo sed -i '1 a exec 2> /tmp/rc.local.log      # send stderr from rc.local to a log file' /etc/rc.local
+  sudo sed -i '2 a exec 1>&2                      # send stdout to the same log file' /etc/rc.local
+  sudo sed -i '3 a set -x                         # tell sh to display commands before execution' /etc/rc.local
+  sudo sed -i "$ i /usr/local/bin/sudo_wrapper \"/home/${USER}/misc_scripts/start_raw.sh &>> /home/${USER}/start_raw.log\"" /etc/rc.local
+fi
