@@ -17,7 +17,7 @@ function komodo_asset () {
     >& ${HOME}/.komodo/log/${name}.log
 }
 
-for ((item=1; item<$(cat ${ASSETCHAINS_FILE} | jq '. | length'); item++));
+for ((item=0; item<$(cat ${ASSETCHAINS_FILE} | jq '. | length'); item++));
 do
   name=$(cat ${ASSETCHAINS_FILE} | jq -r ".[${item}] | .ac_name")
   if [[ ${name} == "BEER" || ${name} == "PIZZA" || ${name} == "VOTE2018" ]]; then continue; fi
