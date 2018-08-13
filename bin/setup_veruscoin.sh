@@ -124,7 +124,6 @@ sudo chmod +x /usr/local/bin/veruscoind
 
 # Permissions and ownership
 chmod +x ${VAR_CONF_DIR}/bin/*
-chmod 660 ${VAR_CONF_DIR}/conf/*.conf
 
 echo -e "## ${VAR_THING} has been configured ##\n"
 
