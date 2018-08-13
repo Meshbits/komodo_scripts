@@ -53,10 +53,22 @@ su - meshbits
 /usr/local/src/komodo_scripts/bin/setup_chips.sh
 ```
 
+- `setup_gamecredits.sh`: sets up gamecredits daemon from scratch
+```
+su - meshbits
+/usr/local/src/komodo_scripts/bin/setup_gamecredits.sh
+```
+
 - `setup_assetchains.sh`: sets up chips daemon from scratch
 ```
 su - meshbits
 /usr/local/src/komodo_scripts/bin/setup_assetchains.sh
+```
+
+- `setup_veruscoin.sh`: sets up veruscoin daemon from scratch
+```
+su - meshbits
+/usr/local/src/komodo_scripts/bin/setup_veruscoin.sh
 ```
 
 - `setup_misc_scripts.sh`: sets up misc scripts and ensures **all daemon start up using rc.local**
