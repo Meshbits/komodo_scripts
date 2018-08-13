@@ -87,7 +87,7 @@ if [[ ${DONT_BUILD} != true ]]; then
 
   else
     cd ${HOME}
-    git clone ${VAR_REPO} -b ${VAR_BRANCH}
+    git clone ${VAR_REPO} -b ${VAR_BRANCH} ${VAR_THING}
     cd ${VAR_SRC_DIR}
   fi
 

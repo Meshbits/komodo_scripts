@@ -12,6 +12,7 @@ ${SCRIPTPATH}/start_raw.sh >& ~/start_raw.log
 /usr/local/src/komodo_scripts/bin/setup_komodo.sh
 /usr/local/src/komodo_scripts/bin/setup_chips.sh
 /usr/local/src/komodo_scripts/bin/setup_gamecredits.sh
+/usr/local/src/komodo_scripts/bin/setup_veruscoin.sh
 
 # Stop all services first
 ${SCRIPTPATH}/stop_raw.sh
