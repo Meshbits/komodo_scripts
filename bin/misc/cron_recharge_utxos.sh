@@ -39,7 +39,7 @@ if [[ $(${HOME}/veruscoin/src/komodo-cli -ac_name=VRSC listunspent | grep ${dsat
 fi
 
 
-ASSETCHAINS_FILE="<HOME>/komodo/src/assetchains.json"
+ASSETCHAINS_FILE="${HOME}/komodo/src/assetchains.json"
 
 for ((item=0; item<$(cat ${ASSETCHAINS_FILE} | jq '. | length'); item++));
 do
