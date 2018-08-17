@@ -1,4 +1,4 @@
 version: '3'
 services:
   komodo:
-		image: ubuntu:18.04
+    image: ubuntu:18.04
