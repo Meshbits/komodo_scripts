@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 
 #RUN useradd -ms /bin/bash meshbits
-RUN apt-get -y update && apt-get -y install sudo
+RUN apt-get -y update && apt-get -y install sudo time
 ADD . /usr/local/src/komodo_scripts
 RUN /usr/local/src/komodo_scripts/bin/create_user.sh meshbits
 USER meshbits
