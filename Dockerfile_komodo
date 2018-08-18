@@ -1,11 +1,15 @@
-FROM ubuntu:18.04
+FROM ubuntu:16.04
 
 #RUN useradd -ms /bin/bash meshbits
 RUN apt-get -y update && apt-get -y install sudo time
 ADD . /usr/local/src/komodo_scripts
+
 RUN /usr/local/src/komodo_scripts/bin/create_user.sh meshbits
+RUN /usr/local/src/komodo_scripts/bin/userdata.sh
+
 USER meshbits
 WORKDIR /home/meshbits
+
 RUN /usr/local/src/komodo_scripts/bin/setup_komodo.sh
 
 
