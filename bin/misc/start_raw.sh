@@ -24,6 +24,6 @@ ${HOME}/.gamecredits/bin/status.sh
 ${HOME}/.komodo/VRSC/bin/status.sh
 
 cd ${HOME}/SuperNET/iguana
-git checkout dev && git pull && ./m_notary && cd ~/komodo/src && ./dpowassets
+git checkout beta && git pull && ./m_notary && cd ~/komodo/src && ./dpowassets
 
 sudo /etc/init.d/monit start
