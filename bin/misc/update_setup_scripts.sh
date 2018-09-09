@@ -3,19 +3,19 @@
 
 while true; do
 
-  sudo -s bash <<EOF
+sudo -s bash <<EOF
 cd /usr/local/src
 if [[ -d komodo_scripts ]]; then
   cd komodo_scripts
-  git checkout master; git reset --hard; git pull --rebase
+  git checkout master; git reset -q --hard; git pull --rebase
   cd - >& /dev/null
 else
-  git clone https://github.com/ns408/komodo_scripts.git
+  git clone -q https://github.com/ns408/komodo_scripts.git
   cd - >& /dev/null
 fi
 EOF
 
-  bash /usr/local/src/komodo_scripts/bin/setup_misc_scripts.sh
+  bash /usr/local/src/komodo_scripts/bin/setup_misc_scripts.sh >& /dev/null
   cd ${HOME}
   sleep 5
 done
