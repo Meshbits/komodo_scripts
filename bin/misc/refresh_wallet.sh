@@ -4,6 +4,9 @@ set -eo pipefail
 # Reference:
 # https://github.com/chainstrike/nntools/blob/master/guides/Guide-FreshWallet.txt
 
+# Prep for this script
+#komodo-cli importprivkey $TEMP_private_key "temp_vault" false
+
 # source profile and setup variables using "${HOME}/.common/config"
 source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
