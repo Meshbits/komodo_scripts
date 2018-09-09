@@ -48,8 +48,13 @@ NN_private_key=$(komodo-cli dumpprivkey ${NN_KOMODO_ADDRESS} | tee ${HOME}/.temp
 TEMP_private_key=$(komodo-cli dumpprivkey ${TEMP_KOMODO_ADDRESS} | tee ${HOME}/.temp_sensitive/temp_komodo_key)
 
 # What da balance
-balance=$(komodo-cli getbalance)
+balance=$(komodo-cli getbalance "")
 balance_minus_ten=$(bc <<< "$balance-10.0")
+
+if [[ $balance < 50 ]]; then
+  echo -e "\nBalance < 50 so quit. \n"
+  exit 1
+fi
 
 # send all but 10 komodo to VAULT_KOMODO_ADDRESS
 komodo-cli sendtoaddress "${VAULT_KOMODO_ADDRESS}" ${balance_minus_ten} "" "" true
