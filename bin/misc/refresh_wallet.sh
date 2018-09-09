@@ -58,7 +58,7 @@ komodo-cli sendtoaddress "${VAULT_KOMODO_ADDRESS}" ${balance_minus_ten} "" "" tr
 sudo /etc/init.d/monit stop
 
 # Stop komodo and start without -gen
-komodo-cli stop
+~/.komodo/bin/stop.sh
 komodod &
 sleep 60
 ~/.komodo/bin/status.sh
