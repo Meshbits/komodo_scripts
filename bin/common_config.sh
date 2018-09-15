@@ -31,12 +31,14 @@ verifyvalue EXTERNALIP ${EXTERNALIP}
 # verifyvalue BTC_NOTARISATION_ADDRESS xxxxxxxxx
 # verifyvalue KMD_NOTARISATION_ADDRESS xxxxxxxxx
 
+verifyvalue NN_BITCOIN_ADDRESS ''
 verifyvalue NN_KOMODO_ADDRESS ''
 verifyvalue NN_VERUSCOIN_ADDRESS ''
 verifyvalue NN_GAMECREDITS_ADDRESS ''
 verifyvalue VAULT_KOMODO_ADDRESS ''
 verifyvalue VAULT_VERUSCOIN_ADDRESS ''
 verifyvalue VAULT_GAMECREDITS_ADDRESS ''
+verifyvalue TEMP_BITCOIN_ADDRESS ''
 verifyvalue TEMP_KOMODO_ADDRESS ''
 verifyvalue TEMP_VERUSCOIN_ADDRESS ''
 verifyvalue TEMP_GAMECREDITS_ADDRESS ''
