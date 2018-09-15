@@ -4,8 +4,9 @@ set -eo pipefail
 # Reference:
 # https://github.com/chainstrike/nntools/blob/master/guides/Guide-FreshWallet.txt
 
-# Prep for this script
-#komodo-cli importprivkey $TEMP_private_key "temp_vault" false
+# Pre-requisites for this script
+#komodo-cli importprivkey $TEMP_komodo_private_key "temp_vault" false
+#bitcoin-cli importprivkey $TEMP_bitcoin_private_key "temp_vault" false
 
 # source profile and setup variables using "${HOME}/.common/config"
 source /etc/profile
@@ -21,12 +22,14 @@ function error_handler() {
 
 # Validate variables
 if [[ \
+-z ${NN_BITCOIN_ADDRESS+x} || \
 -z ${NN_KOMODO_ADDRESS+x} || \
 -z ${NN_VERUSCOIN_ADDRESS+x} || \
 -z ${NN_GAMECREDITS_ADDRESS+x} || \
 -z ${VAULT_KOMODO_ADDRESS+x} || \
 -z ${VAULT_VERUSCOIN_ADDRESS+x} || \
 -z ${VAULT_GAMECREDITS_ADDRESS+x} || \
+-z ${TEMP_BITCOIN_ADDRESS+x} || \
 -z ${TEMP_KOMODO_ADDRESS+x} || \
 -z ${TEMP_VERUSCOIN_ADDRESS+x} || \
 -z ${TEMP_GAMECREDITS_ADDRESS+x} \
@@ -44,31 +47,35 @@ fi
 #komodo-cli getaddressesbyaccount ''
 
 # save the privkey to a variable so we import it later
-NN_private_key=$(komodo-cli dumpprivkey ${NN_KOMODO_ADDRESS} | tee ${HOME}/.temp_sensitive/nn_komodo_key)
-TEMP_private_key=$(komodo-cli dumpprivkey ${TEMP_KOMODO_ADDRESS} | tee ${HOME}/.temp_sensitive/temp_komodo_key)
+NN_bitcoin_private_key=$(bitcoin-cli dumpprivkey ${NN_BITCOIN_ADDRESS} | tee ${HOME}/.temp_sensitive/nn_bitcoin_key)
+NN_komodo_private_key=$(komodo-cli dumpprivkey ${NN_KOMODO_ADDRESS} | tee ${HOME}/.temp_sensitive/nn_komodo_key)
+TEMP_bitcoin_private_key=$(bitcoin-cli dumpprivkey ${TEMP_BITCOIN_ADDRESS} | tee ${HOME}/.temp_sensitive/temp_bitcoin_key)
+TEMP_komodo_private_key=$(komodo-cli dumpprivkey ${TEMP_KOMODO_ADDRESS} | tee ${HOME}/.temp_sensitive/temp_komodo_key)
 
 # What da balance
 balance=$(komodo-cli getbalance "")
 balance_minus_ten=$(bc <<< "$balance-10.0")
 
-if [[ $balance < 50 ]]; then
-  echo -e "\nBalance < 50 so quit. \n"
+if [[ $balance < 20 ]]; then
+  echo -e "\nBalance < 20 so quit. \n"
   exit 1
 fi
 
 # send all but 10 komodo to VAULT_KOMODO_ADDRESS
 komodo-cli sendtoaddress "${VAULT_KOMODO_ADDRESS}" ${balance_minus_ten} "" "" true
 
-# stop monit or it'll start the nn
-sudo /etc/init.d/monit stop
+# stop monit and all other services
+~/misc_scripts/stop_raw.sh
 
-# Stop komodo and start without -gen
-~/.komodo/bin/stop.sh
+# Start bitcoin and komodo
+bitcoind &
 komodod &
 sleep 60
+~/.bitcoin/bin/status.sh
 ~/.komodo/bin/status.sh
 
-# send all komodo to TEMP_KOMODO_ADDRESS
+# send all bitcoin and komodo to TEMP_ADDRESS
+bitcoin-cli sendtoaddress "${TEMP_BITCOIN_ADDRESS}" $(bitcoin-cli getbalance) "" "" true
 komodo-cli sendtoaddress "${TEMP_KOMODO_ADDRESS}" $(komodo-cli getbalance) "" "" true
 
 #send all but 10 assetchain to vault_address_komodo
@@ -78,29 +85,47 @@ komodo-cli sendtoaddress "${TEMP_KOMODO_ADDRESS}" $(komodo-cli getbalance) "" ""
 #send all veruscoin to temp_address_veruscoin
 #send all gamecredits to temp_address_gamecredits
 
+~/.bitcoin/bin/stop.sh
 ~/.komodo/bin/stop.sh
 
 # when we'll need to move all the wallet.dat for assetchain
 #for list in $(find ~/.komodo -iname wallet.dat)
 
+mv ~/.bitcoin/{wallet.dat,_`date +%s`}
 mv ~/.komodo/{wallet.dat,_`date +%s`}
 
+# Start bitcoin and komodo
+bitcoind &
 komodod &
 sleep 60
+~/.bitcoin/bin/status.sh
 ~/.komodo/bin/status.sh
 
-#bitcoin-cli importprivkey "Kxxx" "" false
+bitcoin-cli importprivkey $(cat ${HOME}/.temp_sensitive/nn_bitcoin_key) "" false
+bitcoin-cli importprivkey $(cat ${HOME}/.temp_sensitive/temp_bitcoin_key) "temp_vault" false
 komodo-cli importprivkey $(cat ${HOME}/.temp_sensitive/nn_komodo_key) "" false
 komodo-cli importprivkey $(cat ${HOME}/.temp_sensitive/temp_komodo_key) "temp_vault" false
 
-# send komodo from temp_vault to nn_komodo_address minus transaction fee
+# Stop and start because komodo doesn't seem to get the balance right after the previous step
+sleep 180
+~/.komodo/bin/stop.sh
+komodod &
+~/.komodo/bin/status.sh
+
+# wait and check if transactions are through yet or not
+while [[ $(bitcoin-cli getbalance temp_vault) == 0.00000000 ]]; do sleep 1; done
+while [[ $(komodo-cli getbalance temp_vault) == 0.00000000 ]]; do sleep 1; done
+
+
+# send bitcoin and komodo from temp_vault to nn_[komodo,bitcoin]_address minus transaction fee
+temp_vault_balance=$(bitcoin-cli getbalance temp_vault)
+temp_vault_balance_minus_trans=$(echo "$temp_vault_balance-0.0001" | bc | awk '{printf "%f", $0}' )
+bitcoin-cli sendmany "temp_vault" "{\"${NN_BITCOIN_ADDRESS}\":\"$temp_vault_balance_minus_trans\"}"
+
 temp_vault_balance=$(komodo-cli getbalance temp_vault)
-temp_vault_balance_minus_trans=$(bc <<< "$temp_vault_balance-0.001")
+temp_vault_balance_minus_trans=$(echo "$temp_vault_balance-0.001" | bc | awk '{printf "%f", $0}' )
 komodo-cli sendmany "temp_vault" "{\"${NN_KOMODO_ADDRESS}\":\"$temp_vault_balance_minus_trans\"}"
 
-~/.komodo/bin/stop.sh
-~/.komodo/bin/start.sh &
-
-~/.komodo/bin/status.sh
+sleep 300
 ~/misc_scripts/cron_recharge_utxos.sh
-sudo /etc/init.d/monit start
+~/misc_scripts/start_raw.sh &>> ~/start_raw.log
