@@ -127,5 +127,5 @@ temp_vault_balance_minus_trans=$(echo "$temp_vault_balance-0.001" | bc | awk '{p
 komodo-cli sendmany "temp_vault" "{\"${NN_KOMODO_ADDRESS}\":\"$temp_vault_balance_minus_trans\"}"
 
 sleep 300
-~/misc_scripts/cron_recharge_utxos.sh
 ~/misc_scripts/start_raw.sh &>> ~/start_raw.log
+~/misc_scripts/cron_recharge_utxos.sh
