@@ -102,15 +102,27 @@ sleep 60
 ~/.komodo/bin/status.sh
 
 bitcoin-cli importprivkey $(cat ${HOME}/.temp_sensitive/nn_bitcoin_key) "" false
+sleep 10
 bitcoin-cli importprivkey $(cat ${HOME}/.temp_sensitive/temp_bitcoin_key) "temp_vault" false
+sleep 10
 komodo-cli importprivkey $(cat ${HOME}/.temp_sensitive/nn_komodo_key) "" false
+sleep 10
 komodo-cli importprivkey $(cat ${HOME}/.temp_sensitive/temp_komodo_key) "temp_vault" false
 
 # Stop and start because komodo doesn't seem to get the balance right after the previous step
 sleep 180
 ~/.komodo/bin/stop.sh
+~/.bitcoin/bin/stop.sh
+sleep 30
+bitcoind &
+~/.bitcoin/bin/status.sh
 komodod &
 ~/.komodo/bin/status.sh
+
+# Need for bitcoin
+blockcount=$(bitcoin-cli getblockchaininfo | jq .blocks)
+blockcount_minus_1000=$(echo $blockcount - 1000 | bc)
+bitcoin-cli rescanblockchain ${blockcount_minus_1000} ${blockcount}
 
 # wait and check if transactions are through yet or not
 while [[ $(bitcoin-cli getbalance temp_vault) == 0.00000000 ]]; do sleep 1; done
@@ -121,11 +133,15 @@ while [[ $(komodo-cli getbalance temp_vault) == 0.00000000 ]]; do sleep 1; done
 temp_vault_balance=$(bitcoin-cli getbalance temp_vault)
 temp_vault_balance_minus_trans=$(echo "$temp_vault_balance-0.0001" | bc | awk '{printf "%f", $0}' )
 bitcoin-cli sendmany "temp_vault" "{\"${NN_BITCOIN_ADDRESS}\":\"$temp_vault_balance_minus_trans\"}"
+sleep 10
 
 temp_vault_balance=$(komodo-cli getbalance temp_vault)
 temp_vault_balance_minus_trans=$(echo "$temp_vault_balance-0.001" | bc | awk '{printf "%f", $0}' )
+echo $temp_vault_balance
+echo $temp_vault_balance_minus_trans
 komodo-cli sendmany "temp_vault" "{\"${NN_KOMODO_ADDRESS}\":\"$temp_vault_balance_minus_trans\"}"
 
 sleep 300
+~/misc_scripts/stop_raw.sh
 ~/misc_scripts/start_raw.sh &>> ~/start_raw.log
 ~/misc_scripts/cron_recharge_utxos.sh
