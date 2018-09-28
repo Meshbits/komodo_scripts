@@ -53,7 +53,7 @@ TEMP_bitcoin_private_key=$(bitcoin-cli dumpprivkey ${TEMP_BITCOIN_ADDRESS} | tee
 TEMP_komodo_private_key=$(komodo-cli dumpprivkey ${TEMP_KOMODO_ADDRESS} | tee ${HOME}/.temp_sensitive/temp_komodo_key)
 
 # What da balance
-balance=$(komodo-cli getbalance "")
+balance=$(komodo-cli getbalance "" 5)
 balance_minus_ten=$(bc <<< "$balance-10.0")
 
 if [[ $balance < 20 ]]; then
@@ -85,14 +85,15 @@ komodo-cli sendtoaddress "${TEMP_KOMODO_ADDRESS}" $(komodo-cli getbalance) "" ""
 #send all veruscoin to temp_address_veruscoin
 #send all gamecredits to temp_address_gamecredits
 
+sleep 30
 ~/.bitcoin/bin/stop.sh
 ~/.komodo/bin/stop.sh
 
 # when we'll need to move all the wallet.dat for assetchain
 #for list in $(find ~/.komodo -iname wallet.dat)
 
-mv ~/.bitcoin/{wallet.dat,_`date +%s`}
-mv ~/.komodo/{wallet.dat,_`date +%s`}
+mv ~/.bitcoin/wallet.dat{,_`date +%s`}
+mv ~/.komodo/wallet.dat{,_`date +%s`}
 
 # Start bitcoin and komodo
 bitcoind &
@@ -130,7 +131,7 @@ while [[ $(komodo-cli getbalance temp_vault) == 0.00000000 ]]; do sleep 1; done
 
 
 # send bitcoin and komodo from temp_vault to nn_[komodo,bitcoin]_address minus transaction fee
-temp_vault_balance=$(bitcoin-cli getbalance temp_vault 5)
+temp_vault_balance=$(bitcoin-cli getbalance)
 temp_vault_balance_minus_trans=$(echo "$temp_vault_balance-0.0001" | bc | awk '{printf "%f", $0}' )
 bitcoin-cli sendmany "temp_vault" "{\"${NN_BITCOIN_ADDRESS}\":\"$temp_vault_balance_minus_trans\"}"
 sleep 10
