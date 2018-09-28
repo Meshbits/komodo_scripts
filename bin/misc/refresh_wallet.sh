@@ -130,12 +130,12 @@ while [[ $(komodo-cli getbalance temp_vault) == 0.00000000 ]]; do sleep 1; done
 
 
 # send bitcoin and komodo from temp_vault to nn_[komodo,bitcoin]_address minus transaction fee
-temp_vault_balance=$(bitcoin-cli getbalance temp_vault)
+temp_vault_balance=$(bitcoin-cli getbalance temp_vault 5)
 temp_vault_balance_minus_trans=$(echo "$temp_vault_balance-0.0001" | bc | awk '{printf "%f", $0}' )
 bitcoin-cli sendmany "temp_vault" "{\"${NN_BITCOIN_ADDRESS}\":\"$temp_vault_balance_minus_trans\"}"
 sleep 10
 
-temp_vault_balance=$(komodo-cli getbalance temp_vault)
+temp_vault_balance=$(komodo-cli getbalance temp_vault 5)
 temp_vault_balance_minus_trans=$(echo "$temp_vault_balance-0.001" | bc | awk '{printf "%f", $0}' )
 echo $temp_vault_balance
 echo $temp_vault_balance_minus_trans
@@ -143,5 +143,7 @@ komodo-cli sendmany "temp_vault" "{\"${NN_KOMODO_ADDRESS}\":\"$temp_vault_balanc
 
 sleep 300
 ~/misc_scripts/stop_raw.sh
+sleep 30
 ~/misc_scripts/start_raw.sh &>> ~/start_raw.log
+sleep 30
 ~/misc_scripts/cron_recharge_utxos.sh
