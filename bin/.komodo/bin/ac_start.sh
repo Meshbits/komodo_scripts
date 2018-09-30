@@ -16,6 +16,15 @@ ${HOME}/komodo/src/listassetchainparams | while read args; do
 
   name=$(echo ${args} | awk -F '-ac_name=' '{ print $2 }' | awk '{ print $1 }')
   if $(echo ${name} | grep -q -P "BEER|PIZZA|VOTE2018"); then continue; fi
+
+  # If shit goes south and we need to sync everything again
+  # if $(echo ${name} | grep -q -P "DSEC|SEC|MGNX|COQUI|RFOX|PIRATE|GLXT" ); then
+  #     ${HOME}/komodo/src/komodod $args -addnode=$seed_ip -maxconnections=512 -resync &>> /tmp/tmplogfile &
+  #     sleep 1
+  #     continue
+  # fi
+  # for list in DSEC SEC MGNX COQUI RFOX PIRATE GLXT; do ${HOME}/komodo/src/komodo-cli -ac_name=$list stop; done
+
   conffile=<HOME>/.komodo/${name}/${name}.conf
 
   if [[ ! -f ${conffile} ]]; then
