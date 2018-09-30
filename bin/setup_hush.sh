@@ -28,7 +28,7 @@ SCRIPTPATH=$(dirname $SCRIPTNAME)
 [[ -z ${VAR_SRC_DIR+x} ]] && VAR_SRC_DIR="${HOME}/hush"
 [[ -z ${VAR_CONF_DIR+x} ]] && VAR_CONF_DIR="${HOME}/.hush"
 [[ -z ${VAR_CONF_FILE+x} ]] && VAR_CONF_FILE="${VAR_CONF_DIR}/conf/hush.conf"
-[[ -z ${VAR_RPCPORT+x} ]] && VAR_RPCPORT="57776"
+[[ -z ${VAR_RPCPORT+x} ]] && VAR_RPCPORT="8822"
 
 # Create random password for conf if needed
 if [[ ! -f ${VAR_CONF_FILE} ]]; then

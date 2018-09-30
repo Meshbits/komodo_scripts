@@ -13,12 +13,13 @@ ${SCRIPTPATH}/start_raw.sh >& ~/start_raw.log
 /usr/local/src/komodo_scripts/bin/setup_chips.sh
 /usr/local/src/komodo_scripts/bin/setup_gamecredits.sh
 /usr/local/src/komodo_scripts/bin/setup_veruscoin.sh
+/usr/local/src/komodo_scripts/bin/setup_hush.sh
 
 # Stop all services first
 ${SCRIPTPATH}/stop_raw.sh
 
 cd ${HOME}
-for list in chips3 gamecredits komodo; do
+for list in chips3 gamecredits komodo hush; do
   rm -rf .build_source/${list}_old
   mv $list .build_source/${list}_old
   mv .build_source/${list} .

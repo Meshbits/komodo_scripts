@@ -12,31 +12,29 @@ seed_ip=$(getent hosts zero.kolo.supernet.org | awk '{ print $1 }')
 EXTERNALIP="-externalip=<EXTERNALIP>"
 ASSETCHAINS_FILE="<HOME>/komodo/src/assetchains.json"
 
-function komodo_asset () {
-  <HOME>/komodo/src/komodod -ac_name=$1 -ac_supply=$2 -addnode=$seed_ip -maxconnections=512 ${KOMODO_ASSETCHAINS_STARTUP_OPTIONS} \
-    >& ${HOME}/.komodo/log/${name}.log
-}
+${HOME}/komodo/src/listassetchainparams | while read args; do
 
-for ((item=0; item<$(cat ${ASSETCHAINS_FILE} | jq '. | length'); item++));
-do
-  name=$(cat ${ASSETCHAINS_FILE} | jq -r ".[${item}] | .ac_name")
-  if [[ ${name} == "BEER" || ${name} == "PIZZA" || ${name} == "VOTE2018" ]]; then continue; fi
-  supply=$(cat ${ASSETCHAINS_FILE} | jq -r ".[${item}] | .ac_supply")
+  name=$(echo ${args} | awk -F '-ac_name=' '{ print $2 }' | awk '{ print $1 }')
+  if $(echo ${name} | grep -q -P "BEER|PIZZA|VOTE2018"); then continue; fi
   conffile=<HOME>/.komodo/${name}/${name}.conf
 
   if [[ ! -f ${conffile} ]]; then
-    komodo_asset ${name} ${supply} &
+    ${HOME}/komodo/src/komodod $args -addnode=$seed_ip -maxconnections=256 ${KOMODO_ASSETCHAINS_STARTUP_OPTIONS} \
+      >& ${HOME}/.komodo/log/${name}.log &
   else
-    sed -i 's|rpcworkqueue=64|rpcworkqueue=256|' ${conffile}
+    sed -i 's|rpcworkqueue=64|rpcworkqueue=128|' ${conffile}
     RPCPORT=$(grep 'rpcport=' ${conffile} | cut -d'=' -f2)
     if ! $( lsof -Pi :${RPCPORT} -sTCP:LISTEN -t >& /dev/null); then
       if [[ "${EXTERNALIP}" = "-externalip=<EXTERNALIP>" || "${EXTERNALIP}" = "-externalip=" ]]; then
-        komodo_asset ${name} ${supply} &
+        ${HOME}/komodo/src/komodod $args -addnode=$seed_ip -maxconnections=256 ${KOMODO_ASSETCHAINS_STARTUP_OPTIONS} \
+          >& ${HOME}/.komodo/log/${name}.log &
       else
-        komodo_asset ${name} ${supply} "${EXTERNALIP}" &
+        ${HOME}/komodo/src/komodod $args -addnode=$seed_ip -maxconnections=256 ${KOMODO_ASSETCHAINS_STARTUP_OPTIONS} \
+          "${EXTERNALIP}" >& ${HOME}/.komodo/log/${name}.log &
       fi
     fi
   fi
+
   sleep 1
 done
 
