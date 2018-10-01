@@ -53,10 +53,10 @@ TEMP_bitcoin_private_key=$(bitcoin-cli dumpprivkey ${TEMP_BITCOIN_ADDRESS} | tee
 TEMP_komodo_private_key=$(komodo-cli dumpprivkey ${TEMP_KOMODO_ADDRESS} | tee ${HOME}/.temp_sensitive/temp_komodo_key)
 
 # What da balance
-balance=$(komodo-cli getbalance "" 5)
+balance=$(komodo-cli getbalance)
 balance_minus_ten=$(bc <<< "$balance-10.0")
 
-if [[ $balance < 20 ]]; then
+if [[ $balance -lt 20 ]]; then
   echo -e "\nBalance < 20 so quit. \n"
   exit 1
 fi
@@ -64,8 +64,14 @@ fi
 # send all but 10 komodo to VAULT_KOMODO_ADDRESS
 komodo-cli sendtoaddress "${VAULT_KOMODO_ADDRESS}" ${balance_minus_ten} "" "" true
 
+# send all the TEMP_VAULT funds to VAULT
+temp_vault_balance=$(komodo-cli getbalance temp_vault 5)
+temp_vault_balance_minus_trans=$(echo "$temp_vault_balance-0.001" | bc | awk '{printf "%f", $0}' )
+komodo-cli sendmany "temp_vault" "{\"${VAULT_KOMODO_ADDRESS}\":\"$temp_vault_balance_minus_trans\"}"
+
 # stop monit and all other services
 ~/misc_scripts/stop_raw.sh
+sleep 30
 
 # Start bitcoin and komodo
 bitcoind &
@@ -116,8 +122,10 @@ sleep 180
 ~/.bitcoin/bin/stop.sh
 sleep 30
 bitcoind &
+sleep 10
 ~/.bitcoin/bin/status.sh
 komodod &
+sleep 10
 ~/.komodo/bin/status.sh
 
 # Need for bitcoin
@@ -138,8 +146,8 @@ sleep 10
 
 temp_vault_balance=$(komodo-cli getbalance temp_vault 5)
 temp_vault_balance_minus_trans=$(echo "$temp_vault_balance-0.001" | bc | awk '{printf "%f", $0}' )
-echo $temp_vault_balance
-echo $temp_vault_balance_minus_trans
+#echo $temp_vault_balance
+#echo $temp_vault_balance_minus_trans
 komodo-cli sendmany "temp_vault" "{\"${NN_KOMODO_ADDRESS}\":\"$temp_vault_balance_minus_trans\"}"
 
 sleep 300
