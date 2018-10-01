@@ -56,7 +56,7 @@ TEMP_komodo_private_key=$(komodo-cli dumpprivkey ${TEMP_KOMODO_ADDRESS} | tee ${
 balance=$(komodo-cli getbalance)
 balance_minus_ten=$(bc <<< "$balance-10.0")
 
-if [[ $balance -lt 20 ]]; then
+if [[ ${balance%.*} -lt 20 ]]; then
   echo -e "\nBalance < 20 so quit. \n"
   exit 1
 fi
