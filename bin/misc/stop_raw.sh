@@ -7,5 +7,6 @@ sudo /etc/init.d/monit stop
 ~/.chips/bin/stop.sh
 ~/.gamecredits/bin/stop.sh
 ~/.komodo/VRSC/bin/stop.sh
+~/.hush/bin/stop.sh
 
 pkill -15 iguana
