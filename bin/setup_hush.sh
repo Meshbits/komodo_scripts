@@ -114,8 +114,6 @@ if [[ ${DONT_BUILD} != true ]]; then
 
 fi
 
-exit 0
-
 # Setup control scripts
 sed -e "s|<VAR_RPCPORT>|${VAR_RPCPORT}|g" \
   -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
