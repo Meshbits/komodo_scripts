@@ -21,13 +21,15 @@ function time_taken() {
 # Variables
 SCRIPTNAME=$(realpath $0)
 SCRIPTPATH=$(dirname $SCRIPTNAME)
+VAR_THING=hush
+
 [[ -z ${VAR_NPROC+x} ]] && VAR_NPROC="$(cat /proc/cpuinfo | grep processor | wc -l)"
 [[ -z ${VAR_USERNAME+x} ]] && VAR_USERNAME="${USER}"
 [[ -z ${VAR_BRANCH+x} ]] && VAR_BRANCH='dev'
 [[ -z ${VAR_REPO+x} ]] && VAR_REPO='https://github.com/MyHush/hush.git'
-[[ -z ${VAR_SRC_DIR+x} ]] && VAR_SRC_DIR="${HOME}/hush"
-[[ -z ${VAR_CONF_DIR+x} ]] && VAR_CONF_DIR="${HOME}/.hush"
-[[ -z ${VAR_CONF_FILE+x} ]] && VAR_CONF_FILE="${VAR_CONF_DIR}/conf/hush.conf"
+[[ -z ${VAR_SRC_DIR+x} ]] && VAR_SRC_DIR="${HOME}/${VAR_THING}"
+[[ -z ${VAR_CONF_DIR+x} ]] && VAR_CONF_DIR="${HOME}/.${VAR_THING}"
+[[ -z ${VAR_CONF_FILE+x} ]] && VAR_CONF_FILE="${VAR_CONF_DIR}/conf/${VAR_THING}.conf"
 [[ -z ${VAR_RPCPORT+x} ]] && VAR_RPCPORT="8822"
 
 # Create random password for conf if needed
@@ -39,7 +41,7 @@ else
   RPCPASSWORD=$(grep 'rpcpassword' ${VAR_CONF_FILE} | cut -d'=' -f2)
 fi
 
-echo -e "## Hush Daemon setup starting ##\n"
+echo -e "## ${VAR_THING} Daemon setup starting ##\n"
 
 # Install requisites:
 sudo -s bash <<EOF
@@ -87,28 +89,28 @@ EOF
 echo -e "Created configuration file\n"
 
 # Create a hard-link for conf file for backward compatibility
-[[ -f ${VAR_CONF_DIR}/hush.conf ]] || ln -sf ${VAR_CONF_FILE} ${VAR_CONF_DIR}/
+[[ -f ${VAR_CONF_DIR}/${VAR_THING}.conf ]] || ln -sf ${VAR_CONF_FILE} ${VAR_CONF_DIR}/
 
 if [[ ${DONT_BUILD} != true ]]; then
 
   ### Checkout the sourcecode
   if [[ -d ${VAR_SRC_DIR} ]]; then
 
-    echo -e "## Hush source directory already exists, building in *.build_source/hush* ##\n"
+    echo -e "## ${VAR_THING} source directory already exists, building in *.build_source/${VAR_THING}* ##\n"
     cd ${HOME}/.build_source >& /dev/null
-    rm -rf hush
-    git clone ${VAR_REPO} -b ${VAR_BRANCH} hush
-    cd hush
+    rm -rf ${VAR_THING}
+    git clone ${VAR_REPO} -b ${VAR_BRANCH} ${VAR_THING}
+    cd ${VAR_THING}
   else
     cd ${HOME}
-    git clone ${VAR_REPO} -b ${VAR_BRANCH} hush
+    git clone ${VAR_REPO} -b ${VAR_BRANCH} ${VAR_THING}
     cd ${VAR_SRC_DIR}
   fi
 
   # Build Hush
-  echo -e "===> Build Hush Daemon"
+  echo -e "===> Build ${VAR_THING} Daemon"
   time_taken ./zcutil/build.sh -j${VAR_NPROC}
-  echo -e "===> Finished building Hush Daemon"
+  echo -e "===> Finished building ${VAR_THING} Daemon"
 
 fi
 
@@ -119,43 +121,42 @@ sed -e "s|<VAR_RPCPORT>|${VAR_RPCPORT}|g" \
   -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
   -e "s|<VAR_CONF_DIR>|${VAR_CONF_DIR}|g" \
   -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
-  -e "s|<VAR_NPROC>|${VAR_NPROC}|g" \
-  -e "s|<VAR_USERNAME>|${VAR_USERNAME}|g" \
-  "${SCRIPTPATH}/.hush/bin/start.sh" > "${VAR_CONF_DIR}/bin/start.sh"
+  "${SCRIPTPATH}/.${VAR_THING}/bin/start.sh" > "${VAR_CONF_DIR}/bin/start.sh"
 
 sed -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
   -e "s|<VAR_CONF_DIR>|${VAR_CONF_DIR}|g" \
   -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
   -e "s|<VAR_USERNAME>|${VAR_USERNAME}|g" \
-  "${SCRIPTPATH}/.hush/bin/stop.sh" > "${VAR_CONF_DIR}/bin/stop.sh"
+  -e "s|<VAR_THING>|${VAR_THING}|g" \
+  "${SCRIPTPATH}/.${VAR_THING}/bin/stop.sh" > "${VAR_CONF_DIR}/bin/stop.sh"
 
 sed -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
-  "${SCRIPTPATH}/.hush/bin/healthcheck.sh" > "${VAR_CONF_DIR}/bin/healthcheck.sh"
+  "${SCRIPTPATH}/.${VAR_THING}/bin/healthcheck.sh" > "${VAR_CONF_DIR}/bin/healthcheck.sh"
 
 sed -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
-  "${SCRIPTPATH}/.hush/bin/status.sh" > "${VAR_CONF_DIR}/bin/status.sh"
+  "${SCRIPTPATH}/.${VAR_THING}/bin/status.sh" > "${VAR_CONF_DIR}/bin/status.sh"
 
 # Symlink binaries
-sudo ln -sf ${VAR_SRC_DIR}/src/hush-cli /usr/local/bin/
-sudo ln -sf ${VAR_SRC_DIR}/src/hushd /usr/local/bin/
-sudo chmod +x /usr/local/bin/hush-cli
-sudo chmod +x /usr/local/bin/hushd
+sudo ln -sf ${VAR_SRC_DIR}/src/${VAR_THING}-cli /usr/local/bin/
+sudo ln -sf ${VAR_SRC_DIR}/src/${VAR_THING}d /usr/local/bin/
+sudo chmod +x /usr/local/bin/${VAR_THING}-cli
+sudo chmod +x /usr/local/bin/${VAR_THING}d
 
 # Permissions and ownership
 chmod +x ${VAR_CONF_DIR}/bin/*
 chmod 660 ${VAR_CONF_DIR}/conf/*.conf
 
-echo -e "## Hush Daemon has been configured ##\n"
+echo -e "## ${VAR_THING} Daemon has been configured ##\n"
 
 # Create monit template
-cat > ${HOME}/.hush/monitd_hush.template <<EOF
-check program hush_healthcheck.sh with path "${HOME}/.hush/bin/healthcheck.sh"
+cat > ${HOME}/.${VAR_THING}/monitd_${VAR_THING}.template <<EOF
+check program ${VAR_THING}_healthcheck.sh with path "${HOME}/.${VAR_THING}/bin/healthcheck.sh"
   as uid ${USER} and gid ${USER}
   with timeout 60 seconds
-if status != 0 then exec "/usr/local/bin/sudo_wrapper ${HOME}/.hush/bin/start.sh"
+if status != 0 then exec "/usr/local/bin/sudo_wrapper ${HOME}/.${VAR_THING}/bin/start.sh"
   as uid ${USER} and gid ${USER}
   repeat every 2 cycles
 EOF
 
 # Copy monit configuration
-sudo mv ${HOME}/.hush/monitd_hush.template /etc/monit/conf.d/monitd_hush
+sudo mv ${HOME}/.${VAR_THING}/monitd_${VAR_THING}.template /etc/monit/conf.d/monitd_${VAR_THING}
