@@ -87,16 +87,26 @@ if [[ ${DONT_BUILD} != true ]]; then
     cd ${HOME}/.build_source >& /dev/null
     rm -rf ${VAR_THING}
     git clone ${VAR_REPO} -b ${VAR_BRANCH} ${VAR_THING}
+    $(dirname $0)/install_berkleydb.sh "${HOME}/.build_source/${VAR_THING}"
     cd ${VAR_THING}
+    BDB_PREFIX="${HOME}/.build_source/${VAR_THING}/db4"
   else
     cd ${HOME}
     git clone ${VAR_REPO} -b ${VAR_BRANCH} ${VAR_THING}
     cd ${VAR_SRC_DIR}
+
+    # Build BerkleyDB
+    $(dirname $0)/install_berkleydb.sh ${VAR_SRC_DIR}
+    cd ${VAR_SRC_DIR}
+    BDB_PREFIX="${VAR_SRC_DIR}/db4"
   fi
 
-  # Build Hush
+  # Build
   echo -e "===> Build ${VAR_THING} Daemon"
-  time_taken ./zcutil/build.sh -j${VAR_NPROC}
+  time_taken ./autogen.sh
+  time_taken ./configure LDFLAGS="-L${BDB_PREFIX}/lib/" CPPFLAGS="-I${BDB_PREFIX}/include/" \
+    --without-gui --without-miniupnpc --disable-tests --disable-bench --without-gui
+  time_taken make -j${VAR_NPROC}
   echo -e "===> Finished building ${VAR_THING} Daemon"
 
 fi
