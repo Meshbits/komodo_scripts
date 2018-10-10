@@ -31,7 +31,6 @@ ${HOME}/.komodo/VRSC/bin/status.sh
 ${HOME}/.hush/bin/status.sh
 
 cd ${HOME}/SuperNET/iguana
-#git checkout ${IGUANA_BRANCH} && git pull && ./m_notary && cd ~/komodo/src && ./dpowassets
 git checkout ${IGUANA_BRANCH} && git pull && ./m_notary && ./dpowassets
 
 sudo /etc/init.d/monit start
