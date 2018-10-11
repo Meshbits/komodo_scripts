@@ -99,6 +99,7 @@ if [[ ${DONT_BUILD} != true ]]; then
   ### Checkout the sourcecode
   if [[ -d ${VAR_SRC_DIR} ]]; then
     cd ${VAR_SRC_DIR}
+    git checkout master; git pull --rebase
     git checkout ${VAR_BRANCH}; git reset --hard
   else
     cd ${HOME}
