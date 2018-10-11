@@ -68,10 +68,10 @@ komodo-cli sendmany "" "{\"${VAULT_KOMODO_ADDRESS}\":\"$balance_minus_ten\"}" \
   1 "" "[\"${VAULT_KOMODO_ADDRESS}\"]"
 
 # send all the TEMP_VAULT funds to VAULT
-temp_vault_balance=$(komodo-cli getbalance)
+#temp_vault_balance=$(komodo-cli getbalance)
 #temp_vault_balance_minus_trans=$(echo "$temp_vault_balance-0.001" | bc | awk '{printf "%f", $0}' )
-komodo-cli sendmany "temp_vault" "{\"${VAULT_KOMODO_ADDRESS}\":\"$temp_vault_balance\"}" \
-  1 "" "[\"${VAULT_KOMODO_ADDRESS}\"]"
+#komodo-cli sendmany "temp_vault" "{\"${VAULT_KOMODO_ADDRESS}\":\"$temp_vault_balance_minus_trans\"}" \
+#  1 "" "[\"${VAULT_KOMODO_ADDRESS}\"]"
 
 # stop monit and all other services
 ~/misc_scripts/stop_raw.sh
