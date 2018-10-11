@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+#set -e
 
 # source profile and setup variables using "${HOME}/.common/config"
 source /etc/profile
@@ -29,6 +29,7 @@ fi
 if [[ $(komodo-cli listunspent | grep ${dsatoshis} | wc -l) -lt 20 ]]; then
   /usr/local/bin/slack_alert testing "$(echo -n -e 'KMD utxos before split:\t'; komodo-cli listunspent | grep ${dsatoshis} | wc -l)"
   ${HOME}/misc_scripts/acsplit.sh KMD 20
+  ${HOME}/misc_scripts/acsplit.sh KMD 5
   /usr/local/bin/slack_alert testing "$(echo -n -e 'KMD utxos after split:\t'; komodo-cli listunspent | grep ${dsatoshis} | wc -l)"
 fi
 
