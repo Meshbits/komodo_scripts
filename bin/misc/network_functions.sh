@@ -14,14 +14,14 @@ function func_nn_connect() {
 }
 
 function nn_ping() {
-  func_nn_connect | while read variable
+  nn_connected_ip | while read variable
   do
     nc -zn -w2 ${variable} 17775 || echo "Unable to connect to ${variable}" &
   done
 }
 
 function nn_ufw() {
-  func_nn_connect | while read variable
+  nn_connected_ip | while read variable
   do
     sudo grep ${variable} /var/log/ufw.log | uniq
   done
