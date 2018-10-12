@@ -23,6 +23,7 @@ function verifyvalue() {
 
 verifyvalue USERNAME ${USER}
 verifyvalue EXTERNALIP ${EXTERNALIP}
+verifyvalue NN_IPS ''
 # verifyvalue SLACK_CHANNEL xxxxxxxxx
 # verifyvalue SLACK_USERNAME 'jalim-chucha'
 # verifyvalue SLACK_URL xxxxxxxxx
