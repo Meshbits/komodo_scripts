@@ -81,9 +81,9 @@ showmetrics=0
 listenonion=0
 # These are optional and can be disabled for performance reasons if needed
 # This will enable various RPC methods which depend on indexes
-addressindex=1
-timestampindex=1
-spentindex=1
+#addressindex=1
+#timestampindex=1
+#spentindex=1
 # TLS options described here, default is fine for most: https://github.com/MyHush/hush/blob/master/SECURE_SETUP.md
 EOF
 echo -e "Created configuration file\n"

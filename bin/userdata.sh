@@ -66,3 +66,21 @@ sed -e "s|<VAR_NPROC>|${VAR_NPROC}|" \
   $(dirname $0)/../conf/monit/monitrc > /etc/monit/monitrc
 chmod 0600 /etc/monit/monitrc
 sudo systemctl disable monit
+
+# Install chrony for aws systems
+# https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/set-time.html
+if $(curl -s -m 5 http://169.254.169.254/latest/dynamic/instance-identity/document | grep -q availabilityZone) ; then
+  sudo systemctl disable ntp
+  sudo apt install chrony
+
+cat > /etc/chrony.conf <<EOF
+server 169.254.169.123 prefer iburst
+EOF
+
+  sudo /etc/init.d/chrony restart
+  sudo systemctl enable chrony
+
+  # Verify that chrony is using the 169.254.169.123 IP address to synchronize the time.
+  # chronyc sources -v
+  # chronyc tracking
+fi
