@@ -36,13 +36,22 @@ verifyvalue NN_BITCOIN_ADDRESS ''
 verifyvalue NN_KOMODO_ADDRESS ''
 verifyvalue NN_VERUSCOIN_ADDRESS ''
 verifyvalue NN_GAMECREDITS_ADDRESS ''
+verifyvalue NN_HUSH_ADDRESS ''
+verifyvalue NN_EMC2_ADDRESS ''
+
+verifyvalue VAULT_BITCOIN_ADDRESS ''
 verifyvalue VAULT_KOMODO_ADDRESS ''
 verifyvalue VAULT_VERUSCOIN_ADDRESS ''
 verifyvalue VAULT_GAMECREDITS_ADDRESS ''
+verifyvalue VAULT_HUSH_ADDRESS ''
+verifyvalue VAULT_EMC2_ADDRESS ''
+
 verifyvalue TEMP_BITCOIN_ADDRESS ''
 verifyvalue TEMP_KOMODO_ADDRESS ''
 verifyvalue TEMP_VERUSCOIN_ADDRESS ''
 verifyvalue TEMP_GAMECREDITS_ADDRESS ''
+verifyvalue TEMP_HUSH_ADDRESS ''
+verifyvalue TEMP_EMC2_ADDRESS ''
 
 
 verifyvalue KOMODO_BRANCH ${KOMODO_BRANCH}
