@@ -49,7 +49,7 @@ verifyvalue KOMODO_REPOSITORY ${KOMODO_REPOSITORY}
 verifyvalue KOMODO_SRC_DIR ${KOMODO_SRC_DIR}
 verifyvalue KOMODO_RPCPORT 7771
 verifyvalue KOMODO_STARTUP_OPTIONS "-notary -pubkey=${pubkey} -gen -genproclimit=-1"
-verifyvalue KOMODO_ASSETCHAINS_STARTUP_OPTIONS "-pubkey=${pubkey} -gen -genproclimit=-1"
+verifyvalue KOMODO_ASSETCHAINS_STARTUP_OPTIONS "-pubkey=${pubkey} -gen -genproclimit=1"
 
 verifyvalue BITCOIND_BRANCH ${BITCOIND_BRANCH}
 verifyvalue BITCOIND_REPOSITORY ${BITCOIND_REPOSITORY}
@@ -74,7 +74,7 @@ verifyvalue GAMECREDITS_STARTUP_OPTIONS "-pubkey=${pubkey} -gen -genproclimit=1"
 verifyvalue VERUSCOIN_BRANCH ${VERUSCOIN_BRANCH}
 verifyvalue VERUSCOIN_REPOSITORY ${VERUSCOIN_REPOSITORY}
 verifyvalue VERUSCOIN_SRC_DIR ${VERUSCOIN_SRC_DIR}
-verifyvalue VERUSCOIN_STARTUP_OPTIONS "-ac_name=VRSC -ac_algo=verushash -ac_cc=1 -ac_veruspos=50 -ac_supply=0 -ac_eras=3 -ac_reward=0,38400000000,2400000000 -ac_halving=1,43200,1051920 -ac_decay=100000000,0,0 -ac_end=10080,226080,0 -ac_timelockgte=19200000000 -ac_timeunlockfrom=129600 -ac_timeunlockto=1180800 -addnode=185.25.48.236 -addnode=185.64.105.111 -pubkey=${pubkey} -gen -genproclimit=-1"
+verifyvalue VERUSCOIN_STARTUP_OPTIONS "-ac_name=VRSC -ac_algo=verushash -ac_cc=1 -ac_veruspos=50 -ac_supply=0 -ac_eras=3 -ac_reward=0,38400000000,2400000000 -ac_halving=1,43200,1051920 -ac_decay=100000000,0,0 -ac_end=10080,226080,0 -ac_timelockgte=19200000000 -ac_timeunlockfrom=129600 -ac_timeunlockto=1180800 -addnode=185.25.48.236 -addnode=185.64.105.111 -pubkey=${pubkey} -gen -genproclimit=1"
 
 verifyvalue HUSH_STARTUP_OPTIONS "-pubkey=${pubkey} -gen -genproclimit=1"
 verifyvalue EINSTEINIUM_STARTUP_OPTIONS "-pubkey=${pubkey} -gen -genproclimit=1"

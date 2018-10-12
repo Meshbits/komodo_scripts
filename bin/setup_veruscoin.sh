@@ -30,7 +30,7 @@ VAR_THING=veruscoin
 [[ -z ${VAR_CONF_DIR+x} ]] && VAR_CONF_DIR="${HOME}/.komodo/VRSC"
 [[ -z ${VAR_CONF_FILE+x} ]] && VAR_CONF_FILE="${VAR_CONF_DIR}/VRSC.conf"
 [[ -z ${VAR_RPCPORT+x} ]] && VAR_RPCPORT="15361"
-[[ -z ${VAR_BLOCKCHAIN_ARCHIVE+x} ]] && VAR_BLOCKCHAIN_ARCHIVE="veruscoin_blockchain_backup.tar.gz"
+[[ -z ${VAR_BLOCKCHAIN_ARCHIVE+x} ]] && VAR_BLOCKCHAIN_ARCHIVE="${VAR_THING}_blockchain_backup.tar.gz"
 
 echo -e "## ${VAR_THING} setup starting ##\n"
 
@@ -117,10 +117,10 @@ sed -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
   "${SCRIPTPATH}/.${VAR_THING}/bin/status.sh" > "${VAR_CONF_DIR}/bin/status.sh"
 
 # Symlink binaries
-sudo ln -sf ${VAR_SRC_DIR}/src/komodo-cli /usr/local/bin/veruscoin-cli
-sudo ln -sf ${VAR_SRC_DIR}/src/komodod /usr/local/bin/veruscoind
-sudo chmod +x /usr/local/bin/veruscoin-cli
-sudo chmod +x /usr/local/bin/veruscoind
+sudo ln -sf ${VAR_SRC_DIR}/src/komodo-cli /usr/local/bin/${VAR_THING}-cli
+sudo ln -sf ${VAR_SRC_DIR}/src/komodod /usr/local/bin/${VAR_THING}d
+sudo chmod +x /usr/local/bin/${VAR_THING}-cli
+sudo chmod +x /usr/local/bin/${VAR_THING}d
 
 # Permissions and ownership
 chmod +x ${VAR_CONF_DIR}/bin/*

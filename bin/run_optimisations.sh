@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if [[ $EUID -ne 0 ]]; then
+   echo -e "This script needs to run as a root user\n"
+   exit 1
+fi
+
 # Display all limits
 ulimit -a
 

@@ -25,15 +25,17 @@ BITCOIN_LATEST_STABLE=$(curl --silent "https://api.github.com/repos/bitcoin/bitc
 
 SCRIPTNAME=$(realpath $0)
 SCRIPTPATH=$(dirname $SCRIPTNAME)
+VAR_THING=bitcoin
+
 [[ -z ${VAR_NPROC+x} ]] && VAR_NPROC="$(cat /proc/cpuinfo | grep processor | wc -l)"
 [[ -z ${VAR_USERNAME+x} ]] && VAR_USERNAME="${USER}"
 [[ -z ${VAR_BRANCH+x} ]] && VAR_BRANCH="v0.16.3"
 [[ -z ${VAR_REPO+x} ]] && VAR_REPO='https://github.com/bitcoin/bitcoin.git'
-[[ -z ${VAR_SRC_DIR+x} ]] && VAR_SRC_DIR="${HOME}/bitcoin"
-[[ -z ${VAR_CONF_DIR+x} ]] && VAR_CONF_DIR="${HOME}/.bitcoin"
-[[ -z ${VAR_CONF_FILE+x} ]] && VAR_CONF_FILE="${VAR_CONF_DIR}/conf/bitcoin.conf"
+[[ -z ${VAR_SRC_DIR+x} ]] && VAR_SRC_DIR="${HOME}/${VAR_THING}"
+[[ -z ${VAR_CONF_DIR+x} ]] && VAR_CONF_DIR="${HOME}/.${VAR_THING}"
+[[ -z ${VAR_CONF_FILE+x} ]] && VAR_CONF_FILE="${VAR_CONF_DIR}/conf/${VAR_THING}.conf"
 [[ -z ${VAR_RPCPORT+x} ]] && VAR_RPCPORT="8332"
-[[ -z ${VAR_BLOCKCHAIN_ARCHIVE+x} ]] && VAR_BLOCKCHAIN_ARCHIVE="bitcoin_blockchain_backup.tar.gz"
+[[ -z ${VAR_BLOCKCHAIN_ARCHIVE+x} ]] && VAR_BLOCKCHAIN_ARCHIVE="${VAR_THING}_blockchain_backup.tar.gz"
 
 # Create random password for conf if needed
 if [[ ! -f ${VAR_CONF_FILE} ]]; then
@@ -44,7 +46,7 @@ else
   RPCPASSWORD=$(grep 'rpcpassword' ${VAR_CONF_FILE} | cut -d'=' -f2)
 fi
 
-echo -e "## Bitcoin Daemon setup starting ##\n"
+echo -e "## ${VAR_THING} Daemon setup starting ##\n"
 
 # Install requisites:
 sudo -s bash <<EOF
@@ -80,7 +82,7 @@ EOF
 echo -e "Created configuration file\n"
 
 # Create a hard-link for conf file for backward compatibility
-[[ -f ${VAR_CONF_DIR}/bitcoin.conf ]] || ln -sf ${VAR_CONF_FILE} ${VAR_CONF_DIR}/
+[[ -f ${VAR_CONF_DIR}/${VAR_THING}.conf ]] || ln -sf ${VAR_CONF_FILE} ${VAR_CONF_DIR}/
 
 #### Use blockchain backup from somewhere
 if [[ ! -z "${VAR_BLOCKCHAIN_DOWNLOAD+x}" ]]; then
@@ -123,13 +125,13 @@ if [[ ${DONT_BUILD} != true ]]; then
   echo -e "===> Finished building and installing Berkley DB 4.8"
 
   # Build Chips
-  echo -e "===> Build Bitcoin Daemon"
+  echo -e "===> Build ${VAR_THING} Daemon"
   cd ${VAR_SRC_DIR}
   time_taken ./autogen.sh
   time_taken ./configure LDFLAGS="-L${BDB_PREFIX}/lib/" CPPFLAGS="-I${BDB_PREFIX}/include/" \
     --without-gui --without-miniupnpc --disable-tests --disable-bench --with-gui=no
   time_taken make -s -j${VAR_NPROC}
-  echo -e "===> Finished building Bitcoin Daemon"
+  echo -e "===> Finished building ${VAR_THING} Daemon"
 
 fi
 
@@ -140,42 +142,42 @@ sed -e "s|<VAR_RPCPORT>|${VAR_RPCPORT}|g" \
   -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
   -e "s|<VAR_NPROC>|${VAR_NPROC}|g" \
   -e "s|<VAR_USERNAME>|${VAR_USERNAME}|g" \
-  "${SCRIPTPATH}/.bitcoin/bin/start.sh" > "${VAR_CONF_DIR}/bin/start.sh"
+  "${SCRIPTPATH}/.${VAR_THING}/bin/start.sh" > "${VAR_CONF_DIR}/bin/start.sh"
 
 sed -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
   -e "s|<VAR_CONF_DIR>|${VAR_CONF_DIR}|g" \
   -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
   -e "s|<VAR_USERNAME>|${VAR_USERNAME}|g" \
-  "${SCRIPTPATH}/.bitcoin/bin/stop.sh" > "${VAR_CONF_DIR}/bin/stop.sh"
+  "${SCRIPTPATH}/.${VAR_THING}/bin/stop.sh" > "${VAR_CONF_DIR}/bin/stop.sh"
 
 sed -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
-  "${SCRIPTPATH}/.bitcoin/bin/healthcheck.sh" > "${VAR_CONF_DIR}/bin/healthcheck.sh"
+  "${SCRIPTPATH}/.${VAR_THING}/bin/healthcheck.sh" > "${VAR_CONF_DIR}/bin/healthcheck.sh"
 
 sed -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
-  "${SCRIPTPATH}/.bitcoin/bin/status.sh" > "${VAR_CONF_DIR}/bin/status.sh"
+  "${SCRIPTPATH}/.${VAR_THING}/bin/status.sh" > "${VAR_CONF_DIR}/bin/status.sh"
 
 # Symlink binaries
-sudo ln -sf ${VAR_SRC_DIR}/src/bitcoin-cli /usr/local/bin/
-sudo ln -sf ${VAR_SRC_DIR}/src/bitcoind /usr/local/bin/
-sudo chmod +x /usr/local/bin/bitcoin-cli
-sudo chmod +x /usr/local/bin/bitcoind
+sudo ln -sf ${VAR_SRC_DIR}/src/${VAR_THING}-cli /usr/local/bin/
+sudo ln -sf ${VAR_SRC_DIR}/src/${VAR_THING}d /usr/local/bin/
+sudo chmod +x /usr/local/bin/${VAR_THING}-cli
+sudo chmod +x /usr/local/bin/${VAR_THING}d
 
 # Permissions and ownership
 chmod +x ${VAR_CONF_DIR}/bin/*
 chmod 660 ${VAR_CONF_DIR}/conf/*.conf
 
-echo -e "## Bitcoin Daemon has been configured ##\n"
+echo -e "## ${VAR_THING} Daemon has been configured ##\n"
 
 
 # Create monit template
-cat > ${HOME}/.bitcoin/monitd_bitcoin.template <<EOF
-check program bitcoind_healthcheck.sh with path "${HOME}/.bitcoin/bin/healthcheck.sh"
+cat > ${HOME}/.${VAR_THING}/monitd_${VAR_THING}.template <<EOF
+check program ${VAR_THING}d_healthcheck.sh with path "${HOME}/.${VAR_THING}/bin/healthcheck.sh"
   as uid ${USER} and gid ${USER}
   with timeout 60 seconds
-if status != 0 then exec "/usr/local/bin/sudo_wrapper ${HOME}/.bitcoin/bin/start.sh"
+if status != 0 then exec "/usr/local/bin/sudo_wrapper ${HOME}/.${VAR_THING}/bin/start.sh"
   as uid ${USER} and gid ${USER}
   repeat every 2 cycles
 EOF
 
 # Copy monit configuration
-sudo mv ${HOME}/.bitcoin/monitd_bitcoin.template /etc/monit/conf.d/monitd_bitcoin
+sudo mv ${HOME}/.${VAR_THING}/monitd_${VAR_THING}.template /etc/monit/conf.d/monitd_${VAR_THING}
