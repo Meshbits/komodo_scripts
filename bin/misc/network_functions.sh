@@ -8,7 +8,7 @@ function nn_ping() {
     | grep -o '[0-9]\+[.][0-9]\+[.][0-9]\+[.][0-9]\+' | uniq \
     | while read variable
   do
-    nc -zn -w2 ${variable} 17775 || echo "Unable to connect to ${variable}"
+    nc -zn -w2 ${variable} 17775 || echo "Unable to connect to ${variable}" &
   done
 }
 
@@ -20,3 +20,5 @@ function nn_ufw() {
     sudo grep ${variable} /var/log/ufw.log | uniq
   done
 }
+
+#watch -x bash -c "source ~/misc_scripts/network_functions.sh; nn_ping"
