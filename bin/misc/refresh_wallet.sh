@@ -172,7 +172,7 @@ sleep 60
 set +e
 # Import NN keys
 sleep 10
-bitcoin-cli importprivkey $(cat ${HOME}/.temp_sensitive/temp_bitcoin_key) "" false &
+bitcoin-cli importprivkey $(cat ${HOME}/.temp_sensitive/nn_bitcoin_key) "" false
 komodo-cli importprivkey $(cat ${HOME}/.temp_sensitive/nn_komodo_key)
 set -e
 
