@@ -8,8 +8,7 @@ set -eo pipefail
 source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
 
-function init_colors ()
-{
+function init_colors () {
 RESET="\033[0m"
 BLACK="\033[30m"
 RED="\033[31m"
@@ -22,8 +21,7 @@ WHITE="\033[37m"
 }
 
 # --------------------------------------------------------------------------
-function log_print()
-{
+function log_print() {
    datetime=$(date '+%Y-%m-%d %H:%M:%S')
    echo [$datetime] $1
 }
@@ -52,8 +50,6 @@ if [[ \
   #exit 1
 fi
 
-# to-do
-# Create game, veruscoin temp_address
 [[ -d ${HOME}/.temp_sensitive ]] || mkdir -p ${HOME}/.temp_sensitive
 
 # get the komodo, veruscoin, gamecredits address
@@ -92,40 +88,9 @@ sleep 60
 ~/.bitcoin/bin/status.sh
 ~/.komodo/bin/status.sh
 
-# Start assetchains
-seed_ip=$(getent hosts zero.kolo.supernet.org | awk '{ print $1 }')
-${HOME}/komodo/src/listassetchainparams | while read args; do
-  name=$(echo ${args} | awk -F '-ac_name=' '{ print $2 }' | awk '{ print $1 }')
-  if $(echo ${name} | grep -q -P "BEER|PIZZA|VOTE2018"); then continue; fi
-  conffile={HOME}/.komodo/${name}/${name}.conf
-  ${HOME}/komodo/src/komodod $args -addnode=$seed_ip -maxconnections=128 &
-  sleep 1
-done
-sleep 60
-~/.komodo/bin/ac_status.sh
-
 # send all bitcoin and komodo to TEMP_ADDRESS
 bitcoin-cli sendtoaddress "${TEMP_BITCOIN_ADDRESS}" $(bitcoin-cli getbalance) "" "" true
 komodo-cli sendtoaddress "${TEMP_KOMODO_ADDRESS}" $(komodo-cli getbalance) "" "" true
-
-# scan through assetchains
-${HOME}/komodo/src/listassetchainparams | while read args
-do
-  name=$(echo ${args} | awk -F '-ac_name=' '{ print $2 }' | awk '{ print $1 }')
-  if $(echo ${name} | grep -q -P "BEER|PIZZA|VOTE2018"); then continue; fi
-  echo $name
-
-  # send all assetchains to TEMP_ADDRESS
-  komodo-cli sendmany "" "{\"${TEMP_KOMODO_ADDRESS}\":\"$(komodo-cli getbalance)\"}" \
-    1 "" "[\"${TEMP_KOMODO_ADDRESS}\"]"
-done
-
-#send all but 10 assetchain to vault_address_komodo
-#send all but 10 veruscoin to vault_address_veruscoin
-#send all but 10 gamecredits to vault_address_gamecredits
-#send all assetchain to temp_address_komodo
-#send all veruscoin to temp_address_veruscoin
-#send all gamecredits to temp_address_gamecredits
 
 sleep 30
 ~/.bitcoin/bin/stop.sh
