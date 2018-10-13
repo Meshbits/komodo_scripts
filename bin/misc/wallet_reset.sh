@@ -207,7 +207,7 @@ function reset_wallet() {
   log_print "Starting daemon ($coin) ... "
 
   # *** STARTING DAEMON ***
-  $komodo_daemon $daemon_args &
+  $komodo_daemon $daemon_args &>> ~/wallet_reset.log &
 
   #$komodo_daemon -gen -notary -pubkey="$NN_PUBKEY" &
 
