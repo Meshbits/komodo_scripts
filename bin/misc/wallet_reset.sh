@@ -227,9 +227,15 @@ function reset_wallet() {
 curdir=$(pwd)
 init_colors
 
+ignore_list=(
+VOTE2018
+)
+
 # Only assetchains
 ${HOME}/komodo/src/listassetchains | while read list; do
-  echo "$list"
+  if [[ "${ignore_list[@]}" =~ "${list}" ]]; then
+    continue
+  fi
   reset_wallet $list
 done
 
