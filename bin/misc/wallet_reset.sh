@@ -96,8 +96,8 @@ function send_balance() {
     asset=""
   fi
 
-  #echo $komodo_cli $asset getbalance
-  BALANCE=$($komodo_cli $asset getbalance 2>/dev/null)
+  #echo $komodo_cli $asset getbalance with at least 1 confirmation
+  BALANCE=$($komodo_cli $asset getbalance "*" 1 2>/dev/null)
   ERRORLEVEL=$?
 
   if [ "$ERRORLEVEL" -eq "0" ] && [ "$BALANCE" != "0.00000000" ]; then
@@ -170,6 +170,7 @@ function reset_wallet() {
 
   # disable generate to avoid daemon crash during multiple "error adding notary vin" messages
   $komodo_cli $asset setgenerate false
+  sleep 5
 
   send_balance $coin
   log_print "ht.$height ($blockhash)"
@@ -215,6 +216,10 @@ function reset_wallet() {
   $komodo_cli $asset importprivkey $NN_PRIVKEY "" false
   log_print "Rescanning from ht.$height ... "
   $komodo_cli $asset z_importkey "$NN_ZKEY" \"yes\" $height
+
+  # Enable generation of new blocks
+  $komodo_cli $asset setgenerate true >& /dev/null
+
   log_print "Done reset ($coin)"
 }
 
