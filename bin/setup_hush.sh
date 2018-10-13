@@ -68,7 +68,7 @@ rpcport=${VAR_RPCPORT}
 rpcbind=127.0.0.1
 rpcallowip=127.0.0.1
 rpcworkqueue=256
-bind=127.0.0.1
+#bind=127.0.0.1
 addnode=explorer.myhush.org
 addnode=dnsseed.myhush.org
 addnode=dnsseed2.myhush.org
@@ -77,6 +77,8 @@ addnode=dnsseed.hush.quebec
 txindex=1
 server=1
 showmetrics=0
+
+maxconnections=16
 # Hush listens on Tor by default, most don't need this. Also requires firewall changes
 listenonion=0
 # These are optional and can be disabled for performance reasons if needed

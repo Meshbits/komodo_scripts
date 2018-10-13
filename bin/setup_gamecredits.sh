@@ -64,9 +64,11 @@ rpcuser=${RPCUSER}
 rpcpassword=${RPCPASSWORD}
 rpcport=${VAR_RPCPORT}
 txindex=1
-bind=127.0.0.1
+#bind=127.0.0.1
 rpcbind=127.0.0.1
 rpcallowip=127.0.0.1
+
+maxconnections=16
 EOF
 echo -e "Created configuration file\n"
 

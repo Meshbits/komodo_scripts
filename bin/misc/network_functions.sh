@@ -27,4 +27,29 @@ function nn_ufw() {
   done
 }
 
+function unready_func_nn_daemon_connect() {
+  # Function to allow connecting to another server to download blockchain
+  komodo-cli addnode "$1"
+ignore_list=(
+VOTE2018
+PIZZA
+BEER
+)
+
+  # Only assetchains
+  ${HOME}/komodo/src/listassetchains | while read list; do
+    if [[ "${ignore_list[@]}" =~ "${list}" ]]; then
+      continue
+    fi
+    komodo-cli -ac_name=$list addnode "$1"
+  done
+
+  bitcoin-cli addnode "$1"
+  chips-cli addnode "$1"
+  einsteinium-cli addnode "$1"
+  gamecredits-cli addnode "$1"
+  hush-cli addnode "$1"
+  veruscoin-cli -ac_name=VRSC addnode "$1"
+}
+
 #watch -x bash -c "source ~/misc_scripts/network_functions.sh; nn_ping"
