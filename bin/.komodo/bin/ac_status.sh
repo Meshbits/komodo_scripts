@@ -21,6 +21,8 @@ do
         break
       else
         echo -e "## assetchain not in sync with the network: ${name} ##"
+        echo -e "Longestchain: $(echo $getinfo | jq -r .longestchain)"
+        echo -e "Blocks: $(echo $getinfo | jq -r .blocks)\n"
         break
       fi
     fi
