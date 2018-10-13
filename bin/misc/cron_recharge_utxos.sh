@@ -55,7 +55,7 @@ do
   if [[ $(komodo-cli -ac_name=${name} listunspent | grep ${dsatoshis} | wc -l) -lt 20 ]]; then
     #/usr/local/bin/slack_alert testing \
     #  "$(echo -n ${name}; echo -n -e ' utxos before split:\t'; komodo-cli listunspent | grep ${dsatoshis} | wc -l)"
-    echo -e "\${name} Split"
+    echo -e "${name} Split"
     ${HOME}/misc_scripts/acsplit.sh ${name} 20
   fi
 done
