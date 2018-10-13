@@ -227,8 +227,7 @@ function reset_wallet() {
 curdir=$(pwd)
 init_colors
 
-reset_wallet KMD
-
+# Only assetchains
 ${HOME}/komodo/src/listassetchains | while read list; do
   echo "$list"
   reset_wallet $list
