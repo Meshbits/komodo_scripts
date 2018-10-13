@@ -229,6 +229,8 @@ init_colors
 
 ignore_list=(
 VOTE2018
+PIZZA
+BEER
 )
 
 # Only assetchains
