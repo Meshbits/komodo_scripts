@@ -49,7 +49,7 @@ function wait_for_daemon() {
   while ! $komodo_cli $asset getinfo >/dev/null 2>&1; do
      i=$((i+1))
      log_print "Waiting for daemon start $coin ($i)"
-     sleep 1
+     sleep 5
      # TODO: in case if daemon start too long, for example, more than 5-7 mins. we should exit from script
   done
 }
@@ -76,13 +76,13 @@ function stop_daemon() {
   while [ -f $ddatadir/komodod.pid ]; do
      i=$((i+1))
      log_print "Waiting for daemon $coin stop ($i)"
-     sleep 1
+     sleep 2
   done
 
   while [ ! -z $(lsof -Fp $ddatadir/.lock | head -1 | cut -c 2-) ]; do
      i=$((i+1))
      log_print "Waiting for .lock release by $coin  ($i)"
-     sleep 1
+     sleep 2
   done
 }
 
@@ -222,7 +222,7 @@ function reset_wallet() {
 curdir=$(pwd)
 init_colors
 
-reset_wallet REV
+reset_wallet REVS
 
 # ${HOME}/komodo/src/listassetchains | while read list; do
 #   echo "$list"
