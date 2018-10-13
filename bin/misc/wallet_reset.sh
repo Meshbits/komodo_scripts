@@ -222,12 +222,12 @@ function reset_wallet() {
 curdir=$(pwd)
 init_colors
 
-reset_wallet REVS
+reset_wallet KMD
 
-# ${HOME}/komodo/src/listassetchains | while read list; do
-#   echo "$list"
-#   #reset_wallet $list
-# done
+${HOME}/komodo/src/listassetchains | while read list; do
+  echo "$list"
+  reset_wallet $list
+done
 
 # Start monit
 sudo /etc/init.d/monit start

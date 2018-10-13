@@ -4,21 +4,35 @@ set -eo pipefail
 # Reference:
 # https://github.com/chainstrike/nntools/blob/master/guides/Guide-FreshWallet.txt
 
-# Pre-requisites for this script
-#komodo-cli importprivkey $TEMP_komodo_private_key "temp_vault" false
-#bitcoin-cli importprivkey $TEMP_bitcoin_private_key "temp_vault" false
-
 # source profile and setup variables using "${HOME}/.common/config"
 source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
+
+function init_colors ()
+{
+RESET="\033[0m"
+BLACK="\033[30m"
+RED="\033[31m"
+GREEN="\033[32m"
+YELLOW="\033[33m"
+BLUE="\033[34m"
+MAGENTA="\033[35m"
+CYAN="\033[36m"
+WHITE="\033[37m"
+}
+
+# --------------------------------------------------------------------------
+function log_print()
+{
+   datetime=$(date '+%Y-%m-%d %H:%M:%S')
+   echo [$datetime] $1
+}
 
 function error_handler() {
   echo "Error occurred in script at line: ${1}."
   echo "Line exited with status: ${2}"
 }
-
 #trap 'error_handler ${LINENO} $?' INT TERM ERR
-
 
 # Validate variables
 if [[ \
@@ -67,12 +81,6 @@ fi
 komodo-cli sendmany "" "{\"${VAULT_KOMODO_ADDRESS}\":\"$balance_minus_ten\"}" \
   1 "" "[\"${VAULT_KOMODO_ADDRESS}\"]"
 
-# send all the TEMP_VAULT funds to VAULT
-#temp_vault_balance=$(komodo-cli getbalance)
-#temp_vault_balance_minus_trans=$(echo "$temp_vault_balance-0.001" | bc | awk '{printf "%f", $0}' )
-#komodo-cli sendmany "temp_vault" "{\"${VAULT_KOMODO_ADDRESS}\":\"$temp_vault_balance_minus_trans\"}" \
-#  1 "" "[\"${VAULT_KOMODO_ADDRESS}\"]"
-
 # stop monit and all other services
 ~/misc_scripts/stop_raw.sh
 sleep 30
@@ -84,9 +92,33 @@ sleep 60
 ~/.bitcoin/bin/status.sh
 ~/.komodo/bin/status.sh
 
+# Start assetchains
+seed_ip=$(getent hosts zero.kolo.supernet.org | awk '{ print $1 }')
+${HOME}/komodo/src/listassetchainparams | while read args; do
+  name=$(echo ${args} | awk -F '-ac_name=' '{ print $2 }' | awk '{ print $1 }')
+  if $(echo ${name} | grep -q -P "BEER|PIZZA|VOTE2018"); then continue; fi
+  conffile={HOME}/.komodo/${name}/${name}.conf
+  ${HOME}/komodo/src/komodod $args -addnode=$seed_ip -maxconnections=128 &
+  sleep 1
+done
+sleep 60
+~/.komodo/bin/ac_status.sh
+
 # send all bitcoin and komodo to TEMP_ADDRESS
 bitcoin-cli sendtoaddress "${TEMP_BITCOIN_ADDRESS}" $(bitcoin-cli getbalance) "" "" true
 komodo-cli sendtoaddress "${TEMP_KOMODO_ADDRESS}" $(komodo-cli getbalance) "" "" true
+
+# scan through assetchains
+${HOME}/komodo/src/listassetchainparams | while read args
+do
+  name=$(echo ${args} | awk -F '-ac_name=' '{ print $2 }' | awk '{ print $1 }')
+  if $(echo ${name} | grep -q -P "BEER|PIZZA|VOTE2018"); then continue; fi
+  echo $name
+
+  # send all assetchains to TEMP_ADDRESS
+  komodo-cli sendmany "" "{\"${TEMP_KOMODO_ADDRESS}\":\"$(komodo-cli getbalance)\"}" \
+    1 "" "[\"${TEMP_KOMODO_ADDRESS}\"]"
+done
 
 #send all but 10 assetchain to vault_address_komodo
 #send all but 10 veruscoin to vault_address_veruscoin
