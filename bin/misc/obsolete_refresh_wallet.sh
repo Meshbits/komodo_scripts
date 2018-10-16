@@ -57,10 +57,10 @@ fi
 #komodo-cli getaddressesbyaccount ''
 
 # save the privkey to a variable so we import it later
+echo "Saving NN btc private key"
 NN_bitcoin_private_key=$(bitcoin-cli dumpprivkey ${NN_BITCOIN_ADDRESS} | tee ${HOME}/.temp_sensitive/nn_bitcoin_key)
+echo "Saving NN kmd private key"
 NN_komodo_private_key=$(komodo-cli dumpprivkey ${NN_KOMODO_ADDRESS} | tee ${HOME}/.temp_sensitive/nn_komodo_key)
-TEMP_bitcoin_private_key=$(bitcoin-cli dumpprivkey ${TEMP_BITCOIN_ADDRESS} | tee ${HOME}/.temp_sensitive/temp_bitcoin_key)
-TEMP_komodo_private_key=$(komodo-cli dumpprivkey ${TEMP_KOMODO_ADDRESS} | tee ${HOME}/.temp_sensitive/temp_komodo_key)
 
 # What da balance
 balance=$(komodo-cli getbalance)
@@ -73,6 +73,7 @@ if [[ ${balance%.*} -lt 20 ]]; then
   exit 1
 fi
 
+#todo: Capture the transaction ID here - and use it like used in Decker's script
 # send all but 10 komodo to VAULT_KOMODO_ADDRESS
 komodo-cli sendmany "" "{\"${VAULT_KOMODO_ADDRESS}\":\"$balance_minus_ten\"}" \
   1 "" "[\"${VAULT_KOMODO_ADDRESS}\"]"
