@@ -10,6 +10,7 @@ sudo ufw default deny incoming
 sudo ufw allow from 127.0.0.1 comment 'Localhost'
 sudo ufw allow 22 comment 'SSH'
 sudo ufw allow 17775 comment 'Iguana'
+sudo ufw allow 7770 comment 'Komodo'
 
 # Allow all Notary node IPs
 for list in "${NN_IPS[@]}"

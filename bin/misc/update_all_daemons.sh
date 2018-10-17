@@ -20,7 +20,7 @@ ${SCRIPTPATH}/start_raw.sh >& ~/start_raw.log
 ${SCRIPTPATH}/stop_raw.sh
 
 cd ${HOME}
-for list in chips gamecredits komodo hush einsteinium; do
+for list in chips gamecredits komodo veruscoin hush einsteinium; do
   rm -rf .build_source/${list}_old
   mv $list .build_source/${list}_old
   mv .build_source/${list} .
