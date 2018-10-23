@@ -13,7 +13,7 @@ function log_print() {
 # Validate variables
 if [[ \
 -z ${NN_KOMODO_ADDRESS+x} || \
--z ${VAULT_KOMODO_ADDRESS+x} || \
+-z ${VAULT_KOMODO_ADDRESS+x}
 ]]; then
   echo -e "Variable not found\n"
   exit 1
