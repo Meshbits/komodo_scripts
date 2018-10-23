@@ -8,7 +8,6 @@ function image_build() {
 }
 
 function image_push() {
-  docker build -f Dockerfile_komodo -t "meshbits_komodo1604:${var_tag}" .
   docker tag "meshbits_komodo1604:${var_tag}" "nsrea408/meshbits_komodo1604:${var_tag}"
   docker push "nsrea408/meshbits_komodo1604:${var_tag}"
 }
