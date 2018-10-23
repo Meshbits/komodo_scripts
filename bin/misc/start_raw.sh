@@ -33,6 +33,6 @@ ${HOME}/.hush/bin/status.sh
 ${HOME}/.einsteinium/bin/status.sh
 
 cd ${HOME}/SuperNET/iguana
-git checkout ${IGUANA_BRANCH} && git pull && ./m_notary && ./dpowassets
+git checkout ${IGUANA_BRANCH} && git pull && ./m_notary "" notary_nosplit && ./dpowassets
 
 sudo /etc/init.d/monit start
