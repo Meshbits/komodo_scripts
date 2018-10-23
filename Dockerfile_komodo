@@ -12,5 +12,4 @@ WORKDIR /home/meshbits
 
 RUN /usr/local/src/komodo_scripts/bin/setup_komodo.sh
 
-
 CMD ["/bin/bash"]
