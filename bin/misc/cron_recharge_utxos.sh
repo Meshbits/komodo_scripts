@@ -14,7 +14,7 @@ print_txid () {
 }
 
 var_coin=BTC
-var_value=20
+var_value=25
 if [[ $(bitcoin-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
   echo -e "\n${var_coin} Split"
   RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
@@ -23,7 +23,7 @@ if [[ $(bitcoin-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; 
 fi
 
 var_coin=KMD
-var_value=20
+var_value=100
 if [[ $(komodo-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
   echo -e "\n${var_coin} Split"
   RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
@@ -31,7 +31,7 @@ if [[ $(komodo-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; t
 fi
 
 var_coin=CHIPS
-var_value=20
+var_value=25
 if [[ $(chips-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
   echo -e "\n${var_coin} Split"
   RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
@@ -39,7 +39,7 @@ if [[ $(chips-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; th
 fi
 
 var_coin=VRSC
-var_value=20
+var_value=25
 if [[ $(${HOME}/veruscoin/src/komodo-cli -ac_name=VRSC listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
   echo -e "\n${var_coin} Split"
   RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
@@ -47,7 +47,7 @@ if [[ $(${HOME}/veruscoin/src/komodo-cli -ac_name=VRSC listunspent | grep -c "${
 fi
 
 var_coin=HUSH
-var_value=20
+var_value=25
 if [[ $(hush-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
   echo -e "\n${var_coin} Split"
   RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
@@ -55,7 +55,7 @@ if [[ $(hush-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; the
 fi
 
 var_coin=GAME
-var_value=20
+var_value=25
 if [[ $(gamecredits-cli listunspent | grep -c "${dsatoshis_gamecredits},") -lt ${var_value} ]]; then
   echo -e "\n${var_coin} Split"
   RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value} 100000)"
@@ -63,7 +63,7 @@ if [[ $(gamecredits-cli listunspent | grep -c "${dsatoshis_gamecredits},") -lt $
 fi
 
 var_coin=EMC2
-var_value=20
+var_value=25
 if [[ $(${HOME}/einsteinium/src/einsteinium-cli listunspent | grep -c "${dsatoshis_einsteinium},") -lt ${var_value} ]]; then
   echo -e "\n${var_coin} Split"
   RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value} 100000)"
@@ -72,7 +72,7 @@ fi
 
 ASSETCHAINS_FILE="${HOME}/komodo/src/assetchains.json"
 
-var_value=20
+var_value=25
 for ((item=0; item<$(cat ${ASSETCHAINS_FILE} | jq '. | length'); item++));
 do
   name=$(cat ${ASSETCHAINS_FILE} | jq -r ".[${item}] | .ac_name")
