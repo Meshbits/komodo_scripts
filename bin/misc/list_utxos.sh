@@ -1,23 +1,47 @@
 #!/usr/bin/env bash
-set -e
+#set -e
 
 # source profile and setup variables using "${HOME}/.common/config"
 source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
 
-dsatoshis='.0001'
+dsatoshis='0.00010000'
+dsatoshis_gamecredits='0.00100000'
+dsatoshis_einsteinium='0.00100000'
 
-echo -n BTC; echo -n -e ' \t\t'; bitcoin-cli listunspent | grep ${dsatoshis} | wc -l
-echo -n CHIPS; echo -n -e ' \t\t'; chips-cli listunspent | grep ${dsatoshis} | wc -l
-echo -n KMD; echo -n -e ' \t\t'; komodo-cli listunspent | grep ${dsatoshis} | wc -l
+echo -n "BTC total utxos:"; echo -n -e ' \t'; bitcoin-cli listunspent | grep -c "amount"
+echo -n "BTC notarisation utxos:"; echo -n -e ' \t'; bitcoin-cli listunspent | grep -c "${dsatoshis},"
 
-ASSETCHAINS_FILE="${HOME}/komodo/src/assetchains"
+echo -n "KMD total utxos:"; echo -n -e ' \t'; komodo-cli listunspent | grep -c "amount"
+echo -n "KMD notarisation utxos:"; echo -n -e ' \t'; komodo-cli listunspent | grep -c "${dsatoshis},"
 
-# Check that we can actually find '^komodo_asset' before doing anything else
-if grep -P '^komodo_asset' ${ASSETCHAINS_FILE} >& /dev/null; then
-  for name in $(grep -P '^komodo_asset' ${ASSETCHAINS_FILE} | awk '{ print $2 }' );
-  do
-    if [[ ${name} == "BEER" || ${name} == "PIZZA" || ${name} == "VOTE2018" ]]; then continue; fi
-    echo -n ${name}; echo -n -e ' \t\t'; komodo-cli -ac_name=${name} listunspent | grep ${dsatoshis} | wc -l
-  done
-fi
+echo -n "KMD total utxos:"; echo -n -e ' \t'; chips-cli listunspent | grep -c "amount"
+echo -n "KMD notarisation utxos:"; echo -n -e ' \t'; chips-cli listunspent | grep -c "${dsatoshis},"
+
+
+echo -n "VRSC total utxos:"; echo -n -e ' \t'; ${HOME}/veruscoin/src/komodo-cli -ac_name=VRSC listunspent | grep -c "amount"
+echo -n "VRSC notarisation utxos:"; echo -n -e ' \t'; ${HOME}/veruscoin/src/komodo-cli -ac_name=VRSC listunspent | grep -c "${dsatoshis},"
+
+echo -n "HUSH total utxos:"; echo -n -e ' \t'; hush-cli listunspent | grep -c "amount"
+echo -n "HUSH notarisation utxos:"; echo -n -e ' \t'; hush-cli listunspent | grep -c "${dsatoshis},"
+
+echo -n "Gamecredits total utxos:"; echo -n -e ' \t'; gamecredits-cli listunspent | grep -c "amount"
+echo -n "Gamecredits notarisation utxos:"; echo -n -e ' \t'; gamecredits-cli listunspent | grep -c "${dsatoshis_gamecredits},"
+
+echo -n "Einsteinium total utxos:"; echo -n -e ' \t'; ${HOME}/einsteinium/src/einsteinium-cli listunspent | grep -c "amount"
+echo -n "Einsteinium notarisation utxos:"; echo -n -e ' \t'; ${HOME}/einsteinium/src/einsteinium-cli listunspent | grep -c "${dsatoshis_einsteinium},"
+
+ignore_list=(
+VOTE2018
+PIZZA
+BEER
+)
+
+# Only assetchains
+${HOME}/komodo/src/listassetchains | while read list; do
+  if [[ "${ignore_list[@]}" =~ "${list}" ]]; then
+    continue
+  fi
+  echo -n "${list} total utxos:"; echo -n -e ' \t'; komodo-cli -ac_name=${list} listunspent | grep -c "amount"
+  echo -n "${list} notarisation utxos:"; echo -n -e ' \t'; komodo-cli -ac_name=${list} listunspent | grep -c "${dsatoshis},"
+done
