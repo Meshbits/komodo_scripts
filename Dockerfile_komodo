@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 
 #RUN useradd -ms /bin/bash meshbits
-RUN apt-get -y update && apt-get -y install sudo time
+RUN apt-get -y -qq update && apt-get -y -qq install sudo time curl
 ADD . /usr/local/src/komodo_scripts
 
 RUN /usr/local/src/komodo_scripts/bin/create_user.sh meshbits
