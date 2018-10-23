@@ -20,13 +20,15 @@ function time_taken() {
 # Variables
 SCRIPTNAME=$(realpath $0)
 SCRIPTPATH=$(dirname $SCRIPTNAME)
+VAR_THING=gamecredits
+
 [[ -z ${VAR_NPROC+x} ]] && VAR_NPROC="$(cat /proc/cpuinfo | grep processor | wc -l)"
 [[ -z ${VAR_USERNAME+x} ]] && VAR_USERNAME="${USER}"
 [[ -z ${VAR_BRANCH+x} ]] && VAR_BRANCH='master'
-[[ -z ${VAR_REPO+x} ]] && VAR_REPO='https://github.com/jl777/GameCredits.git'
-[[ -z ${VAR_SRC_DIR+x} ]] && VAR_SRC_DIR="${HOME}/gamecredits"
-[[ -z ${VAR_CONF_DIR+x} ]] && VAR_CONF_DIR="${HOME}/.gamecredits"
-[[ -z ${VAR_CONF_FILE+x} ]] && VAR_CONF_FILE="${VAR_CONF_DIR}/conf/gamecredits.conf"
+[[ -z ${VAR_REPO+x} ]] && VAR_REPO='https://github.com/gamecredits-project/GameCredits.git'
+[[ -z ${VAR_SRC_DIR+x} ]] && VAR_SRC_DIR="${HOME}/${VAR_THING}"
+[[ -z ${VAR_CONF_DIR+x} ]] && VAR_CONF_DIR="${HOME}/.${VAR_THING}"
+[[ -z ${VAR_CONF_FILE+x} ]] && VAR_CONF_FILE="${VAR_CONF_DIR}/conf/${VAR_THING}.conf"
 [[ -z ${VAR_RPCPORT+x} ]] && VAR_RPCPORT="40001"
 
 # Create random password for conf if needed
@@ -38,7 +40,7 @@ else
   RPCPASSWORD=$(grep 'rpcpassword' ${VAR_CONF_FILE} | cut -d'=' -f2)
 fi
 
-echo -e "## GameCredits Daemon setup starting ##\n"
+echo -e "## ${VAR_THING} Daemon setup starting ##\n"
 
 # Install requisites:
 sudo -s bash <<EOF
@@ -62,30 +64,32 @@ rpcuser=${RPCUSER}
 rpcpassword=${RPCPASSWORD}
 rpcport=${VAR_RPCPORT}
 txindex=1
-bind=127.0.0.1
+#bind=127.0.0.1
 rpcbind=127.0.0.1
 rpcallowip=127.0.0.1
+
+maxconnections=16
 EOF
 echo -e "Created configuration file\n"
 
 # Create a hard-link for conf file for backward compatibility
-[[ -f ${VAR_CONF_DIR}/gamecredits.conf ]] || ln -sf ${VAR_CONF_FILE} ${VAR_CONF_DIR}/
+[[ -f ${VAR_CONF_DIR}/${VAR_THING}.conf ]] || ln -sf ${VAR_CONF_FILE} ${VAR_CONF_DIR}/
 
 if [[ ${DONT_BUILD} != true ]]; then
 
   ### Checkout the sourcecode
   if [[ -d ${VAR_SRC_DIR} ]]; then
 
-    echo -e "## GameCredits source directory already exists, building in *.build_source/gamecredits* ##\n"
+    echo -e "## ${VAR_THING} source directory already exists, building in *.build_source/${VAR_THING}* ##\n"
     cd "${HOME}/.build_source" >& /dev/null
-    rm -rf gamecredits
-    git clone ${VAR_REPO} -b ${VAR_BRANCH} gamecredits
-    $(dirname $0)/install_berkleydb.sh "${HOME}/.build_source/gamecredits"
-    cd gamecredits
-    BDB_PREFIX="${HOME}/.build_source/gamecredits/db4"
+    rm -rf ${VAR_THING}
+    git clone ${VAR_REPO} -b ${VAR_BRANCH} ${VAR_THING}
+    $(dirname $0)/install_berkleydb.sh "${HOME}/.build_source/${VAR_THING}"
+    cd ${VAR_THING}
+    BDB_PREFIX="${HOME}/.build_source/${VAR_THING}/db4"
   else
     cd ${HOME}
-    git clone ${VAR_REPO} -b ${VAR_BRANCH} gamecredits
+    git clone ${VAR_REPO} -b ${VAR_BRANCH} ${VAR_THING}
     cd ${VAR_SRC_DIR}
 
     # Build BerkleyDB
@@ -94,13 +98,13 @@ if [[ ${DONT_BUILD} != true ]]; then
     BDB_PREFIX="${VAR_SRC_DIR}/db4"
   fi
 
-  # Build GameCredits
-  echo -e "===> Build GameCredits Daemon"
+  # Build ${VAR_THING}
+  echo -e "===> Build ${VAR_THING} Daemon"
   time ./autogen.sh
   time ./configure LDFLAGS="-L${BDB_PREFIX}/lib/" CPPFLAGS="-I${BDB_PREFIX}/include/" \
     --without-gui --without-miniupnpc --disable-tests --disable-bench --with-gui=no
   time make -j${VAR_NPROC}
-  echo -e "===> Finished building GameCredits Daemon"
+  echo -e "===> Finished building ${VAR_THING} Daemon"
 
 fi
 
@@ -111,41 +115,41 @@ sed -e "s|<VAR_RPCPORT>|${VAR_RPCPORT}|g" \
   -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
   -e "s|<VAR_NPROC>|${VAR_NPROC}|g" \
   -e "s|<VAR_USERNAME>|${VAR_USERNAME}|g" \
-  "${SCRIPTPATH}/.gamecredits/bin/start.sh" > "${VAR_CONF_DIR}/bin/start.sh"
+  "${SCRIPTPATH}/.${VAR_THING}/bin/start.sh" > "${VAR_CONF_DIR}/bin/start.sh"
 
 sed -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
   -e "s|<VAR_CONF_DIR>|${VAR_CONF_DIR}|g" \
   -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
   -e "s|<VAR_USERNAME>|${VAR_USERNAME}|g" \
-  "${SCRIPTPATH}/.gamecredits/bin/stop.sh" > "${VAR_CONF_DIR}/bin/stop.sh"
+  "${SCRIPTPATH}/.${VAR_THING}/bin/stop.sh" > "${VAR_CONF_DIR}/bin/stop.sh"
 
 sed -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
-  "${SCRIPTPATH}/.gamecredits/bin/healthcheck.sh" > "${VAR_CONF_DIR}/bin/healthcheck.sh"
+  "${SCRIPTPATH}/.${VAR_THING}/bin/healthcheck.sh" > "${VAR_CONF_DIR}/bin/healthcheck.sh"
 
 sed -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
-  "${SCRIPTPATH}/.gamecredits/bin/status.sh" > "${VAR_CONF_DIR}/bin/status.sh"
+  "${SCRIPTPATH}/.${VAR_THING}/bin/status.sh" > "${VAR_CONF_DIR}/bin/status.sh"
 
 # Symlink binaries
-sudo ln -sf ${VAR_SRC_DIR}/src/gamecredits-cli /usr/local/bin/
-sudo ln -sf ${VAR_SRC_DIR}/src/gamecreditsd /usr/local/bin/
-sudo chmod +x /usr/local/bin/gamecredits-cli
-sudo chmod +x /usr/local/bin/gamecreditsd
+sudo ln -sf ${VAR_SRC_DIR}/src/${VAR_THING}-cli /usr/local/bin/
+sudo ln -sf ${VAR_SRC_DIR}/src/${VAR_THING}d /usr/local/bin/
+sudo chmod +x /usr/local/bin/${VAR_THING}-cli
+sudo chmod +x /usr/local/bin/${VAR_THING}d
 
 # Permissions and ownership
 chmod +x ${VAR_CONF_DIR}/bin/*
 chmod 660 ${VAR_CONF_DIR}/conf/*.conf
 
-echo -e "## GameCredits Daemon has been configured ##\n"
+echo -e "## ${VAR_THING} Daemon has been configured ##\n"
 
 # Create monit template
-cat > ${HOME}/.gamecredits/monitd_gamecredits.template <<EOF
-check program gamecredits_healthcheck.sh with path "${HOME}/.gamecredits/bin/healthcheck.sh"
+cat > ${HOME}/.${VAR_THING}/monitd_${VAR_THING}.template <<EOF
+check program ${VAR_THING}_healthcheck.sh with path "${HOME}/.${VAR_THING}/bin/healthcheck.sh"
   as uid ${USER} and gid ${USER}
   with timeout 60 seconds
-if status != 0 then exec "/usr/local/bin/sudo_wrapper ${HOME}/.gamecredits/bin/start.sh"
+if status != 0 then exec "/usr/local/bin/sudo_wrapper ${HOME}/.${VAR_THING}/bin/start.sh"
   as uid ${USER} and gid ${USER}
   repeat every 2 cycles
 EOF
 
 # Copy monit configuration
-sudo mv ${HOME}/.gamecredits/monitd_gamecredits.template /etc/monit/conf.d/monitd_gamecredits
+sudo mv ${HOME}/.${VAR_THING}/monitd_${VAR_THING}.template /etc/monit/conf.d/monitd_${VAR_THING}

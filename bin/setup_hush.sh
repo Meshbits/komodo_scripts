@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Installing Bitcoin on Ubuntu 16.04 LTS
+# Installing Hush on Ubuntu 16.04 LTS
+# Reference: https://gist.github.com/leto/d07578c55738131b8772623265bfb2cf
 set -e
 
 if [[ $EUID -eq 0 ]]; then
@@ -18,24 +19,18 @@ function time_taken() {
 }
 
 # Variables
-# Leart it the hard way that version should be pinned and that bitcoin's master branch can be unstable
-BITCOIN_LATEST_STABLE=$(curl --silent "https://api.github.com/repos/bitcoin/bitcoin/releases/latest" \
-  | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-#wget -c https://github.com/bitcoin/bitcoin/archive/${BITCOIN_LATEST_STABLE}.tar.gz -O ${BITCOIN_LATEST_STABLE}.tar.gz
-
 SCRIPTNAME=$(realpath $0)
 SCRIPTPATH=$(dirname $SCRIPTNAME)
-VAR_THING=bitcoin
+VAR_THING=hush
 
 [[ -z ${VAR_NPROC+x} ]] && VAR_NPROC="$(cat /proc/cpuinfo | grep processor | wc -l)"
 [[ -z ${VAR_USERNAME+x} ]] && VAR_USERNAME="${USER}"
-[[ -z ${VAR_BRANCH+x} ]] && VAR_BRANCH="v0.16.3"
-[[ -z ${VAR_REPO+x} ]] && VAR_REPO='https://github.com/bitcoin/bitcoin.git'
+[[ -z ${VAR_BRANCH+x} ]] && VAR_BRANCH='dev'
+[[ -z ${VAR_REPO+x} ]] && VAR_REPO='https://github.com/MyHush/hush.git'
 [[ -z ${VAR_SRC_DIR+x} ]] && VAR_SRC_DIR="${HOME}/${VAR_THING}"
 [[ -z ${VAR_CONF_DIR+x} ]] && VAR_CONF_DIR="${HOME}/.${VAR_THING}"
 [[ -z ${VAR_CONF_FILE+x} ]] && VAR_CONF_FILE="${VAR_CONF_DIR}/conf/${VAR_THING}.conf"
-[[ -z ${VAR_RPCPORT+x} ]] && VAR_RPCPORT="8332"
-[[ -z ${VAR_BLOCKCHAIN_ARCHIVE+x} ]] && VAR_BLOCKCHAIN_ARCHIVE="${VAR_THING}_blockchain_backup.tar.gz"
+[[ -z ${VAR_RPCPORT+x} ]] && VAR_RPCPORT="8822"
 
 # Create random password for conf if needed
 if [[ ! -f ${VAR_CONF_FILE} ]]; then
@@ -53,12 +48,7 @@ sudo -s bash <<EOF
 export DEBIAN_FRONTEND=noninteractive;
 apt-get -y -qq update
 apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -qq \
-  install build-essential libtool autotools-dev autoconf pkg-config libssl-dev \
-  libboost-all-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev \
-  qttools5-dev-tools libprotobuf-dev protobuf-compiler libqrencode-dev autoconf \
-  automake openssl libssl-dev libevent-dev libminiupnpc-dev bsdmainutils \
-  pigz vim ntp ntpdate curl wget git python unzip sudo jq dnsutils tree \
-  inotify-tools htop
+  install libevent-dev
 EOF
 
 # Create directories
@@ -66,6 +56,7 @@ EOF
 [[ -d ${VAR_CONF_DIR}/conf ]] || mkdir ${VAR_CONF_DIR}/conf
 [[ -d ${VAR_CONF_DIR}/log ]] || mkdir ${VAR_CONF_DIR}/log
 [[ -d ${VAR_CONF_DIR}/bin ]] || mkdir ${VAR_CONF_DIR}/bin
+[[ -d ${HOME}/.build_source ]] || mkdir ${HOME}/.build_source
 
 #### Create conf only if it doesn't exist before
 [[ -f "${VAR_CONF_FILE}" ]] || \
@@ -73,66 +64,54 @@ EOF
 rpcuser=${RPCUSER}
 rpcpassword=${RPCPASSWORD}
 rpcport=${VAR_RPCPORT}
-txindex=1
-server=1
-#bind=127.0.0.1
+
 rpcbind=127.0.0.1
 rpcallowip=127.0.0.1
+rpcworkqueue=256
+#bind=127.0.0.1
+addnode=explorer.myhush.org
+addnode=dnsseed.myhush.org
+addnode=dnsseed2.myhush.org
+addnode=dnsseed.bleuzero.com
+addnode=dnsseed.hush.quebec
+txindex=1
+server=1
+showmetrics=0
 
 maxconnections=16
+# Hush listens on Tor by default, most don't need this. Also requires firewall changes
+listenonion=0
+# These are optional and can be disabled for performance reasons if needed
+# This will enable various RPC methods which depend on indexes
+#addressindex=1
+#timestampindex=1
+#spentindex=1
+# TLS options described here, default is fine for most: https://github.com/MyHush/hush/blob/master/SECURE_SETUP.md
 EOF
 echo -e "Created configuration file\n"
 
 # Create a hard-link for conf file for backward compatibility
 [[ -f ${VAR_CONF_DIR}/${VAR_THING}.conf ]] || ln -sf ${VAR_CONF_FILE} ${VAR_CONF_DIR}/
 
-#### Use blockchain backup from somewhere
-if [[ ! -z "${VAR_BLOCKCHAIN_DOWNLOAD+x}" ]]; then
-  echo -e "## Downloading ${VAR_BLOCKCHAIN_ARCHIVE} in the background ##\n"
-  cd ${VAR_CONF_DIR}
-  wget -c ${VAR_BLOCKCHAIN_DOWNLOAD} \
-    -O ${VAR_BLOCKCHAIN_ARCHIVE}
-
-  if ! [[ -d blocks && -d chainstate ]]; then
-    pigz -dc ${VAR_BLOCKCHAIN_ARCHIVE} | tar xf -
-  fi
-fi &
-
 if [[ ${DONT_BUILD} != true ]]; then
 
   ### Checkout the sourcecode
   if [[ -d ${VAR_SRC_DIR} ]]; then
-    cd ${VAR_SRC_DIR}
-    git checkout master; git pull --rebase
-    git checkout ${VAR_BRANCH}; git reset --hard
+
+    echo -e "## ${VAR_THING} source directory already exists, building in *.build_source/${VAR_THING}* ##\n"
+    cd ${HOME}/.build_source >& /dev/null
+    rm -rf ${VAR_THING}
+    git clone ${VAR_REPO} -b ${VAR_BRANCH} ${VAR_THING}
+    cd ${VAR_THING}
   else
     cd ${HOME}
-    git clone ${VAR_REPO} -b ${VAR_BRANCH}
+    git clone ${VAR_REPO} -b ${VAR_BRANCH} ${VAR_THING}
     cd ${VAR_SRC_DIR}
   fi
 
-  # Download & Install Berkley DB 4.8
-  echo -e "===> Build Berkley DB 4.8"
-  BDB_PREFIX="${VAR_SRC_DIR}/db4"
-  [[ -d "${BDB_PREFIX}" ]] || mkdir -p "${BDB_PREFIX}"
-  sudo chown -R `whoami`. /usr/local/src
-  cd /usr/local/src
-  wget -c 'http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz'
-  echo '12edc0df75bf9abd7f82f821795bcee50f42cb2e5f76a6a281b85732798364ef db-4.8.30.NC.tar.gz' | sha256sum -c
-  tar -xzf 'db-4.8.30.NC.tar.gz'
-  cd "db-4.8.30.NC/build_unix"
-  time_taken ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=${BDB_PREFIX}
-  time_taken make -j${VAR_NPROC}
-  time_taken make install
-  echo -e "===> Finished building and installing Berkley DB 4.8"
-
-  # Build Chips
+  # Build Hush
   echo -e "===> Build ${VAR_THING} Daemon"
-  cd ${VAR_SRC_DIR}
-  time_taken ./autogen.sh
-  time_taken ./configure LDFLAGS="-L${BDB_PREFIX}/lib/" CPPFLAGS="-I${BDB_PREFIX}/include/" \
-    --without-gui --without-miniupnpc --disable-tests --disable-bench --with-gui=no
-  time_taken make -s -j${VAR_NPROC}
+  time_taken ./zcutil/build.sh -j${VAR_NPROC}
   echo -e "===> Finished building ${VAR_THING} Daemon"
 
 fi
@@ -142,14 +121,13 @@ sed -e "s|<VAR_RPCPORT>|${VAR_RPCPORT}|g" \
   -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
   -e "s|<VAR_CONF_DIR>|${VAR_CONF_DIR}|g" \
   -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
-  -e "s|<VAR_NPROC>|${VAR_NPROC}|g" \
-  -e "s|<VAR_USERNAME>|${VAR_USERNAME}|g" \
   "${SCRIPTPATH}/.${VAR_THING}/bin/start.sh" > "${VAR_CONF_DIR}/bin/start.sh"
 
 sed -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
   -e "s|<VAR_CONF_DIR>|${VAR_CONF_DIR}|g" \
   -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
   -e "s|<VAR_USERNAME>|${VAR_USERNAME}|g" \
+  -e "s|<VAR_THING>|${VAR_THING}|g" \
   "${SCRIPTPATH}/.${VAR_THING}/bin/stop.sh" > "${VAR_CONF_DIR}/bin/stop.sh"
 
 sed -e "s|<VAR_CONF_FILE>|${VAR_CONF_FILE}|g" \
@@ -170,10 +148,9 @@ chmod 660 ${VAR_CONF_DIR}/conf/*.conf
 
 echo -e "## ${VAR_THING} Daemon has been configured ##\n"
 
-
 # Create monit template
 cat > ${HOME}/.${VAR_THING}/monitd_${VAR_THING}.template <<EOF
-check program ${VAR_THING}d_healthcheck.sh with path "${HOME}/.${VAR_THING}/bin/healthcheck.sh"
+check program ${VAR_THING}_healthcheck.sh with path "${HOME}/.${VAR_THING}/bin/healthcheck.sh"
   as uid ${USER} and gid ${USER}
   with timeout 60 seconds
 if status != 0 then exec "/usr/local/bin/sudo_wrapper ${HOME}/.${VAR_THING}/bin/start.sh"

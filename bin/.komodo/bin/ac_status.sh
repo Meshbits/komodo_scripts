@@ -18,7 +18,11 @@ do
     if <HOME>/komodo/src/komodo-cli -ac_name=${name} getinfo &> /dev/null; then
       getinfo=$(<HOME>/komodo/src/komodo-cli -ac_name=${name} getinfo)
       if [[ $(echo $getinfo | jq -r .longestchain) -eq $(echo $getinfo | jq -r .blocks) ]]; then
-        echo -e "## assetchain in sync with the network: ${name} ##"
+        break
+      else
+        echo -e "## assetchain not in sync with the network: ${name} ##"
+        echo -e "Longestchain: $(echo $getinfo | jq -r .longestchain)"
+        echo -e "Blocks: $(echo $getinfo | jq -r .blocks)\n"
         break
       fi
     fi

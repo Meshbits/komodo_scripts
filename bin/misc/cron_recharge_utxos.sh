@@ -1,56 +1,88 @@
 #!/usr/bin/env bash
-set -e
+#set -e
 
 # source profile and setup variables using "${HOME}/.common/config"
 source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
 
-dsatoshis='.00010000'
-dsatoshis_gamecredits='.00100000'
+dsatoshis='0.00010000'
+dsatoshis_gamecredits='0.00100000'
+dsatoshis_einsteinium='0.00100000'
 
-if [[ $(bitcoin-cli listunspent | grep ${dsatoshis} | wc -l) -lt 20 ]]; then
-  /usr/local/bin/slack_alert testing "$(echo -n -e 'BTC utxos before split:\t'; bitcoin-cli listunspent | grep ${dsatoshis} | wc -l)"
-  ${HOME}/misc_scripts/acsplit.sh BTC 20
-  /usr/local/bin/slack_alert testing "$(echo -n -e 'BTC utxos after split:\t'; bitcoin-cli listunspent | grep ${dsatoshis} | wc -l)"
+print_txid () {
+  echo -n $(echo "$1" | jq .txid)
+}
+
+var_coin=BTC
+var_value=25
+if [[ $(bitcoin-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
+  echo -e "\n${var_coin} Split"
+  RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
+	print_txid "$RESULT"
+  #/usr/local/bin/slack_alert testing "$(echo -n -e \"${var_coin} utxos after split:\t\"; bitcoin-cli listunspent | grep -c \"${dsatoshis},\")"
 fi
 
-if [[ $(chips-cli listunspent | grep ${dsatoshis} | wc -l) -lt 20 ]]; then
-  /usr/local/bin/slack_alert testing "$(echo -n -e 'CHIPS utxos before split:\t'; chips-cli listunspent | grep ${dsatoshis} | wc -l)"
-  ${HOME}/misc_scripts/acsplit.sh CHIPS 20
-  /usr/local/bin/slack_alert testing "$(echo -n -e 'CHIPS utxos after split:\t'; chips-cli listunspent | grep ${dsatoshis} | wc -l)"
+var_coin=KMD
+var_value=100
+if [[ $(komodo-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
+  echo -e "\n${var_coin} Split"
+  RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
+	print_txid "$RESULT"
 fi
 
-if [[ $(gamecredits-cli listunspent | grep ${dsatoshis_gamecredits} | wc -l) -lt 20 ]]; then
-  /usr/local/bin/slack_alert testing "$(echo -n -e 'GameCredits utxos before split:\t'; gamecredits-cli listunspent | grep ${dsatoshis} | wc -l)"
-  ${HOME}/misc_scripts/acsplit.sh GAME 10 100000
-  /usr/local/bin/slack_alert testing "$(echo -n -e 'GameCredits utxos after split:\t'; gamecredits-cli listunspent | grep ${dsatoshis} | wc -l)"
+var_coin=CHIPS
+var_value=25
+if [[ $(chips-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
+  echo -e "\n${var_coin} Split"
+  RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
+	print_txid "$RESULT"
 fi
 
-if [[ $(komodo-cli listunspent | grep ${dsatoshis} | wc -l) -lt 20 ]]; then
-  /usr/local/bin/slack_alert testing "$(echo -n -e 'KMD utxos before split:\t'; komodo-cli listunspent | grep ${dsatoshis} | wc -l)"
-  ${HOME}/misc_scripts/acsplit.sh KMD 20
-  /usr/local/bin/slack_alert testing "$(echo -n -e 'KMD utxos after split:\t'; komodo-cli listunspent | grep ${dsatoshis} | wc -l)"
+var_coin=VRSC
+var_value=25
+if [[ $(${HOME}/veruscoin/src/komodo-cli -ac_name=VRSC listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
+  echo -e "\n${var_coin} Split"
+  RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
+	print_txid "$RESULT"
 fi
 
-if [[ $(${HOME}/veruscoin/src/komodo-cli -ac_name=VRSC listunspent | grep ${dsatoshis} | wc -l) -lt 10 ]]; then
-  /usr/local/bin/slack_alert testing "$(echo -n -e 'VRSC utxos before split:\t'; komodo-cli listunspent | grep ${dsatoshis} | wc -l)"
-  ${HOME}/misc_scripts/acsplit.sh VRSC 20
-  /usr/local/bin/slack_alert testing "$(echo -n -e 'VRSC utxos after split:\t'; komodo-cli listunspent | grep ${dsatoshis} | wc -l)"
+var_coin=HUSH
+var_value=25
+if [[ $(hush-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
+  echo -e "\n${var_coin} Split"
+  RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
+  print_txid "$RESULT"
 fi
 
+var_coin=GAME
+var_value=25
+if [[ $(gamecredits-cli listunspent | grep -c "${dsatoshis_gamecredits},") -lt ${var_value} ]]; then
+  echo -e "\n${var_coin} Split"
+  RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value} 100000)"
+  print_txid "$RESULT"
+fi
+
+var_coin=EMC2
+var_value=25
+if [[ $(${HOME}/einsteinium/src/einsteinium-cli listunspent | grep -c "${dsatoshis_einsteinium},") -lt ${var_value} ]]; then
+  echo -e "\n${var_coin} Split"
+  RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value} 100000)"
+  print_txid "$RESULT"
+fi
 
 ASSETCHAINS_FILE="${HOME}/komodo/src/assetchains.json"
 
+var_value=25
 for ((item=0; item<$(cat ${ASSETCHAINS_FILE} | jq '. | length'); item++));
 do
   name=$(cat ${ASSETCHAINS_FILE} | jq -r ".[${item}] | .ac_name")
   if [[ ${name} == "BEER" || ${name} == "PIZZA" || ${name} == "VOTE2018" ]]; then continue; fi
 
-  if [[ $(komodo-cli -ac_name=${name} listunspent | grep ${dsatoshis} | wc -l) -lt 20 ]]; then
-    /usr/local/bin/slack_alert testing \
-      "$(echo -n ${name}; echo -n -e ' utxos before split:\t'; komodo-cli listunspent | grep ${dsatoshis} | wc -l)"
-    ${HOME}/misc_scripts/acsplit.sh ${name} 20
-    /usr/local/bin/slack_alert testing \
-      "$(echo -n ${name}; echo -n -e ' utxos after split:\t'; komodo-cli listunspent | grep ${dsatoshis} | wc -l)"
+  if [[ $(komodo-cli -ac_name=${name} listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
+    #/usr/local/bin/slack_alert testing \
+    #  "$(echo -n ${name}; echo -n -e ' utxos before split:\t'; komodo-cli listunspent | grep ${dsatoshis} | wc -l)"
+    echo -e "${name} Split"
+    RESULT="$(${HOME}/misc_scripts/acsplit.sh ${name} ${var_value})"
+    print_txid "$RESULT"
   fi
 done
