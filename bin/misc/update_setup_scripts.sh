@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 # Run this while developing so that code can stay in-sync
 
-while true; do
+var = ${1}
+
+if [[ -z ${var+x} ]]; then
+  var = 10
+fi
+
+while count -ne ${var}; do
 
 sudo -s bash <<EOF
 cd /usr/local/src
@@ -18,4 +24,6 @@ EOF
   bash /usr/local/src/komodo_scripts/bin/setup_misc_scripts.sh >& /dev/null
   cd ${HOME}
   sleep 5
+
+  count = ${count} + 1
 done
