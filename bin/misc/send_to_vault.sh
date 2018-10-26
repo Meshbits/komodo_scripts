@@ -1,9 +1,18 @@
 #!/usr/bin/env bash
-set -eo pipefail
+#set -eo pipefail
 
 # source profile and setup variables using "${HOME}/.common/config"
 source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
+
+# Validate variables
+if [[ \
+-z ${NN_KOMODO_ADDRESS+x} || \
+-z ${VAULT_KOMODO_ADDRESS+x}
+]]; then
+  echo -e "Variable not found\n"
+  exit 1
+fi
 
 function init_colors() {
   RESET="\033[0m"
@@ -23,7 +32,8 @@ function log_print() {
 }
 
 function send_balance() {
-  BALANCE=$(komodo-cli getbalance 2>/dev/null)
+  ADDRESS=${1}
+  BALANCE=${2}
   ERRORLEVEL=$?
 
   if [ "$ERRORLEVEL" -eq "0" ] && [ "$BALANCE" != "0.00000000" ]; then
@@ -36,7 +46,7 @@ function send_balance() {
     exit
   fi
 
-  RESULT=$(komodo-cli sendtoaddress $NN_ADDRESS $BALANCE "" "" true 2>&1)
+  RESULT=$(komodo-cli sendtoaddress ${1} $BALANCE "" "" true 2>&1)
   ERRORLEVEL=$?
   if [ "$ERRORLEVEL" -ne "0" ]; then
     log_print "tx $RESULT"
@@ -57,36 +67,17 @@ function send_balance() {
   height=$(komodo-cli getblock $blockhash | jq .height)
 }
 
-# Validate variables
-if [[ \
--z ${NN_KOMODO_ADDRESS+x} || \
--z ${VAULT_KOMODO_ADDRESS+x}
-]]; then
-  echo -e "Variable not found\n"
-  exit 1
-fi
-
-[[ -d ${HOME}/.temp_sensitive ]] || mkdir -p ${HOME}/.temp_sensitive
-
-# save the privkey to a variable so we import it later
-echo "Saving NN kmd private key"
-NN_komodo_private_key=$(komodo-cli dumpprivkey ${NN_KOMODO_ADDRESS} | tee ${HOME}/.temp_sensitive/nn_komodo_key)
-
 # What da balance
 balance=$(komodo-cli getbalance)
 balance_minus_ten=$(bc <<< "$balance-10.0")
 
-echo "Balance - 10 = $balance_minus_ten"
-
-if [[ ${balance%.*} -lt 20 ]]; then
-  echo -e "\nBalance < 20 so quit. \n"
+if [[ ${balance%.*} -lt 15 ]]; then
+  echo -e "\nBalance < 15 so quit. \n"
   exit 1
 fi
 
-# send all but 10 komodo to VAULT_KOMODO_ADDRESS
-komodo-cli sendmany "" "{\"${VAULT_KOMODO_ADDRESS}\":\"$balance_minus_ten\"}" \
-  1 "" "[\"${VAULT_KOMODO_ADDRESS}\"]"
+send_balance ${VAULT_KOMODO_ADDRESS} ${balance_minus_ten}
 
-send_balance
+send_balance ${NN_KOMODO_ADDRESS} $(komodo-cli getbalance)
 
 [[ -f ${HOME}/misc/cron_recharge_utxos.sh ]] && ${HOME}/misc/cron_recharge_utxos.sh
