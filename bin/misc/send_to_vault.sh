@@ -14,6 +14,12 @@ if [[ \
   exit 1
 fi
 
+function finish {
+  # Enable generate
+  komodo-cli setgenerate true
+}
+trap finish EXIT
+
 function init_colors() {
   RESET="\033[0m"
   BLACK="\033[30m"
@@ -67,17 +73,22 @@ function send_balance() {
   height=$(komodo-cli getblock $blockhash | jq .height)
 }
 
-# What da balance
+# Disable generate
+komodo-cli setgenerate false
+
+# Send funds to the vault
 balance=$(komodo-cli getbalance)
 balance_minus_ten=$(bc <<< "$balance-10.0")
 
-if [[ ${balance%.*} -lt 15 ]]; then
-  echo -e "\nBalance < 15 so quit. \n"
+if [[ ${balance%.*} -lt 10 ]]; then
+  echo -e "\nBalance < 10 so quit. \n"
   exit 1
 fi
-
 send_balance ${VAULT_KOMODO_ADDRESS} ${balance_minus_ten}
 
-send_balance ${NN_KOMODO_ADDRESS} $(komodo-cli getbalance)
+# Send {total - 3} funds to yourself
+balance=$(komodo-cli getbalance)
+balance_minus_fees=$(bc <<< "$balance-3")
+send_balance ${NN_KOMODO_ADDRESS} ${balance_minus_fees}
 
 [[ -f ${HOME}/misc/cron_recharge_utxos.sh ]] && ${HOME}/misc/cron_recharge_utxos.sh
