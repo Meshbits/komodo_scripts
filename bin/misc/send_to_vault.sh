@@ -87,8 +87,6 @@ fi
 send_balance ${VAULT_KOMODO_ADDRESS} ${balance_minus_ten}
 
 # Send {total - 3} funds to yourself
-balance=$(komodo-cli getbalance)
-balance_minus_fees=$(bc <<< "$balance-3")
-send_balance ${NN_KOMODO_ADDRESS} ${balance_minus_fees}
-
-[[ -f ${HOME}/misc/cron_recharge_utxos.sh ]] && ${HOME}/misc/cron_recharge_utxos.sh
+# balance=$(komodo-cli getbalance)
+# balance_minus_fees=$(bc <<< "$balance-3")
+# send_balance ${NN_KOMODO_ADDRESS} ${balance_minus_fees}
