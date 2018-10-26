@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # Run this while developing so that code can stay in-sync
 
-var = ${1}
+var=${1}
 
 if [[ -z ${var+x} ]]; then
-  var = 10
+  var=5
 fi
 
-while count -ne ${var}; do
+while [[ count -le ${var} ]]; do
 
 sudo -s bash <<EOF
 cd /usr/local/src
@@ -25,5 +25,5 @@ EOF
   cd ${HOME}
   sleep 5
 
-  count = ${count} + 1
+  count=${count}+1
 done
