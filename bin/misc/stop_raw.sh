@@ -10,4 +10,4 @@ sudo /etc/init.d/monit stop
 ~/.hush/bin/stop.sh
 ~/.einsteinium/bin/stop.sh
 
-pkill -15 iguana
+#pkill -15 iguana
