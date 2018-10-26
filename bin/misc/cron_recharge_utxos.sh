@@ -23,7 +23,7 @@ if [[ $(bitcoin-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; 
 fi
 
 var_coin=KMD
-var_value=100
+var_value=150
 if [[ $(komodo-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
   echo -e "\n${var_coin} Split"
   RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
