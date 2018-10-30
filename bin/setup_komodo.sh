@@ -53,7 +53,7 @@ apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold
   libprotobuf-dev protobuf-compiler libqt4-dev libqrencode-dev libdb++-dev \
   software-properties-common libcurl4-gnutls-dev cmake clang libgmp3-dev \
   pigz vim ntp ntpdate curl wget git python unzip sudo jq dnsutils tree \
-  inotify-tools htop
+  inotify-tools htop libsodium-dev
 EOF
 
 # Create directories
