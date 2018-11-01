@@ -84,7 +84,7 @@ var_value=25
 for ((item=0; item<$(cat ${ASSETCHAINS_FILE} | jq '. | length'); item++));
 do
   name=$(cat ${ASSETCHAINS_FILE} | jq -r ".[${item}] | .ac_name")
-  if [[ ${name} == "BEER" || ${name} == "PIZZA" || ${name} == "VOTE2018" || ${name} == "KMDICE"]]; then continue; fi
+  if [[ ${name} == "BEER" || ${name} == "PIZZA" || ${name} == "VOTE2018" || ${name} == "KMDICE" ]]; then continue; fi
 
   if [[ $(komodo-cli -ac_name=${name} listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
     #/usr/local/bin/slack_alert testing \
