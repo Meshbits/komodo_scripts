@@ -7,6 +7,7 @@ if [[ -z ${var+x} ]]; then
   var=5
 fi
 
+count=1
 while [[ count -le ${var} ]]; do
 
 sudo -s bash <<EOF
