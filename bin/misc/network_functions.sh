@@ -34,6 +34,7 @@ ignore_list=(
 VOTE2018
 PIZZA
 BEER
+KMDICE
 )
 
   # Only assetchains
@@ -50,6 +51,7 @@ BEER
   gamecredits-cli addnode "$1"
   hush-cli addnode "$1"
   veruscoin-cli -ac_name=VRSC addnode "$1"
+  kmdice-cli -ac_name=KMDICE addnode "$1"
 }
 
 #watch -x bash -c "source ~/misc_scripts/network_functions.sh; nn_ping"

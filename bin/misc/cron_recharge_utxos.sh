@@ -46,6 +46,14 @@ if [[ $(${HOME}/veruscoin/src/komodo-cli -ac_name=VRSC listunspent | grep -c "${
 	print_txid "$RESULT"
 fi
 
+var_coin=KMDICE
+var_value=25
+if [[ $(${HOME}/kmdice/src/komodo-cli -ac_name=KMDICE listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
+  echo -e "\n${var_coin} Split"
+  RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
+	print_txid "$RESULT"
+fi
+
 var_coin=HUSH
 var_value=25
 if [[ $(hush-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
@@ -76,7 +84,7 @@ var_value=25
 for ((item=0; item<$(cat ${ASSETCHAINS_FILE} | jq '. | length'); item++));
 do
   name=$(cat ${ASSETCHAINS_FILE} | jq -r ".[${item}] | .ac_name")
-  if [[ ${name} == "BEER" || ${name} == "PIZZA" || ${name} == "VOTE2018" ]]; then continue; fi
+  if [[ ${name} == "BEER" || ${name} == "PIZZA" || ${name} == "VOTE2018" || ${name} == "KMDICE"]]; then continue; fi
 
   if [[ $(komodo-cli -ac_name=${name} listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
     #/usr/local/bin/slack_alert testing \

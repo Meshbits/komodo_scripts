@@ -210,7 +210,7 @@ sleep 5
 log_print "Starting daemon ... "
 # *** STARTING DAEMON ***
 # check args
-$komodo_daemon -gen -notary -pubkey="$NN_PUBKEY" &
+~/.komodo/bin/start.sh &
 wait_for_daemon
 log_print "Importing private key ... "
 $komodo_cli importprivkey $NN_PRIVKEY "" false
