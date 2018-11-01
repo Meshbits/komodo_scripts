@@ -31,7 +31,7 @@ verifyvalue NN_IPS ''
 
 # verifyvalue BTC_NOTARISATION_ADDRESS xxxxxxxxx
 # verifyvalue KMD_NOTARISATION_ADDRESS xxxxxxxxx
-verifyvalue NN_KOMODO_KEY '$(cat ~/a/path/to/nn_komodo_key)"
+verifyvalue NN_KOMODO_KEY '$(cat ~/a/path/to/nn_komodo_key)'
 
 
 verifyvalue NN_BITCOIN_ADDRESS ''
