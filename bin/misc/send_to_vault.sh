@@ -86,7 +86,11 @@ if [[ ${balance%.*} -lt 10 ]]; then
 fi
 send_balance ${VAULT_KOMODO_ADDRESS} ${balance_minus_ten}
 
-# Send {total - 3} funds to yourself
+# TODO: splitting doesn't work after above so there's a need to send myself the
+# balance but for some reason daemon reports incorrect balance so need to
+# experiment and find out what's an optimal figure (fees + balance) to send to
+# myself
+# Send {total - 0.001} funds to yourself
 # balance=$(komodo-cli getbalance)
-# balance_minus_fees=$(bc <<< "$balance-3")
+# balance_minus_fees=$(bc <<< "$balance-0.001")
 # send_balance ${NN_KOMODO_ADDRESS} ${balance_minus_fees}
