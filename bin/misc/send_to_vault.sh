@@ -92,6 +92,6 @@ send_balance ${VAULT_KOMODO_ADDRESS} ${balance_minus_ten}
 # experiment and find out what's an optimal figure (fees + balance) to send to
 # myself
 # Send {total - 0.001} funds to yourself
-# balance=$(komodo-cli getbalance)
-# balance_minus_fees=$(bc <<< "$balance-0.001")
-# send_balance ${NN_KOMODO_ADDRESS} ${balance_minus_fees}
+balance=$(komodo-cli getbalance)
+balance_minus_fees=$(bc <<< "$balance-0.001")
+send_balance ${NN_KOMODO_ADDRESS} ${balance_minus_fees}
