@@ -23,7 +23,7 @@ if [[ $(bitcoin-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; 
 fi
 
 var_coin=KMD
-var_value=150
+var_value=100
 if [[ $(komodo-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
   echo -e "\n${var_coin} Split"
   RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
@@ -63,12 +63,18 @@ if [[ $(hush-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; the
 fi
 
 var_coin=GAME
-var_value=25
-if [[ $(gamecredits-cli listunspent | grep -c "${dsatoshis_gamecredits},") -lt ${var_value} ]]; then
-  echo -e "\n${var_coin} Split"
-  RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value} 100000)"
-  print_txid "$RESULT"
-fi
+var_value=10
+for ((item=0; item<${var_value}; item++));
+do
+  if [[ $(gamecredits-cli listunspent | grep -c "${dsatoshis_gamecredits},") -lt ${var_value} ]]; then
+    echo -e "\n${var_coin} Split"
+    RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${item} 100000)"
+    print_txid "$RESULT"
+  else
+    break
+    rm -f
+  fi
+done &
 
 var_coin=EMC2
 var_value=25
