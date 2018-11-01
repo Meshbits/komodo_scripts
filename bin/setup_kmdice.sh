@@ -123,6 +123,7 @@ sed -e "s|<VAR_RPCPORT>|${VAR_RPCPORT}|g" \
   -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
   -e "s|<VAR_USERNAME>|${VAR_USERNAME}|g" \
   -e "s|<VAR_CONF_DIR>|${VAR_CONF_DIR}|g" \
+  -e "s|<VAR_THING>|${VAR_THING}|g" \
   "${SCRIPTPATH}/.${VAR_THING}/bin/start.sh" > "${VAR_CONF_DIR}/bin/start.sh"
 
 sed -e "s|<VAR_USERNAME>|${VAR_USERNAME}|g" \
