@@ -151,8 +151,8 @@ chmod +x ${VAR_CONF_DIR}/bin/*
 echo -e "## ${VAR_THING} has been configured ##\n"
 
 # Create monit template
-cat > ${HOME}/.${VAR_THING}/monitd_${VAR_THING}.template <<EOF
-check program ${VAR_THING}d_healthcheck.sh with path "${HOME}/.${VAR_THING}/bin/healthcheck.sh"
+cat > ${HOME}/.komodo/monitd_${VAR_THING}.template <<EOF
+check program ${VAR_THING}d_healthcheck.sh with path "${VAR_CONF_DIR}/bin/healthcheck.sh"
   as uid ${USER} and gid ${USER}
   with timeout 60 seconds
 if status != 0 then exec "/usr/local/bin/sudo_wrapper ${VAR_CONF_DIR}/bin/start.sh"
@@ -161,4 +161,4 @@ if status != 0 then exec "/usr/local/bin/sudo_wrapper ${VAR_CONF_DIR}/bin/start.
 EOF
 
 # Copy monit configuration
-sudo mv ${HOME}/.${VAR_THING}/monitd_${VAR_THING}.template /etc/monit/conf.d/monitd_${VAR_THING}
+sudo mv ${HOME}/.komodo/monitd_${VAR_THING}.template /etc/monit/conf.d/monitd_${VAR_THING}
