@@ -69,6 +69,7 @@ function send_balance() {
     log_print "Waiting for confirmations ($i).$confirmations"
     sleep 5
   done
+  echo -e "Value sent to the vault. TXID: ${RESULT}\n"
   blockhash=$(komodo-cli gettransaction $RESULT | jq -r .blockhash)
   height=$(komodo-cli getblock $blockhash | jq .height)
 }
