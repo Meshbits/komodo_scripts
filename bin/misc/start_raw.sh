@@ -34,6 +34,6 @@ ${HOME}/.komodo/KMDICE/bin/status.sh
 ${HOME}/.hush/bin/status.sh
 ${HOME}/.einsteinium/bin/status.sh
 
-${HOME}/misc/iguana_start.sh &
+${HOME}/misc_scripts/iguana_start.sh &
 
 sudo /etc/init.d/monit start
