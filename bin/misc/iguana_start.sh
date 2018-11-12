@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+LOG_FILE="${HOME}/iguana.log"
+exec 3>&1 1>>${LOG_FILE} 2>&1
+
 if [[ $EUID -eq 0 ]]; then
    echo -e "This script needs to run as a non-root user\n"
    exit 1
