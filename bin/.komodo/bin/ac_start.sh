@@ -10,7 +10,6 @@ source /etc/profile
 cd <HOME>/komodo
 seed_ip=$(getent hosts zero.kolo.supernet.org | awk '{ print $1 }')
 EXTERNALIP="-externalip=<EXTERNALIP>"
-ASSETCHAINS_FILE="<HOME>/komodo/src/assetchains.json"
 
 ${HOME}/komodo/src/listassetchainparams | while read args; do
 

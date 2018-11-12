@@ -5,22 +5,29 @@ set -e
 source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
 
-ASSETCHAINS_FILE="<HOME>/komodo/src/assetchains.json"
+ignore_list=(
+VOTE2018
+PIZZA
+BEER
+KMDICE
+)
 
-for ((item=0; item<$(cat ${ASSETCHAINS_FILE} | jq '. | length'); item++));
-do
-  name=$(cat ${ASSETCHAINS_FILE} | jq -r ".[${item}] | .ac_name")
-  if [[ ${name} == "BEER" || ${name} == "PIZZA" || ${name} == "VOTE2018" || ${name} == "KMDICE" ]]; then continue; fi
-  conffile=<HOME>/.komodo/${name}/${name}.conf
+# Only assetchains
+<HOME>/komodo/src/listassetchains | while read item; do
+  if [[ "${ignore_list[@]}" =~ "${item}" ]]; then
+    continue
+  fi
+
+  conffile=<HOME>/.komodo/${item}/${item}.conf
 
   count=0
   while [[ count -lt 180 ]]; do
-    if <HOME>/komodo/src/komodo-cli -ac_name=${name} getinfo &> /dev/null; then
-      getinfo=$(<HOME>/komodo/src/komodo-cli -ac_name=${name} getinfo)
+    if <HOME>/komodo/src/komodo-cli -ac_name=${item} getinfo &> /dev/null; then
+      getinfo=$(<HOME>/komodo/src/komodo-cli -ac_name=${item} getinfo)
       if [[ $(echo $getinfo | jq -r .longestchain) -eq $(echo $getinfo | jq -r .blocks) ]]; then
         break
       else
-        echo -e "## assetchain not in sync with the network: ${name} ##"
+        echo -e "## assetchain not in sync with the network: ${item} ##"
         echo -e "Longestchain: $(echo $getinfo | jq -r .longestchain)"
         echo -e "Blocks: $(echo $getinfo | jq -r .blocks)\n"
         break
@@ -28,7 +35,7 @@ do
     fi
     count=${count}+1
     sleep 1
-  done&
+  done &
 
   sleep 1
 done
