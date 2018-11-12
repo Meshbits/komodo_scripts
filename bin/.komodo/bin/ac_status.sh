@@ -21,16 +21,18 @@ KMDICE
   conffile=<HOME>/.komodo/${item}/${item}.conf
 
   count=0
-  while [[ count -lt 180 ]]; do
+  while [[ ${count} -lt 180 ]]; do
     if <HOME>/komodo/src/komodo-cli -ac_name=${item} getinfo &> /dev/null; then
       getinfo=$(<HOME>/komodo/src/komodo-cli -ac_name=${item} getinfo)
       if [[ $(echo $getinfo | jq -r .longestchain) -eq $(echo $getinfo | jq -r .blocks) ]]; then
         break
       else
-        echo -e "## assetchain not in sync with the network: ${item} ##"
-        echo -e "Longestchain: $(echo $getinfo | jq -r .longestchain)"
-        echo -e "Blocks: $(echo $getinfo | jq -r .blocks)\n"
-        break
+        if [[ ${count} -eq 179 ]]; then
+          echo -e "## assetchain not in sync with the network: ${item} ##"
+          echo -e "Longestchain: $(echo $getinfo | jq -r .longestchain)"
+          echo -e "Blocks: $(echo $getinfo | jq -r .blocks)\n"
+          break
+        fi
       fi
     fi
     count=${count}+1
