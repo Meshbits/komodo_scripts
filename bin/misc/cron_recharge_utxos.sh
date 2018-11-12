@@ -84,19 +84,25 @@ if [[ $(${HOME}/einsteinium/src/einsteinium-cli listunspent | grep -c "${dsatosh
   print_txid "$RESULT"
 fi
 
-ASSETCHAINS_FILE="${HOME}/komodo/src/assetchains.json"
+ignore_list=(
+VOTE2018
+PIZZA
+BEER
+KMDICE
+)
 
+# Only assetchains
 var_value=25
-for ((item=0; item<$(cat ${ASSETCHAINS_FILE} | jq '. | length'); item++));
-do
-  name=$(cat ${ASSETCHAINS_FILE} | jq -r ".[${item}] | .ac_name")
-  if [[ ${name} == "BEER" || ${name} == "PIZZA" || ${name} == "VOTE2018" || ${name} == "KMDICE" ]]; then continue; fi
+<HOME>/komodo/src/listassetchains | while read item; do
+  if [[ "${ignore_list[@]}" =~ "${item}" ]]; then
+    continue
+  fi
 
-  if [[ $(komodo-cli -ac_name=${name} listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
+  if [[ $(komodo-cli -ac_name=${item} listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
     #/usr/local/bin/slack_alert testing \
     #  "$(echo -n ${name}; echo -n -e ' utxos before split:\t'; komodo-cli listunspent | grep ${dsatoshis} | wc -l)"
-    echo -e "${name} Split"
-    RESULT="$(${HOME}/misc_scripts/acsplit.sh ${name} ${var_value})"
+    echo -e "${item} Split"
+    RESULT="$(${HOME}/misc_scripts/acsplit.sh ${item} ${var_value})"
     print_txid "$RESULT"
   fi
 done
