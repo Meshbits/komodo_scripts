@@ -7,6 +7,15 @@ fi
 
 VAR_NPROC="$(cat /proc/cpuinfo | grep processor | wc -l)"
 
+# Install requisites:
+sudo -s bash <<EOF
+export DEBIAN_FRONTEND=noninteractive;
+apt-get -y -qq update
+apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -qq \
+  install build-essential pigz vim ntp ntpdate curl wget git python unzip sudo \
+  jq dnsutils tree inotify-tools htop
+EOF
+
 # Create slack alert wrapper
 cat > /usr/local/bin/slack_alert <<\EOF
 [[ -f "${HOME}/.common/config" ]]; source "${HOME}/.common/config"
