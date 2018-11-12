@@ -5,8 +5,14 @@ set -e
 SCRIPTNAME=$(realpath $0)
 SCRIPTPATH=$(dirname $SCRIPTNAME)
 
+LOGFILE="${HOME}/start_raw.log"
+
+# source profile and setup variables using "${HOME}/.common/config"
+source /etc/profile
+[[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
+
 # Ensure that everything is running first
-${SCRIPTPATH}/start_raw.sh >& ~/start_raw.log
+${SCRIPTPATH}/start_raw.sh >& ${LOGFILE}
 
 # update the daemons
 /usr/local/src/komodo_scripts/bin/setup_komodo.sh
@@ -26,4 +32,8 @@ for list in chips gamecredits komodo veruscoin hush einsteinium; do
   mv .build_source/${list} .
 done
 
-${SCRIPTPATH}/start_raw.sh >& ~/start_raw.log
+# Stop and start iguana
+${SCRIPTPATH}/iguana_stop.sh
+${SCRIPTPATH}/iguana_start.sh >& ${LOGFILE} &
+
+${SCRIPTPATH}/start_raw.sh &>> ${LOGFILE}
