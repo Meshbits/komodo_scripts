@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-#LOG_FILE="${HOME}/iguana.log"
-#exec 3>&1 1>>${LOG_FILE} 2>&1
+LOG_FILE="${HOME}/iguana.log"
+exec 3>&1 1>>${LOG_FILE} 2>&1
 
 if [[ $EUID -eq 0 ]]; then
    echo -e "This script needs to run as a non-root user\n"
@@ -15,5 +15,5 @@ source /etc/profile
 if ! pgrep iguana >& /dev/null; then
   cd ${HOME}/SuperNET/iguana
   git checkout ${IGUANA_BRANCH} && \
-    git pull && ./m_notary "" notary_nosplit &>> ~/iguana.log && ./dpowassets &>> ~/dpowassets.log
+    git pull && ./m_notary "" notary_nosplit && ./dpowassets
 fi
