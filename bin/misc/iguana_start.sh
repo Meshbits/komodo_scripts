@@ -12,8 +12,11 @@ fi
 source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
 
+cd ${HOME}/SuperNET/iguana
+git checkout ${IGUANA_BRANCH} && git pull
+
 if ! pgrep iguana >& /dev/null; then
-  cd ${HOME}/SuperNET/iguana
-  git checkout ${IGUANA_BRANCH} && \
-    git pull && ./m_notary "" notary_nosplit && ./dpowassets
+  ./m_notary "" notary_nosplit && sleep 120 && ./dpowassets
 fi
+
+./dpowassets
