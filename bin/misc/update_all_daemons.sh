@@ -15,6 +15,7 @@ source /etc/profile
 ${SCRIPTPATH}/start_raw.sh >& ${LOGFILE}
 
 # update the daemons
+echo -e "Starting upgrading everything in .build_source directory\n"
 /usr/local/src/komodo_scripts/bin/setup_komodo.sh
 /usr/local/src/komodo_scripts/bin/setup_chips.sh
 /usr/local/src/komodo_scripts/bin/setup_gamecredits.sh
@@ -22,8 +23,10 @@ ${SCRIPTPATH}/start_raw.sh >& ${LOGFILE}
 /usr/local/src/komodo_scripts/bin/setup_hush.sh
 /usr/local/src/komodo_scripts/bin/setup_emc2.sh
 /usr/local/src/komodo_scripts/bin/setup_kmdice.sh
+echo -e "Finished upgrading everything in .build_source directory\n"
 
 # Stop all services first
+echo -e "Stop all services\n"
 ${SCRIPTPATH}/stop_raw.sh
 
 cd ${HOME}
@@ -32,6 +35,7 @@ for list in chips gamecredits komodo veruscoin hush einsteinium kmdice; do
   mv $list .build_source/${list}_old
   mv .build_source/${list} .
 done
+echo -e "Moved all assets to \$HOME \n"
 
 # Stop and start iguana
 ${SCRIPTPATH}/iguana_stop.sh
