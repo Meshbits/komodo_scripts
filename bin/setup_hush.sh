@@ -100,7 +100,7 @@ if [[ ${DONT_BUILD} != true ]]; then
 
     echo -e "## ${VAR_THING} source directory already exists, building in *.build_source/${VAR_THING}* ##\n"
     cd ${HOME}/.build_source >& /dev/null
-    rm -rf ${VAR_THING}
+    [[ -d ${VAR_THING} ]] && rm -rf ${VAR_THING}
     git clone ${VAR_REPO} -b ${VAR_BRANCH} ${VAR_THING}
     cd ${VAR_THING}
   else
