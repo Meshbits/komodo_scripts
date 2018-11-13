@@ -38,4 +38,4 @@ ${HOME}/misc_scripts/iguana_start.sh &
 
 sudo /etc/init.d/monit start
 
-find ~/ -iname debug.log -exec tail -f ${HOME}/start_raw.log {} \; | grep -i -P "err|fork" > ~/errors &
+#find ~/ -iname debug.log -exec tail -f ${HOME}/start_raw.log ${HOME}/iguana.log {} \; | grep -i -P "err|fork" > ~/errors &

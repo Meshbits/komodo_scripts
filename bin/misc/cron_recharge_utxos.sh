@@ -93,7 +93,7 @@ KMDICE
 
 # Only assetchains
 var_value=25
-<HOME>/komodo/src/listassetchains | while read item; do
+${HOME}/komodo/src/listassetchains | while read item; do
   if [[ "${ignore_list[@]}" =~ "${item}" ]]; then
     continue
   fi
