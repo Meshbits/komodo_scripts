@@ -6,11 +6,11 @@ source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
 
 count=0
-while [[ count -lt 300 ]]; do
-  if "<VAR_SRC_DIR>/src/<VAR_THING>-cli" getinfo >& /dev/null; then
+while [[ ${count} -lt 300 ]]; do
+  if <VAR_SRC_DIR>/src/<VAR_THING>-cli getinfo >& /dev/null; then
     getinfo="$(<VAR_SRC_DIR>/src/<VAR_THING>-cli getinfo)"
     if [[ $(echo ${getinfo} | jq -r .longestchain) -eq $(echo ${getinfo} | jq -r .blocks) ]]; then
-      echo -e '## <VAR_THING> blockchain in sync with the network ##'
+      echo -e "## <VAR_THING> blockchain in sync with the network ##"
       break
     else
       if [[ ${count} -eq 299 ]]; then
