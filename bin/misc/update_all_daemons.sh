@@ -31,9 +31,9 @@ ${SCRIPTPATH}/stop_raw.sh
 
 cd ${HOME}
 for list in chips gamecredits komodo veruscoin hush einsteinium kmdice; do
-  rm -rf .build_source/${list}_old
-  mv $list .build_source/${list}_old
-  mv .build_source/${list} .
+  [[ -d .build_source/${list}_old ]] && rm -rf .build_source/${list}_old
+  [[ -d ${list} ]] && mv ${list} .build_source/${list}_old
+  [[ -d .build_source/${list} ]] && mv .build_source/${list} .
 done
 echo -e "Moved all assets to \$HOME \n"
 
