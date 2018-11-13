@@ -21,12 +21,13 @@ ${SCRIPTPATH}/start_raw.sh >& ${LOGFILE}
 /usr/local/src/komodo_scripts/bin/setup_veruscoin.sh
 /usr/local/src/komodo_scripts/bin/setup_hush.sh
 /usr/local/src/komodo_scripts/bin/setup_emc2.sh
+/usr/local/src/komodo_scripts/bin/setup_kmdice.sh
 
 # Stop all services first
 ${SCRIPTPATH}/stop_raw.sh
 
 cd ${HOME}
-for list in chips gamecredits komodo veruscoin hush einsteinium; do
+for list in chips gamecredits komodo veruscoin hush einsteinium kmdice; do
   rm -rf .build_source/${list}_old
   mv $list .build_source/${list}_old
   mv .build_source/${list} .
