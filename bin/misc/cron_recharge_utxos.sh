@@ -84,7 +84,6 @@ ignore_list=(
 VOTE2018
 PIZZA
 BEER
-KMDICE
 )
 
 # Only assetchains

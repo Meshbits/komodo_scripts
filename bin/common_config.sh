@@ -62,7 +62,6 @@ verifyvalue KOMODO_SRC_DIR ${KOMODO_SRC_DIR}
 verifyvalue KOMODO_RPCPORT 7771
 verifyvalue KOMODO_STARTUP_OPTIONS "-notary -pubkey=${pubkey} -gen -genproclimit=-1"
 verifyvalue KOMODO_ASSETCHAINS_STARTUP_OPTIONS "-pubkey=${pubkey} -gen -genproclimit=1"
-verifyvalue KMDICE_STARTUP_OPTIONS ""
 
 verifyvalue BITCOIND_BRANCH ${BITCOIND_BRANCH}
 verifyvalue BITCOIND_REPOSITORY ${BITCOIND_REPOSITORY}

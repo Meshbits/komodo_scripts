@@ -14,7 +14,7 @@ EXTERNALIP="-externalip=<EXTERNALIP>"
 ${HOME}/komodo/src/listassetchainparams | while read args; do
 
   name=$(echo ${args} | awk -F '-ac_name=' '{ print $2 }' | awk '{ print $1 }')
-  if $(echo ${name} | grep -q -P "BEER|PIZZA|VOTE2018|KMDICE"); then continue; fi
+  if $(echo ${name} | grep -q -P "BEER|PIZZA|VOTE2018"); then continue; fi
 
   # If a fork happens and we need to sync everything again
   # if $(echo ${name} | grep -q -P "DSEC|SEC|MGNX|COQUI|RFOX|PIRATE|GLXT" ); then

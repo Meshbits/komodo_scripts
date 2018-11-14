@@ -6,7 +6,7 @@ source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
 
 ${HOME}/komodo/src/listassetchains | while read item; do
-  if $(echo ${item} | grep -q -P "BEER|PIZZA|VOTE2018|KMDICE"); then continue; fi
+  if $(echo ${item} | grep -q -P "BEER|PIZZA|VOTE2018"); then continue; fi
   ${HOME}/komodo/src/komodo-cli -ac_name=${item} importprivkey ${NN_KOMODO_KEY}
 done
 

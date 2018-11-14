@@ -22,7 +22,6 @@ echo -e "Starting upgrading everything in .build_source directory\n"
 /usr/local/src/komodo_scripts/bin/setup_veruscoin.sh
 /usr/local/src/komodo_scripts/bin/setup_hush.sh
 /usr/local/src/komodo_scripts/bin/setup_emc2.sh
-/usr/local/src/komodo_scripts/bin/setup_kmdice.sh
 echo -e "Finished upgrading everything in .build_source directory\n"
 
 # Stop all services first
@@ -30,7 +29,7 @@ echo -e "Stop all services\n"
 ${SCRIPTPATH}/stop_raw.sh
 
 cd ${HOME}
-for list in chips gamecredits komodo veruscoin hush einsteinium kmdice; do
+for list in chips gamecredits komodo veruscoin hush einsteinium; do
   [[ -d .build_source/${list}_old ]] && rm -rf .build_source/${list}_old
   [[ -d ${list} ]] && mv ${list} .build_source/${list}_old
   [[ -d .build_source/${list} ]] && mv .build_source/${list} .
