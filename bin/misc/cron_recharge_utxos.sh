@@ -5,7 +5,10 @@
 source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
 
-lockfile -r 0 /tmp/the.cron.lock || exit 1
+# https://stackoverflow.com/questions/24388009/linux-flock-how-to-just-lock-a-file
+LOCKFILE=/tmp/the.cron.lock
+exec {lock_fd}>${LOCKFILE}
+flock -x "$lock_fd"
 
 dsatoshis='0.00010000'
 dsatoshis_gamecredits='0.00100000'
@@ -109,4 +112,4 @@ ${HOME}/komodo/src/listassetchains | while read item; do
   fi
 done
 
-rm -f /tmp/the.cron.lock
+exec $lock_fd>&-
