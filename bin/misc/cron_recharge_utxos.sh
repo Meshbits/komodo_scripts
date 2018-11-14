@@ -4,11 +4,10 @@
 # source profile and setup variables using "${HOME}/.common/config"
 source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
+[[ -f ${HOME}/misc_scripts/functions.sh ]] && . ~/misc_scripts/functions.sh
 
-# https://stackoverflow.com/questions/24388009/linux-flock-how-to-just-lock-a-file
-LOCKFILE=/tmp/the.cron.lock
-exec {lock_fd}>${LOCKFILE}
-flock -x "$lock_fd"
+# Lock now - it depends on the functions.sh file being sourced
+exlock_now || exit 1
 
 dsatoshis='0.00010000'
 dsatoshis_gamecredits='0.00100000'
@@ -84,6 +83,7 @@ ignore_list=(
 VOTE2018
 PIZZA
 BEER
+COQUI
 )
 
 # Only assetchains
@@ -102,4 +102,4 @@ ${HOME}/komodo/src/listassetchains | while read item; do
   fi
 done
 
-exec $lock_fd>&-
+unlock
