@@ -35,9 +35,9 @@ ${HOME}/komodo/src/listassetchains | while read item; do
       diff1=$((blocks-remoteblocks))
       diff2=$((blocks-remoteblocks2))
 
-      if ((blocks > longest)) && \
-        (( (( diff1 > variance * -1 )) || (( diff1 < variance )) )) && \
-        (( (( diff2 > variance * -1 )) || (( diff2 < variance )) )); then
+      if ((blocks >= longest)) && \
+        (( (( diff1 >= variance * -1 )) || (( diff1 <= variance )) )) && \
+        (( (( diff2 >= variance * -1 )) || (( diff2 <= variance )) )); then
           break
       else
         if [[ ${count} -eq 179 ]]; then
