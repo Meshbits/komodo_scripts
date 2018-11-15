@@ -16,7 +16,14 @@ cd ${HOME}/SuperNET/iguana
 git checkout ${IGUANA_BRANCH} && git pull
 
 if ! pgrep iguana >& /dev/null; then
-  ./m_notary "" notary_nosplit && sleep 120 && ./dpowassets
+  ./m_notary "" notary_nosplit
+
+  sleep 120
+  if ! pgrep dpowassets >& /dev/null; then
+    ./dpowassets
+  fi
 fi
 
-./dpowassets
+if ! pgrep dpowassets >& /dev/null; then
+  ./dpowassets
+fi
