@@ -10,7 +10,7 @@ while [[ ${count} -lt 300 ]]; do
       break
     else
       if [[ ${count} -eq 299 ]]; then
-        echo -e "## assetchain not in sync with the network: <VAR_THING> ##"
+        echo -e "## assetchain not in sync: <VAR_THING>"
         echo -e "Headers: $(echo ${getblockchaininfo} | jq -r .headers)"
         echo -e "Blocks: $(echo ${getblockchaininfo} | jq -r .blocks)\n"
         break
