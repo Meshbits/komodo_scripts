@@ -83,7 +83,6 @@ ignore_list=(
 VOTE2018
 PIZZA
 BEER
-COQUI
 )
 
 # Only assetchains
