@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 DEBUGLOG_ERRORS="${HOME}/debuglog_errors"
-AC_DAEMON_ERRORS="${HOME}/ac_daemon_errors"
 STARTUP_ERRORS="${HOME}/startup_errors"
 
 function grep_me() {
@@ -10,7 +9,7 @@ function grep_me() {
 
 pids=""
 
-rm -rf ${DEBUGLOG_ERRORS} ${DAEMON_ERRORS} ${AC_DAEMON_ERRORS} ${STARTUP_ERRORS}
+rm -rf ${DEBUGLOG_ERRORS} ${STARTUP_ERRORS}
 
 find ${HOME}/ -iname 'debug.log' -o -iname 'daemon.log' \
   -exec tail -f {} \; | grep_me >> ${DEBUGLOG_ERRORS} &
