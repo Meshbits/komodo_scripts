@@ -18,5 +18,5 @@ HELP
   done
 
   echo -e "## Start bitcoin daemon ##\n"
-  <VAR_SRC_DIR>/src/bitcoind -conf=<VAR_CONF_FILE> &>> <VAR_CONF_DIR>/log/bitcoind.log
+  <VAR_SRC_DIR>/src/bitcoind -conf=<VAR_CONF_FILE> &>> <VAR_CONF_DIR>/log/daemon.log
 fi

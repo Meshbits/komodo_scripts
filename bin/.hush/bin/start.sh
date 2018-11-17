@@ -7,5 +7,5 @@ source /etc/profile
 
 if ! $( lsof -Pi :<VAR_RPCPORT> -sTCP:LISTEN -t >& /dev/null); then
   echo -e "## Start hush daemon ##\n"
-  <VAR_SRC_DIR>/src/hushd -conf=<VAR_CONF_FILE> ${HUSH_STARTUP_OPTIONS} &>> <VAR_CONF_DIR>/log/hushd.log
+  <VAR_SRC_DIR>/src/hushd -conf=<VAR_CONF_FILE> ${HUSH_STARTUP_OPTIONS} &>> <VAR_CONF_DIR>/log/daemon.log
 fi

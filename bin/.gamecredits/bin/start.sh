@@ -7,5 +7,5 @@ source /etc/profile
 
 if ! $( lsof -Pi :<VAR_RPCPORT> -sTCP:LISTEN -t >& /dev/null); then
   echo -e "## Start GameCredits daemon ##\n"
-  <VAR_SRC_DIR>/src/gamecreditsd -conf=<VAR_CONF_FILE> ${GAMECREDITS_STARTUP_OPTIONS} &>> <VAR_CONF_DIR>/log/gamecreditsd.log
+  <VAR_SRC_DIR>/src/gamecreditsd -conf=<VAR_CONF_FILE> ${GAMECREDITS_STARTUP_OPTIONS} &>> <VAR_CONF_DIR>/log/daemon.log
 fi

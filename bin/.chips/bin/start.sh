@@ -7,5 +7,5 @@ source /etc/profile
 
 if ! $( lsof -Pi :<VAR_RPCPORT> -sTCP:LISTEN -t >& /dev/null); then
   echo -e "## Start chips daemon ##\n"
-  <VAR_SRC_DIR>/src/chipsd -conf=<VAR_CONF_FILE> ${CHIPS_STARTUP_OPTIONS} &>> <VAR_CONF_DIR>/log/chipsd.log
+  <VAR_SRC_DIR>/src/chipsd -conf=<VAR_CONF_FILE> ${CHIPS_STARTUP_OPTIONS} &>> <VAR_CONF_DIR>/log/daemon.log
 fi

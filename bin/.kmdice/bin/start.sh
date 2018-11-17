@@ -8,5 +8,5 @@ source /etc/profile
 
 if ! $( lsof -Pi :<VAR_RPCPORT> -sTCP:LISTEN -t >& /dev/null); then
   echo -e "## Start <VAR_THING> daemon ##\n"
-  <VAR_SRC_DIR>/src/komodod ${KMDICE_STARTUP_OPTIONS} &>> ${HOME}/.komodo/log/<VAR_THING>.log
+  <VAR_SRC_DIR>/src/komodod ${KMDICE_STARTUP_OPTIONS} &>> ${HOME}/.komodo/log/daemon.log
 fi
