@@ -1,4 +1,4 @@
-#!/usr/bin/env
+#!/usr/bin/env bash
 
 DEBUGLOG_ERRORS="${HOME}/debuglog_errors"
 DAEMON_ERRORS="${HOME}/daemon_errors"
