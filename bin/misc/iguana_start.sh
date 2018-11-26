@@ -17,6 +17,8 @@ git checkout ${IGUANA_BRANCH} && git pull
 
 if ! pgrep iguana >& /dev/null; then
   ./m_notary "" notary_nosplit
+  sed -i '/ccl/d' ${HOME}/SuperNET/iguana/m_notary_run
+  sed -i '/ccl/d' ${HOME}/SuperNET/iguana/dpowassets
 
   sleep 120
   if ! pgrep dpowassets >& /dev/null; then

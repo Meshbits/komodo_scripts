@@ -34,6 +34,7 @@ ignore_list=(
 VOTE2018
 PIZZA
 BEER
+CCL
 )
 
 # Only assetchains
