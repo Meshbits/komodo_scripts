@@ -5,6 +5,7 @@ source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
 
 sudo apt -y -qq install ufw
+sudo ufw --force reset
 sudo ufw disable
 sudo ufw default deny incoming
 sudo ufw allow from 127.0.0.1 comment 'Localhost'
