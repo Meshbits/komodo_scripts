@@ -10,16 +10,67 @@ sudo ufw default deny incoming
 sudo ufw allow from 127.0.0.1 comment 'Localhost'
 sudo ufw allow 22 comment 'SSH'
 sudo ufw allow 17775 comment 'Iguana'
-sudo ufw allow 7770 comment 'Komodo'
+sudo ufw allow 7775 comment 'Iguana'
+
+#sudo ufw allow 7770 comment 'Komodo'
+#sudo ufw allow 8333 comment 'BTC'
 
 # Allow all Notary node IPs
 for list in "${NN_IPS[@]}"
 do
-  sudo ufw allow from "${list}/32"
+  sudo ufw allow from "${list}/32" comment "Notary Nodes"
 done
 
 sudo ufw enable
 sudo ufw status
+
+exit 0
+
+
+```
+22                         ALLOW       Anywhere
+7770                       ALLOW       Anywhere
+7772                       ALLOW       Anywhere
+7773                       ALLOW       Anywhere
+7774                       ALLOW       Anywhere
+7775                       ALLOW       Anywhere
+17775                      ALLOW       Anywhere
+8333                       ALLOW       Anywhere
+57777                      ALLOW       Anywhere
+10195                      ALLOW       Anywhere
+11340                      ALLOW       Anywhere
+11889                      ALLOW       Anywhere
+14067                      ALLOW       Anywhere
+
+15105                      ALLOW       Anywhere
+14249                      ALLOW       Anywhere
+8515                       ALLOW       Anywhere
+14430                      ALLOW       Anywhere
+11963                      ALLOW       Anywhere
+12385                      ALLOW       Anywhere
+8654                       ALLOW       Anywhere
+12166                      ALLOW       Anywhere
+8298                       ALLOW       Anywhere
+11115                      ALLOW       Anywhere
+9454                       ALLOW       Anywhere
+14336                      ALLOW       Anywhere
+14275                      ALLOW       Anywhere
+8845                       ALLOW       Anywhere
+12926                      ALLOW       Anywhere
+8799                       ALLOW       Anywhere
+10270                      ALLOW       Anywhere
+15487                      ALLOW       Anywhere
+8426                       ALLOW       Anywhere
+12446                      ALLOW       Anywhere
+14357                      ALLOW       Anywhere
+15586                      ALLOW       Anywhere
+9678                       ALLOW       Anywhere
+12466                      ALLOW       Anywhere
+11556                      ALLOW       Anywhere
+15722                      ALLOW       Anywhere                   # GLXT
+10305                      ALLOW       Anywhere                   # EQL
+8888                       ALLOW       Anywhere                   # HUSH
+```
 
 # Extra open ports
 sudo ufw allow 7770 comment 'Komodod'
@@ -27,6 +78,7 @@ sudo ufw allow 7772 comment 'Iguana'
 sudo ufw allow 7773 comment 'Iguana'
 sudo ufw allow 7774 comment 'Iguana'
 sudo ufw allow 7775 comment 'Iguana'
+
 sudo ufw allow 8298 comment 'KV'
 sudo ufw allow 8515 comment 'CRYPTO'
 sudo ufw allow 8674 comment 'RON'
