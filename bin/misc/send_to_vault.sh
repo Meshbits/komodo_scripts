@@ -95,3 +95,6 @@ send_balance ${VAULT_KOMODO_ADDRESS} ${balance_minus_ten}
 balance=$(komodo-cli getbalance)
 balance_minus_fees=$(bc <<< "$balance-0.001")
 send_balance ${NN_KOMODO_ADDRESS} ${balance_minus_fees}
+
+komodo-cli setgenerate true
+komodo-cli getgenerate
