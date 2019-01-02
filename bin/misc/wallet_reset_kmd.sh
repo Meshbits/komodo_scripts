@@ -215,7 +215,7 @@ wait_for_daemon
 log_print "Importing private key ... "
 $komodo_cli importprivkey $NN_PRIVKEY "" false
 log_print "Rescanning from ht.$height ... "
-$komodo_cli z_importkey "$NN_ZKEY" \"yes\" $height
+$komodo_cli z_importkey "${NN_ZKEY}" yes $height
 $komodo_cli setgenerate true
 log_print "Done"
 
