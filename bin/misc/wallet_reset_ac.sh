@@ -215,7 +215,7 @@ function reset_wallet() {
   log_print "Importing private key ... "
   $komodo_cli $asset importprivkey $NN_PRIVKEY "" false
   log_print "Rescanning from ht.$height ... "
-  $komodo_cli $asset z_importkey "$NN_ZKEY" \"yes\" $height
+  $komodo_cli $asset z_importkey "${NN_ZKEY}" yes ${height}
 
   # Enable generation of new blocks
   $komodo_cli $asset setgenerate true >& /dev/null
