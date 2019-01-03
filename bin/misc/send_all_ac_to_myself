@@ -20,6 +20,6 @@ ${HOME}/komodo/src/listassetchains | while read item; do
   BALANCE=$(echo "scale=1; ${BALANCE}/1" | bc)
 
   ${HOME}/komodo/src/komodo-cli -ac_name=${item} sendtoaddress ${NN_KOMODO_ADDRESS} $BALANCE "" "" true
-  ${HOME}/komodo/src/komodo-cli -ac_name=${item} getbalance
+  echo ${BALANCE}
   echo ""
 done
