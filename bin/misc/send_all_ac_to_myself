@@ -15,7 +15,11 @@ CCL
 ${HOME}/komodo/src/listassetchains | while read item; do
   if [[ "${ignore_list[@]}" =~ "${item}" ]]; then continue; fi
   echo "${item}"
-  ${HOME}/komodo/src/komodo-cli -ac_name=${item} sendtoaddress ${NN_KOMODO_ADDRESS} $(${HOME}/komodo/src/komodo-cli -ac_name=${item} getbalance) "" "" true
+
+  BALANCE="$(${HOME}/komodo/src/komodo-cli -ac_name=${item} getbalance)"
+  BALANCE=$(echo "scale=1; ${BALANCE}/1" | bc)
+
+  ${HOME}/komodo/src/komodo-cli -ac_name=${item} sendtoaddress ${NN_KOMODO_ADDRESS} $BALANCE "" "" true
   ${HOME}/komodo/src/komodo-cli -ac_name=${item} getbalance
   echo ""
 done
