@@ -28,14 +28,14 @@ cat > ${HOME}/monitd_${VAR_THING}.template <<EOF
 check program iguana with path "/bin/pidof iguana"
   as uid ${USER} and gid ${USER}
   with timeout 60 seconds
-if status != 0 then exec "/usr/local/bin/sudo_wrapper ${HOME}/misc_scripts/iguana_start.sh"
+if status != 0 for 5 cycles then exec "/usr/local/bin/sudo_wrapper ${HOME}/misc_scripts/iguana_start.sh"
   as uid ${USER} and gid ${USER}
-  repeat every 2 cycles
+  repeat every 3 cycles
 
-check host myhost with address 127.0.0.1
-if failed port 7775 type tcp then exec "/usr/local/bin/sudo_wrapper ${HOME}/misc_scripts/iguana_start.sh"
-  as uid ${USER} and gid ${USER}
-  repeat every 2 cycles
+# check host myhost with address 127.0.0.1
+# if failed port 7775 type tcp then exec "/usr/local/bin/sudo_wrapper ${HOME}/misc_scripts/iguana_start.sh"
+#   as uid ${USER} and gid ${USER}
+#   repeat every 2 cycles
 EOF
 
 # Copy monit configuration

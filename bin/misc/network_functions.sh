@@ -38,9 +38,7 @@ BEER
 
   # Only assetchains
   ${HOME}/komodo/src/listassetchains | while read list; do
-    if [[ "${ignore_list[@]}" =~ "${list}" ]]; then
-      continue
-    fi
+    if [[ "${ignore_list[@]}" =~ "${list}" ]]; then continue fi
     komodo-cli -ac_name=$list addnode "$1"
   done
 

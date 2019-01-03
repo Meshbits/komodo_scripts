@@ -5,7 +5,14 @@
 source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
 
+ignore_list=(
+VOTE2018
+PIZZA
+BEER
+CCL
+)
+
 ${HOME}/komodo/src/listassetchains | while read item; do
-  if $(echo ${item} | grep -q -P "BEER|PIZZA|VOTE2018|CCL"); then continue; fi
+  if [[ "${ignore_list[@]}" =~ "${item}" ]]; then continue fi
   ${HOME}/komodo/src/komodo-cli -ac_name=${item} importprivkey ${NN_KOMODO_KEY}
 done

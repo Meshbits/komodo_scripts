@@ -5,17 +5,20 @@ set -e
 source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
 
-ASSETCHAINS_FILE="<HOME>/komodo/src/assetchains.json"
+ignore_list=(
+VOTE2018
+PIZZA
+BEER
+CCL
+)
 
-for ((item=0; item<$(cat ${ASSETCHAINS_FILE} | jq '. | length'); item++));
-do
-  name=$(cat ${ASSETCHAINS_FILE} | jq -r ".[${item}] | .ac_name")
-  if [[ ${name} == "BEER" || ${name} == "PIZZA" || ${name} == "VOTE2018" || ${name} == "CCL" ]]; then continue; fi
-  conffile=<HOME>/.komodo/${name}/${name}.conf
+${HOME}/komodo/src/listassetchains | while read item; do
+  if [[ "${ignore_list[@]}" =~ "${item}" ]]; then continue fi
+  conffile=<HOME>/.komodo/${item}/${item}.conf
 
   if [[ -f ${conffile} ]]; then
-    echo -e "## Stop daemon: ${name} ##\n"
-    <HOME>/komodo/src/komodo-cli -ac_name=${name} stop &
+    echo -e "## Stop daemon: ${item} ##\n"
+    <HOME>/komodo/src/komodo-cli -ac_name=${item} stop &
   fi
 done
 

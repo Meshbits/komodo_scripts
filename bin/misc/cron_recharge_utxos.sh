@@ -89,14 +89,12 @@ CCL
 # Only assetchains
 var_value=25
 ${HOME}/komodo/src/listassetchains | while read item; do
-  if [[ "${ignore_list[@]}" =~ "${item}" ]]; then
-    continue
-  fi
+  if [[ "${ignore_list[@]}" =~ "${item}" ]]; then continue fi
 
   echo -e "${item} Split"
   if [[ $(komodo-cli -ac_name=${item} listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
     #/usr/local/bin/slack_alert testing \
-    #  "$(echo -n ${name}; echo -n -e ' utxos before split:\t'; komodo-cli listunspent | grep ${dsatoshis} | wc -l)"
+    #  "$(echo -n ${item}; echo -n -e ' utxos before split:\t'; komodo-cli listunspent | grep ${dsatoshis} | wc -l)"
     RESULT="$(${HOME}/misc_scripts/acsplit.sh ${item} ${var_value})"
     print_txid "$RESULT"
   fi

@@ -5,13 +5,16 @@ set -e
 source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
 
-ASSETCHAINS_FILE="<HOME>/komodo/src/assetchains.json"
+ignore_list=(
+VOTE2018
+PIZZA
+BEER
+CCL
+)
 
-for ((item=0; item<$(cat ${ASSETCHAINS_FILE} | jq '. | length'); item++));
-do
-  name=$(cat ${ASSETCHAINS_FILE} | jq -r ".[${item}] | .ac_name")
-  if [[ ${name} == "BEER" || ${name} == "PIZZA" || ${name} == "VOTE2018" || ${name} == "CCL" ]]; then continue; fi
-  conffile=<HOME>/.komodo/${name}/${name}.conf
+${HOME}/komodo/src/listassetchains | while read item; do
+  if [[ "${ignore_list[@]}" =~ "${item}" ]]; then continue fi
+  conffile=<HOME>/.komodo/${item}/${item}.conf
 
   if [[ -f ${conffile} ]]; then
     RPCPORT=$(grep 'rpcport=' ${conffile} | cut -d'=' -f2)
@@ -24,7 +27,7 @@ do
     | jq -r .result.testnet)
 
     if ! [[ ${curl_output} == 'false' ]]; then
-      echo -e "## echo assetchain $name not running##\n"
+      echo -e "## echo assetchain ${item} not running##\n"
       exit 1
     fi
   fi
