@@ -13,14 +13,17 @@ source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
 
 cd ${HOME}/SuperNET/iguana
-git checkout ${IGUANA_BRANCH} && git pull
+git checkout ${IGUANA_BRANCH}
+git stash
+git pull
 
 if ! pgrep iguana >& /dev/null; then
   ./m_notary "" notary_nosplit
+  git stash pop
   sed -i '/ccl/d' ${HOME}/SuperNET/iguana/m_notary_run
   sed -i '/ccl/d' ${HOME}/SuperNET/iguana/dpowassets
 
-  sleep 120
+  sleep 200
   if ! pgrep dpowassets >& /dev/null; then
     ./dpowassets
   fi
