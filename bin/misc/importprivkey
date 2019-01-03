@@ -13,6 +13,6 @@ CCL
 )
 
 ${HOME}/komodo/src/listassetchains | while read item; do
-  if [[ "${ignore_list[@]}" =~ "${item}" ]]; then continue fi
+  if [[ "${ignore_list[@]}" =~ "${item}" ]]; then continue; fi
   ${HOME}/komodo/src/komodo-cli -ac_name=${item} importprivkey ${NN_KOMODO_KEY}
 done

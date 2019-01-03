@@ -20,7 +20,7 @@ CCL
 
 ${HOME}/komodo/src/listassetchainparams | while read args; do
   name=$(echo ${args} | awk -F '-ac_name=' '{ print $2 }' | awk '{ print $1 }')
-  if [[ "${ignore_list[@]}" =~ "${name}" ]]; then continue fi
+  if [[ "${ignore_list[@]}" =~ "${name}" ]]; then continue; fi
 
   # If a fork happens and we need to sync everything again
   # if $(echo ${name} | grep -q -P "DSEC|SEC|MGNX|COQUI|RFOX|PIRATE|GLXT" ); then

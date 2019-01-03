@@ -236,7 +236,7 @@ CCL
 
 # Only assetchains
 ${HOME}/komodo/src/listassetchains | while read list; do
-  if [[ "${ignore_list[@]}" =~ "${list}" ]]; then continue fi
+  if [[ "${ignore_list[@]}" =~ "${list}" ]]; then continue; fi
   reset_wallet $list
 done
 

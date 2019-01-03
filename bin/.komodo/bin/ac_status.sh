@@ -17,7 +17,7 @@ CCL
 
 # Only assetchains
 ${HOME}/komodo/src/listassetchains | while read item; do
-  if [[ "${ignore_list[@]}" =~ "${item}" ]]; then continue fi
+  if [[ "${ignore_list[@]}" =~ "${item}" ]]; then continue; fi
 
   conffile=<HOME>/.komodo/${item}/${item}.conf
 

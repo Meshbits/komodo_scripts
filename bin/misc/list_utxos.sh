@@ -39,7 +39,7 @@ CCL
 
 # Only assetchains
 ${HOME}/komodo/src/listassetchains | while read list; do
-  if [[ "${ignore_list[@]}" =~ "${list}" ]]; then continue fi
+  if [[ "${ignore_list[@]}" =~ "${list}" ]]; then continue; fi
   echo -n "${list} total utxos:"; echo -n -e ' \t'; komodo-cli -ac_name=${list} listunspent | grep -c "amount"
   echo -n "${list} notarisation utxos:"; echo -n -e ' \t'; komodo-cli -ac_name=${list} listunspent | grep -c "${dsatoshis},"
 done

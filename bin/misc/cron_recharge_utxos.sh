@@ -89,7 +89,7 @@ CCL
 # Only assetchains
 var_value=25
 ${HOME}/komodo/src/listassetchains | while read item; do
-  if [[ "${ignore_list[@]}" =~ "${item}" ]]; then continue fi
+  if [[ "${ignore_list[@]}" =~ "${item}" ]]; then continue; fi
 
   echo -e "${item} Split"
   if [[ $(komodo-cli -ac_name=${item} listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
