@@ -120,7 +120,7 @@ function send_balance() {
     asset=""
   fi
 
-  BALANCE=$($komodo_cli $asset getbalance "*" 10 2>/dev/null)
+  BALANCE=$($komodo_cli $asset z_getbalance "${NN_ADDRESS}" 10 2>/dev/null)
   ERRORLEVEL=$?
 
   if [ "$ERRORLEVEL" -eq "0" ] && [ "$BALANCE" != "0.00000000" ]; then
