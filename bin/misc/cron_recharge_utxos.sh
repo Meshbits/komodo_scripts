@@ -79,6 +79,8 @@ if [[ $(${HOME}/einsteinium/src/einsteinium-cli listunspent | grep -c "${dsatosh
   print_txid "$RESULT"
 fi
 
+echo -e "\n"
+
 ignore_list=(
 VOTE2018
 PIZZA
@@ -103,7 +105,7 @@ ${HOME}/komodo/src/listassetchains | while read item; do
     /usr/local/bin/slack_alert testing \
       "$(echo -n ${item}; echo -n -e ' utxos after split:\t'; komodo-cli -ac_name=${item} listunspent 10 | grep ${dsatoshis} | wc -l)"
 
-    echo ""
+    echo -e "\n"
   fi
 done
 
