@@ -93,7 +93,7 @@ var_value=25
 ${HOME}/komodo/src/listassetchains | while read item; do
   if [[ "${ignore_list[@]}" =~ "${item}" ]]; then continue; fi
 
-  if [[ $(komodo-cli -ac_name=${item} listunspent 10 | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
+  if [[ $(komodo-cli -ac_name=${item} listunspent 1 | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
     echo -e "${item} Split"
 
     /usr/local/bin/slack_alert testing \
