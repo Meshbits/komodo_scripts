@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -eo pipefail
 
 ## Decker (c) 2018
 ##
@@ -29,6 +30,12 @@
 # source profile and setup variables using "${HOME}/.common/config"
 source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
+
+function finish {
+  # Enable generate
+  komodo-cli setgenerate true
+}
+trap finish EXIT
 
 # Stop monit
 sudo /etc/init.d/monit stop
