@@ -95,13 +95,13 @@ ${HOME}/komodo/src/listassetchains | while read item; do
     echo -e "${item} Split"
 
     /usr/local/bin/slack_alert testing \
-      "$(echo -n ${item}; echo -n -e ' utxos before split:\t'; komodo-cli listunspent 10 | grep ${dsatoshis} | wc -l)"
+      "$(echo -n ${item}; echo -n -e ' utxos before split:\t'; komodo-cli -ac_name=${item} listunspent 10 | grep ${dsatoshis} | wc -l)"
 
     RESULT="$(${HOME}/misc_scripts/acsplit.sh ${item} ${var_value})"
     print_txid "$RESULT"
 
     /usr/local/bin/slack_alert testing \
-      "$(echo -n ${item}; echo -n -e ' utxos after split:\t'; komodo-cli listunspent 10 | grep ${dsatoshis} | wc -l)"
+      "$(echo -n ${item}; echo -n -e ' utxos after split:\t'; komodo-cli -ac_name=${item} listunspent 10 | grep ${dsatoshis} | wc -l)"
 
     echo ""
   fi
