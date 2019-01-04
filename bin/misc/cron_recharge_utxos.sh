@@ -29,7 +29,7 @@ fi
 var_coin=KMD
 var_value=100
 echo -e "\n${var_coin} Split"
-if [[ $(komodo-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
+if [[ $(komodo-cli listunspent 10 | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
   RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
 	print_txid "$RESULT"
 fi
@@ -91,12 +91,19 @@ var_value=25
 ${HOME}/komodo/src/listassetchains | while read item; do
   if [[ "${ignore_list[@]}" =~ "${item}" ]]; then continue; fi
 
-  echo -e "${item} Split"
-  if [[ $(komodo-cli -ac_name=${item} listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
-    #/usr/local/bin/slack_alert testing \
-    #  "$(echo -n ${item}; echo -n -e ' utxos before split:\t'; komodo-cli listunspent | grep ${dsatoshis} | wc -l)"
+  if [[ $(komodo-cli -ac_name=${item} listunspent 10 | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
+    echo -e "${item} Split"
+
+    /usr/local/bin/slack_alert testing \
+      "$(echo -n ${item}; echo -n -e ' utxos before split:\t'; komodo-cli listunspent 10 | grep ${dsatoshis} | wc -l)"
+
     RESULT="$(${HOME}/misc_scripts/acsplit.sh ${item} ${var_value})"
     print_txid "$RESULT"
+
+    /usr/local/bin/slack_alert testing \
+      "$(echo -n ${item}; echo -n -e ' utxos after split:\t'; komodo-cli listunspent 10 | grep ${dsatoshis} | wc -l)"
+
+    echo ""
   fi
 done
 
