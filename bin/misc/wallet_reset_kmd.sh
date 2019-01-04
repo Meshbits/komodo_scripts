@@ -229,4 +229,4 @@ log_print "Done"
 # Start monit
 sudo /etc/init.d/monit start
 
-[[ -f ${HOME}/misc/cron_recharge_utxos.sh ]] && ${HOME}/misc/cron_recharge_utxos.sh
+[[ -f ${HOME}/misc_scripts/cron_recharge_utxos.sh ]] && ${HOME}/misc_scripts/cron_recharge_utxos.sh
