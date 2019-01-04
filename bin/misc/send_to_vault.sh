@@ -16,7 +16,7 @@ fi
 
 function finish {
   # Enable generate
-  komodo-cli setgenerate true
+  komodo-cli setgenerate true 1
 }
 trap finish EXIT
 
@@ -96,5 +96,5 @@ balance=$(komodo-cli getbalance)
 balance_minus_fees=$(bc <<< "$balance-0.001")
 send_balance ${NN_KOMODO_ADDRESS} ${balance_minus_fees}
 
-komodo-cli setgenerate true
+komodo-cli setgenerate true 1
 komodo-cli getgenerate

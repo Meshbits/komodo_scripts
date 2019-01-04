@@ -218,7 +218,7 @@ function reset_wallet() {
   $komodo_cli $asset z_importkey "${NN_ZKEY}" yes ${height}
 
   # Enable generation of new blocks
-  $komodo_cli $asset setgenerate true >& /dev/null
+  $komodo_cli $asset setgenerate true 1 >& /dev/null
 
   log_print "Done reset ($coin)"
 }

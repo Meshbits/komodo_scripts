@@ -33,7 +33,7 @@ source /etc/profile
 
 function finish {
   # Enable generate
-  komodo-cli setgenerate true
+  komodo-cli setgenerate true 1
 }
 trap finish EXIT
 
@@ -223,7 +223,7 @@ log_print "Importing private key ... "
 $komodo_cli importprivkey $NN_PRIVKEY "" false
 log_print "Rescanning from ht.$height ... "
 $komodo_cli z_importkey "${NN_ZKEY}" yes $height
-$komodo_cli setgenerate true
+$komodo_cli setgenerate true 1
 log_print "Done"
 
 # Start monit
