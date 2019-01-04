@@ -29,7 +29,7 @@ fi
 var_coin=KMD
 var_value=100
 echo -e "\n${var_coin} Split"
-if [[ $(komodo-cli listunspent 10 | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
+if [[ $(komodo-cli listunspent 1 | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
   RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
 	print_txid "$RESULT"
 fi
