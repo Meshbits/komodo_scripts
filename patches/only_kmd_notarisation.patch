@@ -1,0 +1,114 @@
+From 594004cec7dbc2799c0ed4c55b2c2f216cf29e9f Mon Sep 17 00:00:00 2001
+From: nsrea408 <nsrea408@gmail.com>
+Date: Thu, 3 Jan 2019 11:32:29 +0000
+Subject: [PATCH] KMD only
+
+---
+ iguana/m_notary_run | 57 ++++++++---------------------------------------------
+ 1 file changed, 8 insertions(+), 49 deletions(-)
+
+diff --git a/iguana/m_notary_run b/iguana/m_notary_run
+index 5ee1255..65feb75 100755
+--- a/iguana/m_notary_run
++++ b/iguana/m_notary_run
+@@ -15,10 +15,18 @@ stdbuf -oL $1 ../agents/iguana $iguana_arg  & #> iguana.log 2> error.log  &
+ 
+ myip=`curl -s4 checkip.amazonaws.com`
+ source pubkey.txt
++[[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
+ 
+ sleep 4
+ curl --url "http://127.0.0.1:7776" --data "{\"agent\":\"SuperNET\",\"method\":\"myipaddr\",\"ipaddr\":\"$myip\"}"
+ sleep 3
++
++for list in "${NN_IPS[@]}"; do
++  if [[ "${list}" != ${myip} ]]; then
++    curl --url "http://127.0.0.1:7776" --data "{\"agent\":\"iguana\",\"method\":\"addnotary\",\"ipaddr\":\"$list\"}"
++  fi
++done
++
+ curl --url "http://127.0.0.1:7776" --data "{\"agent\":\"iguana\",\"method\":\"addnotary\",\"ipaddr\":\"167.99.67.33\"}"
+ curl --url "http://127.0.0.1:7776" --data "{\"agent\":\"iguana\",\"method\":\"addnotary\",\"ipaddr\":\"78.47.196.146\"}"
+ curl --url "http://127.0.0.1:7776" --data "{\"agent\":\"iguana\",\"method\":\"addnotary\",\"ipaddr\":\"95.213.238.98\"}"
+@@ -58,56 +66,7 @@ curl --url "http://127.0.0.1:7776" --data "{\"agent\":\"iguana\",\"method\":\"ad
+ coins/btc_7776
+ #coins/ltc_7776
+ coins/kmd_7776
+-coins/chips_7776
+-coins/game_7776
+-coins/emc2_7776
+ ./wp_7776
+ 
+-coins/revs_7776
+-coins/supernet_7776
+-coins/dex_7776
+-coins/bet_7776
+-coins/bots_7776
+-coins/hodl_7776
+-coins/mshark_7776
+-coins/jumblr_7776
+-coins/crypto_7776
+-coins/pangea_7776
+-coins/mgw_7776
+-coins/coqui_7776
+-coins/wlc_7776
+-coins/kv_7776
+-coins/ceal_7776
+-coins/mesh_7776
+-coins/mnz_7776
+-coins/axo_7776
+-coins/etomic_7776
+-coins/btch_7776
+-#coins/vote2018_7776
+-coins/ninja_7776
+-coins/oot_7776
+-coins/bntn_7776
+-coins/chain_7776
+-coins/prlpay_7776
+-coins/dsec_7776
+-coins/glxt_7776
+-coins/eql_7776
+-coins/zilla_7776
+-coins/vrsc_7776
+-coins/rfox_7776
+-coins/sec_7776
+-coins/ccl_7776
+-coins/hush_7776
+-coins/pirate_7776
+-coins/mgnx_7776
+-coins/pgt_7776
+-coins/kmdice_7776
+-coins/dion_7776
+-coins/zex_7776
+-coins/ksb_7776
+-
+-#curl --url "http://127.0.0.1:7776" --data "{\"agent\":\"passthru\",\"method\":\"paxfiats\",\"timeout\":900000}"
+-
+-#curl --url "http://127.0.0.1:7776" --data "{\"agent\":\"iguana\",\"method\":\"addnotary\",\"ipaddr\":\"$myip\"}"
+ sleep 30
+ curl --url "http://127.0.0.1:7776" --data "{\"agent\":\"iguana\",\"method\":\"dpow\",\"symbol\":\"KMD\",\"pubkey\":\"$pubkey\"}"
+-- 
+2.7.4
+
+From 30a7d25b00d9265ff52fdaac61c8c7e82ce28f77 Mon Sep 17 00:00:00 2001
+From: nsrea408 <nsrea408@gmail.com>
+Date: Sat, 5 Jan 2019 04:55:42 +0000
+Subject: [PATCH] remove git pull
+
+---
+ iguana/m_notary | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/iguana/m_notary b/iguana/m_notary
+index c23e6f7..2adb0fe 100755
+--- a/iguana/m_notary
++++ b/iguana/m_notary
+@@ -1,5 +1,4 @@
+ #!/bin/bash
+ pkill -15 iguana
+ rm -f ../agents/iguana *.o
+-git pull
+ ./m_notary_run "$1" "$2"
+-- 
+2.7.4
+
