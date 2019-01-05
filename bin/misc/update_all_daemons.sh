@@ -17,6 +17,7 @@ ${SCRIPTPATH}/start_raw.sh >& ${LOGFILE}
 # update the daemons
 echo -e "Starting upgrading everything in .build_source directory\n"
 /usr/local/src/komodo_scripts/bin/setup_komodo.sh
+/usr/local/src/komodo_scripts/bin/setup_assetchains.sh
 /usr/local/src/komodo_scripts/bin/setup_chips.sh
 /usr/local/src/komodo_scripts/bin/setup_gamecredits.sh
 /usr/local/src/komodo_scripts/bin/setup_veruscoin.sh

@@ -24,4 +24,4 @@ SCRIPTPATH=$(dirname $SCRIPTNAME)
 VAR_THING=hush
 
 # Copy monit configuration
-sudo rm -f etc/monit/conf.d/monitd_${VAR_THING}
+sudo rm -f /etc/monit/conf.d/monitd_${VAR_THING}
