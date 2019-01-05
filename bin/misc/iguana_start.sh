@@ -16,19 +16,9 @@ cd ${HOME}/SuperNET/iguana
 git checkout ${IGUANA_BRANCH}
 git stash
 git pull
+git am < "/usr/local/src/komodo_scripts/patches/only_kmd_notarisation.patch"
 
 if ! pgrep iguana >& /dev/null; then
-  ./m_notary "" notary_nosplit
+  ./m_notary "" notary_nosplits
   git stash pop
-  sed -i '/ccl/d' ${HOME}/SuperNET/iguana/m_notary_run
-  sed -i '/ccl/d' ${HOME}/SuperNET/iguana/dpowassets
-
-  sleep 200
-  if ! pgrep dpowassets >& /dev/null; then
-    ./dpowassets
-  fi
-fi
-
-if ! pgrep dpowassets >& /dev/null; then
-  ./dpowassets
 fi

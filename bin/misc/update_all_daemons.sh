@@ -29,7 +29,7 @@ echo -e "Stop all services\n"
 ${SCRIPTPATH}/stop_raw.sh
 
 cd ${HOME}
-for list in chips gamecredits komodo veruscoin hush einsteinium; do
+for list in komodo; do
   [[ -d .build_source/${list}_old ]] && rm -rf .build_source/${list}_old
   [[ -d ${list} ]] && mv ${list} .build_source/${list}_old
   [[ -d .build_source/${list} ]] && mv .build_source/${list} .
@@ -38,6 +38,5 @@ echo -e "Moved all assets to \$HOME \n"
 
 # Stop and start iguana
 ${SCRIPTPATH}/iguana_stop.sh
-${SCRIPTPATH}/iguana_start.sh >& ${LOGFILE} &
 
 ${SCRIPTPATH}/start_raw.sh &>> ${LOGFILE}

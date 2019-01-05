@@ -14,7 +14,7 @@ sudo -s bash <<EOF
 cd /usr/local/src
 if [[ -d komodo_scripts ]]; then
   cd komodo_scripts
-  git checkout master; git reset -q --hard; git pull --rebase
+  git checkout no_assetchains; git reset -q --hard; git pull --rebase
   cd - >& /dev/null
 else
   git clone -q https://github.com/ns408/komodo_scripts.git

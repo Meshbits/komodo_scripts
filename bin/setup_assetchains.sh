@@ -33,8 +33,7 @@ if status != 0 then exec "/usr/local/bin/sudo_wrapper ${HOME}/.komodo/bin/ac_sta
 EOF
 
 # Copy monit configuration
-sudo mv ${HOME}/.komodo/monitd_assetchains.template /etc/monit/conf.d/monitd_assetchains
-sudo chmod 600 /etc/monit/conf.d/monitd_assetchains
+sudo rm -f /etc/monit/conf.d/monitd_assetchains
 
 # Permissions and ownership
 chmod +x ${HOME}/.komodo/bin/*
