@@ -16,7 +16,9 @@ cd ${HOME}/SuperNET/iguana
 git checkout ${IGUANA_BRANCH}
 git stash
 git pull
-git am < "/usr/local/src/komodo_scripts/patches/only_kmd_notarisation.patch"
+
+git apply /usr/local/src/komodo_scripts/patches/only_kmd_notarisation.patch --check && \
+git am < /usr/local/src/komodo_scripts/patches/only_kmd_notarisation.patch
 
 if ! pgrep iguana >& /dev/null; then
   ./m_notary "" notary_nosplits
