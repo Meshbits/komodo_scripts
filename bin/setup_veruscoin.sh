@@ -76,6 +76,7 @@ if [[ ${DONT_BUILD} != true ]]; then
       cd .build_source/${VAR_THING}
       git checkout ${VAR_BRANCH}
       git reset --hard
+      git clean -fdx
       git pull --rebase
     else
       cd .build_source
