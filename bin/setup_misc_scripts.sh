@@ -13,7 +13,7 @@ SCRIPTPATH=$(dirname $SCRIPTNAME)
 rsync -a "${SCRIPTPATH}/misc/" "${HOME}/misc_scripts/"
 
 # Sync profile.d
-rsync -a "${SCRIPTPATH}/profile.d/meshbits" "/etc/profile.d/"
+sudo rsync -a "${SCRIPTPATH}/profile.d/meshbits" "/etc/profile.d/"
 
 # Start everything after system reboot
 if ! grep 'misc_scripts/start_raw.sh' /etc/rc.local; then

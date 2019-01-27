@@ -41,6 +41,12 @@ su - meshbits
 /usr/local/src/komodo_scripts/bin/userdata.sh
 ```
 
+- `setup_bitcoin.sh`: sets up bitcoin daemon from scratch
+```
+su - meshbits
+/usr/local/src/komodo_scripts/bin/setup_bitcoin.sh
+```
+
 - `setup_komodo.sh`: sets up komodo daemon from scratch
 ```
 su - meshbits
@@ -69,6 +75,18 @@ su - meshbits
 ```
 su - meshbits
 /usr/local/src/komodo_scripts/bin/setup_veruscoin.sh
+```
+
+- `setup_hush.sh`: sets up hushcoin daemon from scratch
+```
+su - meshbits
+/usr/local/src/komodo_scripts/bin/setup_hush.sh
+```
+
+- `setup_emc2.sh`: sets up einsteinium daemon from scratch
+```
+su - meshbits
+/usr/local/src/komodo_scripts/bin/setup_emc2.sh
 ```
 
 - `setup_misc_scripts.sh`: sets up misc scripts and ensures **all daemon start up using rc.local**
