@@ -12,6 +12,9 @@ SCRIPTPATH=$(dirname $SCRIPTNAME)
 # Sync all the scripts
 rsync -a "${SCRIPTPATH}/misc/" "${HOME}/misc_scripts/"
 
+# Sync profile.d
+rsync -a "${SCRIPTPATH}/profile.d/meshbits" "/etc/profile.d/"
+
 # Start everything after system reboot
 if ! grep 'misc_scripts/start_raw.sh' /etc/rc.local; then
   sudo sed -i '1 a exec 2> /tmp/rc.local.log      # send stderr from rc.local to a log file' /etc/rc.local

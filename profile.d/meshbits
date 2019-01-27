@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+function nn_log_errors() {
+  find ~/ -iname debug.log -exec tail -f ${HOME}/start_raw.log ${HOME}/iguana.log ${HOME}/.komodo/log/* {} \; | grep -i -P "err|fail|fork" > ~/errors &
+}
+
+function nn_log_filesize() {
+  find ~/ -iname debug.log -exec du -sh {} \; | grep -P "G|M"
+  find ${HOME}/.komodo/log/* -exec du -sh {} \; | grep -P "G|M"
+}
