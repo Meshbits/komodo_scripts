@@ -4,7 +4,7 @@
 var=${1}
 
 if [[ -z ${var+x} ]]; then
-  var=5
+  var=2
 fi
 
 count=1
