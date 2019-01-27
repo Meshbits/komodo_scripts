@@ -13,7 +13,7 @@ export DEBIAN_FRONTEND=noninteractive;
 apt-get -y -qq update
 apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -qq \
   install build-essential pigz vim ntp ntpdate curl wget git python unzip sudo \
-  jq dnsutils tree inotify-tools htop
+  jq dnsutils tree inotify-tools htop tmux time
 EOF
 
 # Create slack alert wrapper
