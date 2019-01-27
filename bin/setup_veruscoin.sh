@@ -47,8 +47,8 @@ apt -y -qq autoremove
 EOF
 
 # Create directories
-[[ -d ${VAR_CONF_DIR}/log ]] || mkdir ${VAR_CONF_DIR}/log
-[[ -d ${VAR_CONF_DIR}/bin ]] || mkdir ${VAR_CONF_DIR}/bin
+[[ -d ${VAR_CONF_DIR}/log ]] || mkdir -p ${VAR_CONF_DIR}/log
+[[ -d ${VAR_CONF_DIR}/bin ]] || mkdir -p ${VAR_CONF_DIR}/bin
 [[ -d ${HOME}/.build_source ]] || mkdir ${HOME}/.build_source
 
 
