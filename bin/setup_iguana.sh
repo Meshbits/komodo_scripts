@@ -18,6 +18,12 @@ function time_taken() {
   /usr/bin/time -f "## Time taken=%e\n" "$@"
 }
 
+if [[ ! -d ${HOME}/SuperNET ]]; then
+  cd ${HOME}
+  git clone https://github.com/jl777/SuperNET
+  cd ..
+fi
+
 # Variables
 SCRIPTNAME=$(realpath $0)
 SCRIPTPATH=$(dirname $SCRIPTNAME)
