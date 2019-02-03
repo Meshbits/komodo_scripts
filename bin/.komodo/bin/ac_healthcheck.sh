@@ -27,8 +27,8 @@ ${HOME}/komodo/src/listassetchains | while read item; do
     | jq -r .result.testnet)
 
     if ! [[ ${curl_output} == 'false' ]]; then
-      echo -e "## echo assetchain ${item} not running##\n"
-      exit 1
+      echo -e "${item}"
+      continue
     fi
   fi
 done
