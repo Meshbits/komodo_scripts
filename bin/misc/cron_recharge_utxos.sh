@@ -96,14 +96,14 @@ ${HOME}/komodo/src/listassetchains | while read item; do
   if [[ $(komodo-cli -ac_name=${item} listunspent 1 | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
     echo -e "${item} Split"
 
-    /usr/local/bin/slack_alert testing \
-      "$(echo -n ${item}; echo -n -e ' utxos before split: '; komodo-cli -ac_name=${item} listunspent 10 | grep ${dsatoshis} | wc -l)"
+    #/usr/local/bin/slack_alert testing \
+    #  "$(echo -n ${item}; echo -n -e ' utxos before split: '; komodo-cli -ac_name=${item} listunspent 10 | grep ${dsatoshis} | wc -l)"
 
     RESULT="$(${HOME}/misc_scripts/acsplit.sh ${item} ${var_value})"
     print_txid "$RESULT"
 
-    /usr/local/bin/slack_alert testing \
-      "$(echo -n ${item}; echo -n -e ' utxos after split: '; komodo-cli -ac_name=${item} listunspent 1 | grep ${dsatoshis} | wc -l)"
+    #/usr/local/bin/slack_alert testing \
+    #  "$(echo -n ${item}; echo -n -e ' utxos after split: '; komodo-cli -ac_name=${item} listunspent 1 | grep ${dsatoshis} | wc -l)"
 
     echo -e "\n"
   fi
