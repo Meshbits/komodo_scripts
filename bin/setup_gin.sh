@@ -100,7 +100,7 @@ if [[ ${DONT_BUILD} != true ]]; then
 
   # Build ${VAR_THING}
   echo -e "===> Build ${VAR_THING} Daemon"
-  make clean
+  #make clean || true
   time ./autogen.sh
   time ./configure LDFLAGS="-L${BDB_PREFIX}/lib/" CPPFLAGS="-I${BDB_PREFIX}/include/" \
     --with-gui=no --disable-tests --disable-bench --without-miniupnpc --enable-experimental-asm \
