@@ -136,10 +136,10 @@ sed -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
   "${SCRIPTPATH}/.${VAR_THING}/bin/status.sh" > "${VAR_CONF_DIR}/bin/status.sh"
 
 # Symlink binaries
-sudo ln -sf ${VAR_SRC_DIR}/src/${VAR_THING}-cli /usr/local/bin/
-sudo ln -sf ${VAR_SRC_DIR}/src/${VAR_THING}d /usr/local/bin/
-sudo chmod +x /usr/local/bin/${VAR_THING}-cli
-sudo chmod +x /usr/local/bin/${VAR_THING}d
+sudo ln -sf ${VAR_SRC_DIR}/src/${VAR_THING}coin-cli /usr/local/bin/
+sudo ln -sf ${VAR_SRC_DIR}/src/${VAR_THING}coind /usr/local/bin/
+sudo chmod +x /usr/local/bin/${VAR_THING}coin-cli
+sudo chmod +x /usr/local/bin/${VAR_THING}coind
 
 # Permissions and ownership
 chmod +x ${VAR_CONF_DIR}/bin/*
