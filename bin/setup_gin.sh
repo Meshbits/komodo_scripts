@@ -148,14 +148,14 @@ chmod 660 ${VAR_CONF_DIR}/conf/*.conf
 echo -e "## ${VAR_THING} Daemon has been configured ##\n"
 
 # Create monit template
-cat > ${HOME}/.${VAR_THING}/monitd_${VAR_THING}.template <<EOF
-check program ${VAR_THING}_healthcheck.sh with path "${HOME}/.${VAR_THING}/bin/healthcheck.sh"
+cat > ${VAR_CONF_DIR}/monitd_${VAR_THING}.template <<EOF
+check program ${VAR_THING}_healthcheck.sh with path "${VAR_CONF_DIR}/bin/healthcheck.sh"
   as uid ${USER} and gid ${USER}
   with timeout 60 seconds
-if status != 0 then exec "/usr/local/bin/sudo_wrapper ${HOME}/.${VAR_THING}/bin/start.sh"
+if status != 0 then exec "/usr/local/bin/sudo_wrapper ${VAR_CONF_DIR}/bin/start.sh"
   as uid ${USER} and gid ${USER}
   repeat every 2 cycles
 EOF
 
 # Copy monit configuration
-sudo mv ${HOME}/.${VAR_THING}/monitd_${VAR_THING}.template /etc/monit/conf.d/monitd_${VAR_THING}
+sudo mv ${VAR_CONF_DIR}/monitd_${VAR_THING}.template /etc/monit/conf.d/monitd_${VAR_THING}
