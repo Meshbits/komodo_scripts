@@ -3,7 +3,7 @@ set -e
 
 echo -e "## Stop <VAR_THING> daemon ##\n"
 sudo -H -u <VAR_USERNAME> /bin/bash -c \
-  "<VAR_SRC_DIR>/src/<VAR_THING>-cli -conf=<VAR_CONF_FILE> stop"
+  "<VAR_SRC_DIR>/src/<VAR_THING>coin-cli -conf=<VAR_CONF_FILE> stop"
 
 while inotifywait -e modify -t 60 <VAR_CONF_DIR>/debug.log; do
   if tail -n10 <VAR_CONF_DIR>/debug.log | grep 'Shutdown: done'; then

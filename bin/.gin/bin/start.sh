@@ -7,5 +7,5 @@ source /etc/profile
 
 if ! $( lsof -Pi :<VAR_RPCPORT> -sTCP:LISTEN -t >& /dev/null); then
   echo -e "## Start <VAR_THING> daemon ##\n"
-  <VAR_SRC_DIR>/src/gind -conf=<VAR_CONF_FILE> ${GIN_STARTUP_OPTIONS} &>> <VAR_CONF_DIR>/log/daemon.log
+  <VAR_SRC_DIR>/src/<VAR_THING>coind -conf=<VAR_CONF_FILE> ${GIN_STARTUP_OPTIONS} &>> <VAR_CONF_DIR>/log/daemon.log
 fi
