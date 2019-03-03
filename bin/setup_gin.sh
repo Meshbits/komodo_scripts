@@ -27,7 +27,7 @@ VAR_THING=gin
 [[ -z ${VAR_BRANCH+x} ]] && VAR_BRANCH='master'
 [[ -z ${VAR_REPO+x} ]] && VAR_REPO='https://github.com/GIN-coin/gincoin-core.git'
 [[ -z ${VAR_SRC_DIR+x} ]] && VAR_SRC_DIR="${HOME}/${VAR_THING}"
-[[ -z ${VAR_CONF_DIR+x} ]] && VAR_CONF_DIR="${HOME}/.${VAR_THING}"
+[[ -z ${VAR_CONF_DIR+x} ]] && VAR_CONF_DIR="${HOME}/.gincoincore"
 [[ -z ${VAR_CONF_FILE+x} ]] && VAR_CONF_FILE="${VAR_CONF_DIR}/conf/${VAR_THING}.conf"
 [[ -z ${VAR_RPCPORT+x} ]] && VAR_RPCPORT="57776"
 
