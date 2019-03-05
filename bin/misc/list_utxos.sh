@@ -30,6 +30,9 @@ echo -n "Gamecredits notarisation utxos:"; echo -n -e ' \t'; gamecredits-cli lis
 echo -n "Einsteinium total utxos:"; echo -n -e ' \t'; ${HOME}/einsteinium/src/einsteinium-cli listunspent | grep -c "amount"
 echo -n "Einsteinium notarisation utxos:"; echo -n -e ' \t'; ${HOME}/einsteinium/src/einsteinium-cli listunspent | grep -c "${dsatoshis_einsteinium},"
 
+echo -n "Gincoin total utxos:"; echo -n -e ' \t'; ${HOME}/gin/src/gincoin-cli listunspent | grep -c "amount"
+echo -n "Gincoin notarisation utxos:"; echo -n -e ' \t'; ${HOME}/gin/src/gincoin-cli listunspent | grep -c "${dsatoshis},"
+
 ignore_list=(
 VOTE2018
 PIZZA
