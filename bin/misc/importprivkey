@@ -16,3 +16,13 @@ ${HOME}/komodo/src/listassetchains | while read item; do
   if [[ "${ignore_list[@]}" =~ "${item}" ]]; then continue; fi
   ${HOME}/komodo/src/komodo-cli -ac_name=${item} importprivkey ${NN_KOMODO_KEY}
 done
+
+${HOME}/komodo/src/komodo-cli importprivkey ${NN_KOMODO_KEY}
+${HOME}/gin/src/gincoin-cli importprivkey ${NN_GINCOIN_KEY}
+${HOME}/einsteinium/src/einsteinium-cli importprivkey ${NN_EMC2_KEY}
+${HOME}/veruscoin/src/komodo-cli importprivkey ${NN_VRSC_KEY}
+${HOME}/chips/src/chips-cli importprivkey ${NN_CHIPS_KEY}
+${HOME}/gamecredits/src/gamecredits-cli importprivkey ${NN_GAMECREDITS_KEY}
+${HOME}/hush/src/hush-cli importprivkey ${NN_HUSH_KEY}
+
+#${HOME} importprivkey ${NN_SUQA_KEY}

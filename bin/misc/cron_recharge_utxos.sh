@@ -79,6 +79,14 @@ if [[ $(${HOME}/einsteinium/src/einsteinium-cli listunspent | grep -c "${dsatosh
   print_txid "$RESULT"
 fi
 
+var_coin=GIN
+var_value=25
+echo -e "\n${var_coin} Split"
+if [[ $(${HOME}/gin/src/gincoin-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
+  RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
+  print_txid "$RESULT"
+fi
+
 echo -e "\n"
 
 ignore_list=(
