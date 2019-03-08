@@ -21,6 +21,7 @@ ${HOME}/.gamecredits/bin/start.sh &
 ${HOME}/.komodo/VRSC/bin/start.sh &
 ${HOME}/.hush/bin/start.sh &
 ${HOME}/.einsteinium/bin/start.sh &
+${HOME}/.gincoincore/bin/start.sh &
 
 
 ${HOME}/.bitcoin/bin/status.sh
@@ -31,6 +32,7 @@ ${HOME}/.gamecredits/bin/status.sh
 ${HOME}/.komodo/VRSC/bin/status.sh
 ${HOME}/.hush/bin/status.sh
 ${HOME}/.einsteinium/bin/status.sh
+${HOME}/.gincoincore/bin/status.sh
 
 ${HOME}/misc_scripts/iguana_start.sh &
 
