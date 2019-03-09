@@ -217,7 +217,7 @@ sleep 5
 log_print "Starting daemon ... "
 # *** STARTING DAEMON ***
 # check args
-~/.komodo/bin/start.sh &
+${HOME}/.komodo/bin/start.sh &
 wait_for_daemon
 log_print "Importing private key ... "
 $komodo_cli importprivkey $NN_PRIVKEY "" false

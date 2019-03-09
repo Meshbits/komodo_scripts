@@ -5,13 +5,6 @@ set -e
 source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
 
-ignore_list=(
-VOTE2018
-PIZZA
-BEER
-CCL
-)
-
 ${HOME}/komodo/src/listassetchains | while read item; do
   if [[ "${ignore_list[@]}" =~ "${item}" ]]; then continue; fi
   conffile=<HOME>/.komodo/${item}/${item}.conf

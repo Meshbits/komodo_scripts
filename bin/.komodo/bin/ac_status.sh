@@ -8,13 +8,6 @@ source /etc/profile
 remotecheck=$(curl -m 5 -Ssf https://komodostats.com/api/notary/summary.json)
 remotecheck2=$(curl -m 5 -Ssf https://dexstats.info/api/explorerstatus.php)
 
-ignore_list=(
-VOTE2018
-PIZZA
-BEER
-CCL
-)
-
 # Only assetchains
 ${HOME}/komodo/src/listassetchains | while read item; do
   if [[ "${ignore_list[@]}" =~ "${item}" ]]; then continue; fi

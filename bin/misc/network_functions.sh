@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# source profile and setup variables using "${HOME}/.common/config"
+source /etc/profile
+[[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
+
 #sudo apt -y install parellel
 #parallel --gnu ping -c1 ::: `dig +trace google.com|ipx`
 
@@ -29,25 +33,20 @@ function nn_ufw() {
 
 function unready_func_nn_daemon_connect() {
   # Function to allow connecting to another server to download blockchain
-  komodo-cli addnode "$1"
-ignore_list=(
-VOTE2018
-PIZZA
-BEER
-)
+  komodo-cli addnode "$1" "onetry"
 
   # Only assetchains
   ${HOME}/komodo/src/listassetchains | while read list; do
     if [[ "${ignore_list[@]}" =~ "${list}" ]]; then continue; fi
-    komodo-cli -ac_name=$list addnode "$1"
+    komodo-cli -ac_name=$list addnode "$1" "onetry"
   done
 
-  bitcoin-cli addnode "$1"
-  chips-cli addnode "$1"
-  einsteinium-cli addnode "$1"
-  gamecredits-cli addnode "$1"
-  hush-cli addnode "$1"
-  veruscoin-cli -ac_name=VRSC addnode "$1"
+  bitcoin-cli addnode "$1" "onetry"
+  chips-cli addnode "$1" "onetry"
+  einsteinium-cli addnode "$1" "onetry"
+  gamecredits-cli addnode "$1" "onetry"
+  hush-cli addnode "$1" "onetry"
+  veruscoin-cli -ac_name=VRSC addnode "$1" "onetry"
 }
 
 #watch -x bash -c "source ~/misc_scripts/network_functions.sh; nn_ping"

@@ -89,13 +89,6 @@ fi
 
 echo -e "\n"
 
-ignore_list=(
-VOTE2018
-PIZZA
-BEER
-CCL
-)
-
 # Only assetchains
 var_value=25
 ${HOME}/komodo/src/listassetchains | while read item; do

@@ -31,7 +31,6 @@ verifyvalue NN_IPS ''
 
 # verifyvalue BTC_NOTARISATION_ADDRESS xxxxxxxxx
 # verifyvalue KMD_NOTARISATION_ADDRESS xxxxxxxxx
-verifyvalue NN_KOMODO_KEY '$(cat ~/a/path/to/nn_komodo_key)'
 
 
 verifyvalue NN_BITCOIN_ADDRESS ''
@@ -90,3 +89,18 @@ verifyvalue VERUSCOIN_STARTUP_OPTIONS "-ac_name=VRSC -ac_algo=verushash -ac_cc=1
 
 verifyvalue HUSH_STARTUP_OPTIONS "-pubkey=${pubkey} -gen -genproclimit=1"
 verifyvalue EINSTEINIUM_STARTUP_OPTIONS "-pubkey=${pubkey} -gen -genproclimit=1"
+
+verifyvalue GIN_STARTUP_OPTIONS "-pubkey=${pubkey} -gen -genproclimit=1"
+
+verifyvalue NN_KOMODO_KEY '$(cat ~/a/path/to/nn_komodo_key)'
+verifyvalue NN_BITCOIN_KEY '$(cat ~/a/path/to/nn_bitcoin_key)'
+verifyvalue NN_GAMECREDITS_KEY '$(cat ~/a/path/to/nn_gamecredits_key)'
+verifyvalue NN_CHIPS_KEY '$(cat ~/a/path/to/nn_chips_key)'
+verifyvalue NN_VRSC_KEY '$(cat ~/a/path/to/nn_veruscoin_key)'
+verifyvalue NN_GINCOIN_KEY '$(cat ~/a/path/to/nn_gin_key)'
+verifyvalue NN_EMC2_KEY '$(cat ~/a/path/to/nn_einsteinium_key)'
+verifyvalue NN_HUSH_KEY '$(cat ~/a/path/to/nn_hush_key)'
+verifyvalue NN_SUQA_KEY '$(cat ~/a/path/to/nn_suqa_key)'
+
+
+verifyvalue ignore_list '(VOTE2018 PIZZA BEER CCL)'

@@ -33,13 +33,6 @@ echo -n "Einsteinium notarisation utxos:"; echo -n -e ' \t'; ${HOME}/einsteinium
 echo -n "Gincoin total utxos:"; echo -n -e ' \t'; ${HOME}/gin/src/gincoin-cli listunspent | grep -c "amount"
 echo -n "Gincoin notarisation utxos:"; echo -n -e ' \t'; ${HOME}/gin/src/gincoin-cli listunspent | grep -c "${dsatoshis},"
 
-ignore_list=(
-VOTE2018
-PIZZA
-BEER
-CCL
-)
-
 # Only assetchains
 ${HOME}/komodo/src/listassetchains | while read list; do
   if [[ "${ignore_list[@]}" =~ "${list}" ]]; then continue; fi

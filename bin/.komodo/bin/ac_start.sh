@@ -11,13 +11,6 @@ cd <HOME>/komodo
 seed_ip=$(getent hosts zero.kolo.supernet.org | awk '{ print $1 }')
 EXTERNALIP="-externalip=<EXTERNALIP>"
 
-ignore_list=(
-VOTE2018
-PIZZA
-BEER
-CCL
-)
-
 ${HOME}/komodo/src/listassetchainparams | while read args; do
   name=$(echo ${args} | awk -F '-ac_name=' '{ print $2 }' | awk '{ print $1 }')
   if [[ "${ignore_list[@]}" =~ "${name}" ]]; then continue; fi
