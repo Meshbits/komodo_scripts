@@ -9,5 +9,6 @@ sudo /etc/init.d/monit stop
 ~/.komodo/VRSC/bin/stop.sh
 ~/.hush/bin/stop.sh
 ~/.einsteinium/bin/stop.sh
+${HOME}/.gincoincore/bin/stop.sh
 
 #pkill -15 iguana
