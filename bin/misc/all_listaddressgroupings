@@ -16,7 +16,7 @@ echo -n "BTC:"; ${HOME}/bitcoin/src/bitcoin-cli listaddressgroupings
 echo -n "KMD:"; ${HOME}/komodo/src/komodo-cli listaddressgroupings
 echo -n "GINCOIN:"; ${HOME}/gin/src/gincoin-cli listaddressgroupings
 echo -n "EMC2:"; ${HOME}/einsteinium/src/einsteinium-cli listaddressgroupings
-echo -n "VRSC:"; ${HOME}/veruscoin/src/komodo-cli listaddressgroupings
+echo -n "VRSC:"; ${HOME}/veruscoin/src/komodo-cli -ac_name=VRSC listaddressgroupings
 echo -n "CHIPS:"; ${HOME}/chips/src/chips-cli listaddressgroupings
 echo -n "GAMECREDITS:"; ${HOME}/gamecredits/src/gamecredits-cli listaddressgroupings
 echo -n "HUSH:"; ${HOME}/hush/src/hush-cli listaddressgroupings
