@@ -7,8 +7,8 @@ source /etc/profile
 
 count=0
 while [[ ${count} -lt 300 ]]; do
-  if <VAR_SRC_DIR>/src/komodo-cli -ac_name=VRSC getinfo >& /dev/null; then
-    getinfo="$(<VAR_SRC_DIR>/src/komodo-cli -ac_name=VRSC getinfo)"
+  if <VAR_SRC_DIR>/src/verus -ac_name=VRSC getinfo >& /dev/null; then
+    getinfo="$(<VAR_SRC_DIR>/src/verus -ac_name=VRSC getinfo)"
     if [[ $(echo ${getinfo} | jq -r .longestchain) -eq $(echo ${getinfo} | jq -r .blocks) ]]; then
       echo -e "## <VAR_THING> blockchain in sync with the network ##"
       break

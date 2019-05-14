@@ -8,5 +8,5 @@ source /etc/profile
 
 if ! $( lsof -Pi :<VAR_RPCPORT> -sTCP:LISTEN -t >& /dev/null); then
   echo -e "## Start <VAR_THING> daemon ##\n"
-  <VAR_SRC_DIR>/src/komodod ${VERUSCOIN_STARTUP_OPTIONS} &>> ${HOME}/.komodo/log/VRSC.log
+  <VAR_SRC_DIR>/src/verusd ${VERUSCOIN_STARTUP_OPTIONS} &>> ${HOME}/.komodo/log/VRSC.log
 fi

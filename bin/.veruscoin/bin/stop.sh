@@ -7,7 +7,7 @@ source /etc/profile
 
 echo -e "## Stop <VAR_THING> daemon ##\n"
 sudo -H -u <VAR_USERNAME> /bin/bash -c \
-  "<VAR_SRC_DIR>/src/komodo-cli -ac_name=VRSC stop"
+  "<VAR_SRC_DIR>/src/verus -ac_name=VRSC stop"
 
 while inotifywait -e modify -t 60 <VAR_CONF_DIR>/debug.log; do
   if tail -n10 <VAR_CONF_DIR>/debug.log | grep 'Shutdown: done'; then
