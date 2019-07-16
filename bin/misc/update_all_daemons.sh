@@ -32,7 +32,6 @@ echo -e "Starting upgrading everything in .build_source directory\n"
 /usr/local/src/komodo_scripts/bin/setup_chips.sh && move_source chips
 /usr/local/src/komodo_scripts/bin/setup_gamecredits.sh && move_source gamecredits
 /usr/local/src/komodo_scripts/bin/setup_veruscoin.sh && move_source veruscoin
-/usr/local/src/komodo_scripts/bin/setup_hush.sh && move_source hush
 /usr/local/src/komodo_scripts/bin/setup_emc2.sh && move_source einsteinium
 echo -e "Finished upgrading everything in .build_source directory\n"
 
