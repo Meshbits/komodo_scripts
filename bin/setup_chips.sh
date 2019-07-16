@@ -24,7 +24,7 @@ VAR_THING=chips
 
 [[ -z ${VAR_NPROC+x} ]] && VAR_NPROC="$(cat /proc/cpuinfo | grep processor | wc -l)"
 [[ -z ${VAR_USERNAME+x} ]] && VAR_USERNAME="${USER}"
-[[ -z ${VAR_BRANCH+x} ]] && VAR_BRANCH='dev'
+[[ -z ${VAR_BRANCH+x} ]] && VAR_BRANCH='master'
 [[ -z ${VAR_REPO+x} ]] && VAR_REPO='https://github.com/jl777/chips3.git'
 [[ -z ${VAR_SRC_DIR+x} ]] && VAR_SRC_DIR="${HOME}/${VAR_THING}"
 [[ -z ${VAR_CONF_DIR+x} ]] && VAR_CONF_DIR="${HOME}/.${VAR_THING}"
