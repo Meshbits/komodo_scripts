@@ -119,10 +119,10 @@ sed -e "s|<VAR_SRC_DIR>|${VAR_SRC_DIR}|g" \
   "${SCRIPTPATH}/.${VAR_THING}/bin/status.sh" > "${VAR_CONF_DIR}/bin/status.sh"
 
 # Symlink binaries
-sudo ln -sf ${VAR_SRC_DIR}/src/verus /usr/local/bin/${VAR_THING}-cli
-sudo ln -sf ${VAR_SRC_DIR}/src/verusd /usr/local/bin/${VAR_THING}d
-sudo chmod +x /usr/local/bin/${VAR_THING}-cli
-sudo chmod +x /usr/local/bin/${VAR_THING}d
+sudo ln -sf ${VAR_SRC_DIR}/src/verus /usr/local/bin/verus-cli
+sudo ln -sf ${VAR_SRC_DIR}/src/verusd /usr/local/bin/verusd
+sudo chmod +x /usr/local/bin/verus-cli
+sudo chmod +x /usr/local/bin/verusd
 
 # Permissions and ownership
 chmod +x ${VAR_CONF_DIR}/bin/*
