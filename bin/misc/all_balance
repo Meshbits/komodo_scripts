@@ -13,7 +13,7 @@ echo -n "BTC: "; ${HOME}/bitcoin/src/bitcoin-cli getbalance
 echo -n "KMD: "; ${HOME}/komodo/src/komodo-cli getbalance
 echo -n "GINCOIN: "; ${HOME}/gin/src/gincoin-cli getbalance
 echo -n "EMC2: "; ${HOME}/einsteinium/src/einsteinium-cli getbalance
-echo -n "VRSC: "; ${HOME}/veruscoin/src/komodo-cli -ac_name=VRSC getbalance
+echo -n "VRSC: "; ${HOME}/veruscoin/src/verus -ac_name=VRSC getbalance
 echo -n "CHIPS: "; ${HOME}/chips/src/chips-cli getbalance
 echo -n "GAMECREDITS: "; ${HOME}/gamecredits/src/gamecredits-cli getbalance
 echo -n "HUSH: "; ${HOME}/hush/src/hush-cli getbalance

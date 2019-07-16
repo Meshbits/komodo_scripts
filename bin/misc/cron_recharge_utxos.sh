@@ -45,7 +45,7 @@ fi
 var_coin=VRSC
 var_value=25
 echo -e "\n${var_coin} Split"
-if [[ $(${HOME}/veruscoin/src/komodo-cli -ac_name=VRSC listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
+if [[ $(${HOME}/veruscoin/src/verus -ac_name=VRSC listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
   RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
 	print_txid "$RESULT"
 fi

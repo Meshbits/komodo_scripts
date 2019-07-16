@@ -18,8 +18,8 @@ echo -n "KMD notarisation utxos:"; echo -n -e ' \t'; komodo-cli listunspent | gr
 echo -n "Chips total utxos:"; echo -n -e ' \t'; chips-cli listunspent | grep -c "amount"
 echo -n "Chips notarisation utxos:"; echo -n -e ' \t'; chips-cli listunspent | grep -c "${dsatoshis},"
 
-echo -n "VRSC total utxos:"; echo -n -e ' \t'; ${HOME}/veruscoin/src/komodo-cli -ac_name=VRSC listunspent | grep -c "amount"
-echo -n "VRSC notarisation utxos:"; echo -n -e ' \t'; ${HOME}/veruscoin/src/komodo-cli -ac_name=VRSC listunspent | grep -c "${dsatoshis},"
+echo -n "VRSC total utxos:"; echo -n -e ' \t'; ${HOME}/veruscoin/src/verus -ac_name=VRSC listunspent | grep -c "amount"
+echo -n "VRSC notarisation utxos:"; echo -n -e ' \t'; ${HOME}/veruscoin/src/verus -ac_name=VRSC listunspent | grep -c "${dsatoshis},"
 
 echo -n "HUSH total utxos:"; echo -n -e ' \t'; hush-cli listunspent | grep -c "amount"
 echo -n "HUSH notarisation utxos:"; echo -n -e ' \t'; hush-cli listunspent | grep -c "${dsatoshis},"
