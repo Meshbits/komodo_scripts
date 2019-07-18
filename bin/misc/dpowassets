@@ -1,5 +1,8 @@
 #!/bin/bash
 set -x
+
+cd ${HOME}/SuperNET/iguana
+
 source pubkey.txt
 echo $pubkey
 sleep 3

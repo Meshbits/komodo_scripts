@@ -17,15 +17,6 @@ print_txid () {
   echo -n $(echo "$1" | jq .txid)
 }
 
-var_coin=BTC
-var_value=25
-echo -e "\n${var_coin} Split"
-if [[ $(bitcoin-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
-  RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
-	print_txid "$RESULT"
-  #/usr/local/bin/slack_alert testing "$(echo -n -e \"${var_coin} utxos after split:\t\"; bitcoin-cli listunspent | grep -c \"${dsatoshis},\")"
-fi
-
 var_coin=KMD
 var_value=100
 echo -e "\n${var_coin} Split"
@@ -42,6 +33,14 @@ if [[ $(chips-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; th
 	print_txid "$RESULT"
 fi
 
+var_coin=GAME
+var_value=10
+echo -e "\n${var_coin} Split"
+if [[ $(gamecredits-cli listunspent | grep -c "${dsatoshis_gamecredits},") -lt ${var_value} ]]; then
+  RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${item} 100000)"
+  print_txid "$RESULT"
+fi
+
 var_coin=VRSC
 var_value=25
 echo -e "\n${var_coin} Split"
@@ -49,27 +48,6 @@ if [[ $(${HOME}/veruscoin/src/verus -ac_name=VRSC listunspent | grep -c "${dsato
   RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
 	print_txid "$RESULT"
 fi
-
-var_coin=HUSH
-var_value=25
-echo -e "\n${var_coin} Split"
-if [[ $(hush-cli listunspent | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
-  RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
-  print_txid "$RESULT"
-fi
-
-var_coin=GAME
-var_value=10
-echo -e "\n${var_coin} Split"
-for ((item=0; item<${var_value}; item++));
-do
-  if [[ $(gamecredits-cli listunspent | grep -c "${dsatoshis_gamecredits},") -lt ${var_value} ]]; then
-    RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${item} 100000)"
-    print_txid "$RESULT"
-  else
-    break
-  fi
-done &
 
 var_coin=EMC2
 var_value=25
@@ -86,28 +64,5 @@ if [[ $(${HOME}/gin/src/gincoin-cli listunspent | grep -c "${dsatoshis},") -lt $
   RESULT="$(${HOME}/misc_scripts/acsplit.sh ${var_coin} ${var_value})"
   print_txid "$RESULT"
 fi
-
-echo -e "\n"
-
-# Only assetchains
-var_value=25
-${HOME}/komodo/src/listassetchains | while read item; do
-  if [[ "${ignore_list[@]}" =~ "${item}" ]]; then continue; fi
-
-  if [[ $(komodo-cli -ac_name=${item} listunspent 1 | grep -c "${dsatoshis},") -lt ${var_value} ]]; then
-    echo -e "${item} Split"
-
-    #/usr/local/bin/slack_alert testing \
-    #  "$(echo -n ${item}; echo -n -e ' utxos before split: '; komodo-cli -ac_name=${item} listunspent 10 | grep ${dsatoshis} | wc -l)"
-
-    RESULT="$(${HOME}/misc_scripts/acsplit.sh ${item} ${var_value})"
-    print_txid "$RESULT"
-
-    #/usr/local/bin/slack_alert testing \
-    #  "$(echo -n ${item}; echo -n -e ' utxos after split: '; komodo-cli -ac_name=${item} listunspent 1 | grep ${dsatoshis} | wc -l)"
-
-    echo -e "\n"
-  fi
-done
 
 unlock

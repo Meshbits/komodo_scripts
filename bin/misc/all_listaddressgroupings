@@ -4,16 +4,9 @@
 source /etc/profile
 [[ -f "${HOME}/.common/config" ]] && source "${HOME}/.common/config"
 
-${HOME}/komodo/src/listassetchains | while read item; do
-  if [[ "${ignore_list[@]}" =~ "${item}" ]]; then continue; fi
-  echo -n "${item}:"; ${HOME}/komodo/src/komodo-cli -ac_name=${item} listaddressgroupings
-done
-
-echo -n "BTC:"; ${HOME}/bitcoin/src/bitcoin-cli listaddressgroupings
 echo -n "KMD:"; ${HOME}/komodo/src/komodo-cli listaddressgroupings
-echo -n "GINCOIN:"; ${HOME}/gin/src/gincoin-cli listaddressgroupings
-echo -n "EMC2:"; ${HOME}/einsteinium/src/einsteinium-cli listaddressgroupings
-echo -n "VRSC:"; ${HOME}/veruscoin/src/komodo-cli -ac_name=VRSC listaddressgroupings
 echo -n "CHIPS:"; ${HOME}/chips/src/chips-cli listaddressgroupings
 echo -n "GAMECREDITS:"; ${HOME}/gamecredits/src/gamecredits-cli listaddressgroupings
-echo -n "HUSH:"; ${HOME}/hush/src/hush-cli listaddressgroupings
+echo -n "VRSC:"; ${HOME}/veruscoin/src/verus -ac_name=VRSC listaddressgroupings
+echo -n "EMC2:"; ${HOME}/einsteinium/src/einsteinium-cli listaddressgroupings
+echo -n "GINCOIN:"; ${HOME}/gin/src/gincoin-cli listaddressgroupings

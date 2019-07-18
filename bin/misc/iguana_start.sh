@@ -18,17 +18,16 @@ git stash
 git pull
 
 if ! pgrep iguana >& /dev/null; then
-  ./m_notary "" notary_nosplit
   git stash pop
-  sed -i '/ccl/d' ${HOME}/SuperNET/iguana/m_notary_run
-  sed -i '/ccl/d' ${HOME}/SuperNET/iguana/dpowassets
+  ${HOME}/SuperNET/iguana/m_notary "" notary_nosplit
+  ${HOME}/SuperNET/iguana/dpowassets
 
   sleep 200
   if ! pgrep dpowassets >& /dev/null; then
-    ./dpowassets
+    ${HOME}/SuperNET/iguana/dpowassets
   fi
 fi
 
 if ! pgrep dpowassets >& /dev/null; then
-  ./dpowassets
+  ${HOME}/SuperNET/iguana/dpowassets
 fi
