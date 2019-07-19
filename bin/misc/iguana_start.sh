@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+rm -f "${HOME}/iguana.log"
 LOG_FILE="${HOME}/iguana.log"
 exec 3>&1 1>${LOG_FILE} 2>&1
 
