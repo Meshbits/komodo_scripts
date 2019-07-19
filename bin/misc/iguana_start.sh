@@ -20,7 +20,7 @@ git pull
 
 if ! pgrep iguana >& /dev/null; then
   git stash pop
-  ${HOME}/misc_scripts/iguana/m_notary "" notary_nosplit
+  ${HOME}/misc_scripts/m_notary "" notary_nosplit
   ${HOME}/misc_scripts/dpowassets
 
   sleep 200
