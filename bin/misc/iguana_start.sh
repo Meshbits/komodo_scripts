@@ -19,15 +19,15 @@ git pull
 
 if ! pgrep iguana >& /dev/null; then
   git stash pop
-  ${HOME}/SuperNET/iguana/m_notary "" notary_nosplit
-  ${HOME}/SuperNET/iguana/dpowassets
+  ${HOME}/misc_scripts/iguana/m_notary "" notary_nosplit
+  ${HOME}/misc_scripts/dpowassets
 
   sleep 200
   if ! pgrep dpowassets >& /dev/null; then
-    ${HOME}/SuperNET/iguana/dpowassets
+    ${HOME}/misc_scripts/dpowassets
   fi
 fi
 
 if ! pgrep dpowassets >& /dev/null; then
-  ${HOME}/SuperNET/iguana/dpowassets
+  ${HOME}/misc_scripts/dpowassets
 fi
